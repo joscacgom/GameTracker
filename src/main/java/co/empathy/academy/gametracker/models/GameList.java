@@ -1,37 +1,42 @@
 package co.empathy.academy.gametracker.models;
-import java.util.Objects;
-
 import javax.persistence.*;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "game_lists")
 public class GameList {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "game_id", nullable = false)
-    private Game game;
+    @ManyToMany
+    @JoinTable(name = "game_list_games",
+            joinColumns = @JoinColumn(name = "game_list_id"),
+            inverseJoinColumns = @JoinColumn(name = "game_id")
+    )
+    private List<Game> games;
 
     @Column(nullable = false)
     private String status; // e.g., "pending," "playing," "completed"
 
     @Column(nullable = false)
-    private Integer playtimeHours;
+    private Integer totalPlaytime;
 
     public GameList() {
     }
 
-    public GameList(User user, Game game, String status, Integer playtimeHours) {
+    public GameList(Long id, User user, List<Game> games, String status, Integer totalPlaytime) {
+        this.id = id;
         this.user = user;
-        this.game = game;
+        this.games = games;
         this.status = status;
-        this.playtimeHours = playtimeHours;
+        this.totalPlaytime = totalPlaytime;
     }
 
     public Long getId() {
@@ -50,58 +55,52 @@ public class GameList {
         this.user = user;
     }
 
-    public Game getGame() {
-        return game;
+    public List<Game> getGames() {
+        return games;
     }
-    
-    public void setGame(Game game) {
-        this.game = game;
+
+    public void setGames(List<Game> games) {
+        this.games = games;
     }
-    
+
     public String getStatus() {
         return status;
     }
-    
+
     public void setStatus(String status) {
         this.status = status;
     }
-    
-    public Integer getPlaytimeHours() {
-        return playtimeHours;
-    }
-    
-    public void setPlaytimeHours(Integer playtimeHours) {
-        this.playtimeHours = playtimeHours;
-    }
-    
 
+    public Integer getTotalPlaytime() {
+        return totalPlaytime;
+    }
+
+    public void setTotalPlaytime(Integer totalPlaytime) {
+        this.totalPlaytime = totalPlaytime;
+    }
 
     @Override
     public String toString() {
         return "GameList{" +
                 "id=" + id +
                 ", user=" + user +
-                ", game=" + game +
+                ", games=" + games +
                 ", status='" + status + '\'' +
-                ", playtimeHours=" + playtimeHours +
+                ", totalPlaytime=" + totalPlaytime +
                 '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof GameList)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         GameList gameList = (GameList) o;
-        return id.equals(gameList.id) &&
-                user.equals(gameList.user) &&
-                game.equals(gameList.game) &&
-                status.equals(gameList.status) &&
-                playtimeHours.equals(gameList.playtimeHours);
+        return Objects.equals(id, gameList.id) && Objects.equals(user, gameList.user) && Objects.equals(games, gameList.games) && Objects.equals(status, gameList.status) && Objects.equals(totalPlaytime, gameList.totalPlaytime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, game, status, playtimeHours);
+        return Objects.hash(id, user, games, status, totalPlaytime);
     }
 
 }

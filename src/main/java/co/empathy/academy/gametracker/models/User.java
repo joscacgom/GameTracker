@@ -1,9 +1,12 @@
 package co.empathy.academy.gametracker.models;
 import javax.persistence.*;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,13 +20,18 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GameList> gameLists;
+
     public User() {
     }
 
-    public User(String username, String email, String password) {
+    public User(Long id, String username, String email, String password, List<GameList> gameLists) {
+        this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.gameLists = gameLists;
     }
 
     public Long getId() {
@@ -42,7 +50,6 @@ public class User {
         this.username = username;
     }
 
-
     public String getEmail() {
         return email;
     }
@@ -59,37 +66,36 @@ public class User {
         this.password = password;
     }
 
+    public List<GameList> getGameLists() {
+        return gameLists;
+    }
+
+    public void setGameLists(List<GameList> gameLists) {
+        this.gameLists = gameLists;
+    }
+
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", username='" + username + '\'' + ", email='" + email + '\'' + ", password='"
-                + password + '\'' + '}';
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", gameLists=" + gameLists +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (!(o instanceof User))
-            return false;
-
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-
-        if (!id.equals(user.id))
-            return false;
-        if (!username.equals(user.username))
-            return false;
-        if (!email.equals(user.email))
-            return false;
-        return password.equals(user.password);
+        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(gameLists, user.gameLists);
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + username.hashCode();
-        result = 31 * result + email.hashCode();
-        result = 31 * result + password.hashCode();
-        return result;
+        return Objects.hash(id, username, email, password, gameLists);
     }
 
 }
