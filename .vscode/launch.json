@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-GametrackerApplication<gametracker>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "co.empathy.academy.gametracker.GametrackerApplication",
+            "projectName": "gametracker",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
