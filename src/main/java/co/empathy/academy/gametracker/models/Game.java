@@ -1,16 +1,22 @@
 package co.empathy.academy.gametracker.models;
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "games")
 public class Game {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String title;
+    private String name;
+
+    @Column(nullable = false)
+    private String description;
 
     @Column(nullable = false)
     private String genre;
@@ -21,20 +27,31 @@ public class Game {
     @Column(nullable = false)
     private LocalDate releaseDate;
 
-    // add more parameters as needed
-
     @Column(nullable = false)
     private Integer averagePlaytime;
+
+    @Column(nullable = false)
+    private String image; // uri of the image
+
+    @ManyToMany(mappedBy = "games")
+    private List<GameList> gameLists;
+
+    // add more parameters as needed
+    // maybe rating or isReleased...
 
     public Game() {
     }
 
-    public Game(String title, String genre, String platform, LocalDate releaseDate, Integer averagePlaytime) {
-        this.title = title;
+    public Game(Long id, String name, String description, String genre, String platform, LocalDate releaseDate, Integer averagePlaytime, String image, List<GameList> gameLists) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
         this.genre = genre;
         this.platform = platform;
         this.releaseDate = releaseDate;
         this.averagePlaytime = averagePlaytime;
+        this.image = image;
+        this.gameLists = gameLists;
     }
 
     public Long getId() {
@@ -45,12 +62,20 @@ public class Game {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getGenre() {
@@ -85,28 +110,48 @@ public class Game {
         this.averagePlaytime = averagePlaytime;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public List<GameList> getGameLists() {
+        return gameLists;
+    }
+
+    public void setGameLists(List<GameList> gameLists) {
+        this.gameLists = gameLists;
+    }
+
     @Override
     public String toString() {
         return "Game{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
                 ", genre='" + genre + '\'' +
                 ", platform='" + platform + '\'' +
                 ", releaseDate=" + releaseDate +
                 ", averagePlaytime=" + averagePlaytime +
+                ", image='" + image + '\'' +
+                ", gameLists=" + gameLists +
                 '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Game game)) return false;
-        return id.equals(game.id) && title.equals(game.title) && genre.equals(game.genre) && platform.equals(game.platform) && releaseDate.equals(game.releaseDate);
+        if (o == null || getClass() != o.getClass()) return false;
+        Game game = (Game) o;
+        return Objects.equals(id, game.id) && Objects.equals(name, game.name) && Objects.equals(description, game.description) && Objects.equals(genre, game.genre) && Objects.equals(platform, game.platform) && Objects.equals(releaseDate, game.releaseDate) && Objects.equals(averagePlaytime, game.averagePlaytime) && Objects.equals(image, game.image) && Objects.equals(gameLists, game.gameLists);
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return Objects.hash(id, name, description, genre, platform, releaseDate, averagePlaytime, image, gameLists);
     }
-}
 
+}
