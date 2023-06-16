@@ -19,7 +19,7 @@ public class User  {
 
     @Column(nullable = false)
     private String password;
-
+    
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GameList> gameLists;
 
@@ -78,17 +78,6 @@ public class User  {
 
     public void setRole (String role) {
         this.role=role;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", gameLists=" + gameLists +
-                '}';
     }
 
     @Override

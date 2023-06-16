@@ -15,22 +15,22 @@ public class Game {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String genre;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String platform;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDate releaseDate;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer averagePlaytime;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String image; // uri of the image
 
     @ManyToMany(mappedBy = "games")
@@ -124,21 +124,6 @@ public class Game {
 
     public void setGameLists(List<GameList> gameLists) {
         this.gameLists = gameLists;
-    }
-
-    @Override
-    public String toString() {
-        return "Game{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", genre='" + genre + '\'' +
-                ", platform='" + platform + '\'' +
-                ", releaseDate=" + releaseDate +
-                ", averagePlaytime=" + averagePlaytime +
-                ", image='" + image + '\'' +
-                ", gameLists=" + gameLists +
-                '}';
     }
 
     @Override

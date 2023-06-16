@@ -1,6 +1,7 @@
 package co.empathy.academy.gametracker.utils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -48,8 +49,13 @@ public class JWTUtils implements Serializable {
 
     //for retrieving any information from token we will need the secret key
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        Key key = Keys.hmacShaKeyFor(secretKey.getBytes()); // Convert the secretKey to a Key object
+
+        JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(key).build();
+        Claims claims = jwtParser.parseClaimsJws(token).getBody();
+        return claims;
     }
+    
 
 
     //check if the token has expired
