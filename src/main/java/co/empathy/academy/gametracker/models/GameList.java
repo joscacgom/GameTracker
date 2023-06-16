@@ -1,5 +1,8 @@
 package co.empathy.academy.gametracker.models;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -10,17 +13,19 @@ public class GameList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "game_list_games",
             joinColumns = @JoinColumn(name = "game_list_id"),
             inverseJoinColumns = @JoinColumn(name = "game_id")
     )
-    private List<Game> games;
+    private List<GameWithPlayTime> games;
 
     @Column(nullable = false)
     private String status; // e.g., "pending," "playing," "completed"
@@ -31,7 +36,7 @@ public class GameList {
     public GameList() {
     }
 
-    public GameList(Long id, User user, List<Game> games, String status, Integer totalPlaytime) {
+    public GameList(Long id, User user, List<GameWithPlayTime> games, String status, Integer totalPlaytime) {
         this.id = id;
         this.user = user;
         this.games = games;
@@ -55,11 +60,11 @@ public class GameList {
         this.user = user;
     }
 
-    public List<Game> getGames() {
+    public List<GameWithPlayTime> getGames() {
         return games;
     }
 
-    public void setGames(List<Game> games) {
+    public void setGames(List<GameWithPlayTime> games) {
         this.games = games;
     }
 
@@ -77,17 +82,6 @@ public class GameList {
 
     public void setTotalPlaytime(Integer totalPlaytime) {
         this.totalPlaytime = totalPlaytime;
-    }
-
-    @Override
-    public String toString() {
-        return "GameList{" +
-                "id=" + id +
-                ", user=" + user +
-                ", games=" + games +
-                ", status='" + status + '\'' +
-                ", totalPlaytime=" + totalPlaytime +
-                '}';
     }
 
     @Override
