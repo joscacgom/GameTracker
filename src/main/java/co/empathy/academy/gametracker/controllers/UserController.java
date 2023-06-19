@@ -18,6 +18,15 @@ public class UserController {
         this.userService = userService;
     }
 
+    /*
+     * Register a new user.
+     * 
+     * @param user The user to register.
+     * 
+     * @return ResponseEntity containing the registered user if successful, or an
+     * error response if the registration failed.
+     *
+     */
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         // Extract the necessary details (username, email, password) from the request body
@@ -37,6 +46,15 @@ public class UserController {
         }
     }
 
+    /*
+     * Login a user.
+     * 
+     * @param user The user to login.
+     * 
+     * @return ResponseEntity containing the JWT token if successful, or an error
+     * response if the login failed.
+     *
+     */
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User user) {
         // Extract the necessary details (username, password) from the request body
