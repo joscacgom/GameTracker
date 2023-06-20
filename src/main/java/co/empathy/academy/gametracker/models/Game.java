@@ -1,53 +1,64 @@
 package co.empathy.academy.gametracker.models;
-
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-@Document(collection = "games") // Persistent in MongoDB
+@Entity
+@Table(name = "games")
 public class Game {
 
     @Id
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @Column(nullable = false)
     private String name;
 
-    private LocalDate released;
+    @Column(nullable = true)
+    private String description;
 
-    private String background_image; // uri of the image
+    @Column(nullable = true)
+    private String genre;
 
-    private int playtime;
+    @Column(nullable = true)
+    private String platform;
 
-    private List<String> platforms; // platform names
+    @Column(nullable = true)
+    private LocalDate releaseDate;
 
-    private List<String> genres; // genre names
+    @Column(nullable = true)
+    private Integer averagePlaytime;
 
-    //@ManyToMany(mappedBy = "games")
+    @Column(nullable = true)
+    private String image; // uri of the image
+
+    @ManyToMany(mappedBy = "games")
     private List<GameList> gameLists;
 
     // add more parameters as needed
+    // maybe rating or isReleased...
 
     public Game() {
     }
 
-    public Game(long id, String name, LocalDate released, String background_image, int playtime, List<String> platforms, List<String> genres) {
+    public Game(Long id, String name, String description, String genre, String platform, LocalDate releaseDate, Integer averagePlaytime, String image, List<GameList> gameLists) {
         this.id = id;
         this.name = name;
-        this.released = released;
-        this.background_image = background_image;
-        this.playtime = playtime;
-        this.platforms = platforms;
-        this.genres = genres;
+        this.description = description;
+        this.genre = genre;
+        this.platform = platform;
+        this.releaseDate = releaseDate;
+        this.averagePlaytime = averagePlaytime;
+        this.image = image;
+        this.gameLists = gameLists;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -59,57 +70,60 @@ public class Game {
         this.name = name;
     }
 
-    public LocalDate getReleased() {
-        return released;
+    public String getDescription() {
+        return description;
     }
 
-    public void setReleased(LocalDate released) {
-        this.released = released;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getBackground_image() {
-        return background_image;
+    public String getGenre() {
+        return genre;
     }
 
-    public void setBackground_image(String background_image) {
-        this.background_image = background_image;
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
-    public int getPlaytime() {
-        return playtime;
+    public String getPlatform() {
+        return platform;
     }
 
-    public void setPlaytime(int playtime) {
-        this.playtime = playtime;
+    public void setPlatform(String platform) {
+        this.platform = platform;
     }
 
-    public List<String> getPlatforms() {
-        return platforms;
+    public LocalDate getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setPlatforms(List<String> platforms) {
-        this.platforms = platforms;
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
-    public List<String> getGenres() {
-        return genres;
+    public Integer getAveragePlaytime() {
+        return averagePlaytime;
     }
 
-    public void setGenres(List<String> genres) {
-        this.genres = genres;
+    public void setAveragePlaytime(Integer averagePlaytime) {
+        this.averagePlaytime = averagePlaytime;
     }
 
-    @Override
-    public String toString() {
-        return "Game{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", released=" + released +
-                ", background_image='" + background_image + '\'' +
-                ", playtime=" + playtime +
-                ", platforms=" + platforms +
-                ", genres=" + genres +
-                '}';
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public List<GameList> getGameLists() {
+        return gameLists;
+    }
+
+    public void setGameLists(List<GameList> gameLists) {
+        this.gameLists = gameLists;
     }
 
     @Override
@@ -117,12 +131,12 @@ public class Game {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
-        return id == game.id && Objects.equals(name, game.name) && Objects.equals(released, game.released);
+        return Objects.equals(id, game.id) && Objects.equals(name, game.name) && Objects.equals(description, game.description) && Objects.equals(genre, game.genre) && Objects.equals(platform, game.platform) && Objects.equals(releaseDate, game.releaseDate) && Objects.equals(averagePlaytime, game.averagePlaytime) && Objects.equals(image, game.image) && Objects.equals(gameLists, game.gameLists);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, released);
+        return Objects.hash(id, name, description, genre, platform, releaseDate, averagePlaytime, image, gameLists);
     }
 
 }

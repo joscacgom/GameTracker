@@ -1,6 +1,6 @@
 package co.empathy.academy.gametracker.controllers;
 
-import co.empathy.academy.gametracker.models.Game;
+import co.empathy.academy.gametracker.models.APIGames;
 import co.empathy.academy.gametracker.services.APIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ public class APIController {
 
     @GetMapping("/listGames")
     public ResponseEntity<String> getAListOfGames() {
-        List<Game> games = apiService.getAListOfGames();
+        List<APIGames> games = apiService.getAListOfGames();
         if (games != null)
             return ResponseEntity.ok(games.toString()); // Retorno: respuesta ok con games en el cuerpo.
         else // Retorno: respuesta de error con mensaje.

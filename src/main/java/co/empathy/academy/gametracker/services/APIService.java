@@ -1,6 +1,6 @@
 package co.empathy.academy.gametracker.services;
 
-import co.empathy.academy.gametracker.models.Game;
+import co.empathy.academy.gametracker.models.APIGames;
 import co.empathy.academy.gametracker.repositories.GameRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -26,7 +26,7 @@ public class APIService {
         this.gameRepository = gameRepository;
     }
 
-    public List<Game> getAListOfGames() {
+    public List<APIGames> getAListOfGames() {
         // Llamada a RAWGAPI
         Request request = new Request.Builder()
                     .url("https://rawg-video-games-database.p.rapidapi.com/games?key=6ecc279ebc114b0194d9600c889c4ab9")
@@ -45,9 +45,10 @@ public class APIService {
 
                 // Cadena JSON a Java
                 ObjectMapper objectMapper = new ObjectMapper();
-                JsonNode rootNode = objectMapper.readTree(jsonResponse);
-                JsonNode resultsNode = rootNode.get("results");
-                List<Game> games = objectMapper.readValue(resultsNode.toString(), new TypeReference<List<Game>>() { });
+                //JsonNode rootNode = objectMapper.readTree(jsonResponse);
+                //JsonNode resultsNode = rootNode.get("results");
+                // resultsNode.toString()
+                List<APIGames> games = objectMapper.readValue(jsonResponse, new TypeReference<List<APIGames>>() { });
 
                 gameRepository.saveAll(games); // Guarda los juegos en la bbdd Mongo
 
