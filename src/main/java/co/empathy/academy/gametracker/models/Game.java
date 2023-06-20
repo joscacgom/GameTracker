@@ -1,64 +1,53 @@
 package co.empathy.academy.gametracker.models;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Table(name = "games")
+@Document(collection = "games") // Persistent in MongoDB
 public class Game {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String description;
+    private LocalDate released;
 
-    @Column(nullable = false)
-    private String genre;
+    private String background_image; // uri of the image
 
-    @Column(nullable = false)
-    private String platform;
+    private int playtime;
 
-    @Column(nullable = false)
-    private LocalDate releaseDate;
+    private List<String> platforms; // platform names
 
-    @Column(nullable = false)
-    private Integer averagePlaytime;
+    private List<String> genres; // genre names
 
-    @Column(nullable = false)
-    private String image; // uri of the image
-
-    @ManyToMany(mappedBy = "games")
+    //@ManyToMany(mappedBy = "games")
     private List<GameList> gameLists;
 
     // add more parameters as needed
-    // maybe rating or isReleased...
 
     public Game() {
     }
 
-    public Game(Long id, String name, String description, String genre, String platform, LocalDate releaseDate, Integer averagePlaytime, String image, List<GameList> gameLists) {
+    public Game(long id, String name, LocalDate released, String background_image, int playtime, List<String> platforms, List<String> genres) {
         this.id = id;
         this.name = name;
-        this.description = description;
-        this.genre = genre;
-        this.platform = platform;
-        this.releaseDate = releaseDate;
-        this.averagePlaytime = averagePlaytime;
-        this.image = image;
-        this.gameLists = gameLists;
+        this.released = released;
+        this.background_image = background_image;
+        this.playtime = playtime;
+        this.platforms = platforms;
+        this.genres = genres;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -70,60 +59,44 @@ public class Game {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public LocalDate getReleased() {
+        return released;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setReleased(LocalDate released) {
+        this.released = released;
     }
 
-    public String getGenre() {
-        return genre;
+    public String getBackground_image() {
+        return background_image;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setBackground_image(String background_image) {
+        this.background_image = background_image;
     }
 
-    public String getPlatform() {
-        return platform;
+    public int getPlaytime() {
+        return playtime;
     }
 
-    public void setPlatform(String platform) {
-        this.platform = platform;
+    public void setPlaytime(int playtime) {
+        this.playtime = playtime;
     }
 
-    public LocalDate getReleaseDate() {
-        return releaseDate;
+    public List<String> getPlatforms() {
+        return platforms;
     }
 
-    public void setReleaseDate(LocalDate releaseDate) {
-        this.releaseDate = releaseDate;
+    public void setPlatforms(List<String> platforms) {
+        this.platforms = platforms;
     }
 
-    public Integer getAveragePlaytime() {
-        return averagePlaytime;
+    public List<String> getGenres() {
+        return genres;
     }
 
-    public void setAveragePlaytime(Integer averagePlaytime) {
-        this.averagePlaytime = averagePlaytime;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public List<GameList> getGameLists() {
-        return gameLists;
-    }
-
-    public void setGameLists(List<GameList> gameLists) {
-        this.gameLists = gameLists;
+    public void setGenres(List<String> genres) {
+        this.genres = genres;
     }
 
     @Override
@@ -131,13 +104,11 @@ public class Game {
         return "Game{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", genre='" + genre + '\'' +
-                ", platform='" + platform + '\'' +
-                ", releaseDate=" + releaseDate +
-                ", averagePlaytime=" + averagePlaytime +
-                ", image='" + image + '\'' +
-                ", gameLists=" + gameLists +
+                ", released=" + released +
+                ", background_image='" + background_image + '\'' +
+                ", playtime=" + playtime +
+                ", platforms=" + platforms +
+                ", genres=" + genres +
                 '}';
     }
 
@@ -146,12 +117,12 @@ public class Game {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
-        return Objects.equals(id, game.id) && Objects.equals(name, game.name) && Objects.equals(description, game.description) && Objects.equals(genre, game.genre) && Objects.equals(platform, game.platform) && Objects.equals(releaseDate, game.releaseDate) && Objects.equals(averagePlaytime, game.averagePlaytime) && Objects.equals(image, game.image) && Objects.equals(gameLists, game.gameLists);
+        return id == game.id && Objects.equals(name, game.name) && Objects.equals(released, game.released);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, genre, platform, releaseDate, averagePlaytime, image, gameLists);
+        return Objects.hash(id, name, released);
     }
 
 }

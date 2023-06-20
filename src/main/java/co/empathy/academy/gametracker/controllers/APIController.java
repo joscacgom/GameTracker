@@ -1,5 +1,6 @@
 package co.empathy.academy.gametracker.controllers;
 
+import co.empathy.academy.gametracker.models.Game;
 import co.empathy.academy.gametracker.services.APIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -22,9 +25,9 @@ public class APIController {
 
     @GetMapping("/listGames")
     public ResponseEntity<String> getAListOfGames() {
-        String data = apiService.getAListOfGames();
-        if (data != null)
-            return ResponseEntity.ok(data); // Retorno: respuesta ok con data en el cuerpo.
+        List<Game> games = apiService.getAListOfGames();
+        if (games != null)
+            return ResponseEntity.ok(games.toString()); // Retorno: respuesta ok con games en el cuerpo.
         else // Retorno: respuesta de error con mensaje.
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while getting a list of games from RAWG API.");
     }

@@ -1,20 +1,34 @@
 package co.empathy.academy.gametracker.services;
 
+import co.empathy.academy.gametracker.models.Game;
+import co.empathy.academy.gametracker.repositories.GameRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class APIService {
 
-    OkHttpClient client = new OkHttpClient();
+    @Autowired
+    private GameRepository gameRepository;
 
-    public String getAListOfGames() {
-        Request request;
-        request = new Request.Builder()
+    private OkHttpClient client = new OkHttpClient();
+
+    public APIService(GameRepository gameRepository) {
+        this.gameRepository = gameRepository;
+    }
+
+    public List<Game> getAListOfGames() {
+        // Llamada a RAWGAPI
+        Request request = new Request.Builder()
                     .url("https://rawg-video-games-database.p.rapidapi.com/games?key=6ecc279ebc114b0194d9600c889c4ab9")
                     .get()
                     .addHeader("X-RapidAPI-Key", "2f671919fcmsh2c7423d14d84b80p1f2e01jsnfe69a30cb963")
@@ -22,8 +36,24 @@ public class APIService {
                     .build();
 
         try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful())
-                return response.body().string();
+            if (response.isSuccessful()) {
+                // Obtencion de la respuesta como cadena JSON
+                String jsonResponse = response.body().string();
+
+                if (jsonResponse.isBlank())
+                    throw new IOException("Error response body is blank.");
+
+                // Cadena JSON a Java
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode rootNode = objectMapper.readTree(jsonResponse);
+                JsonNode resultsNode = rootNode.get("results");
+                List<Game> games = objectMapper.readValue(resultsNode.toString(), new TypeReference<List<Game>>() { });
+
+                gameRepository.saveAll(games); // Guarda los juegos en la bbdd Mongo
+
+                // return response.body().string();
+                return games;
+            }
             else
                 throw new IOException("Error on API response.");
         } catch (IOException e) {
@@ -31,6 +61,8 @@ public class APIService {
             return null;
         }
     }
+
+
 
     public String getGameDetails(String game_id) {
         OkHttpClient client = new OkHttpClient();
