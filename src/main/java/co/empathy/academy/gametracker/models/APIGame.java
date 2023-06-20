@@ -1,5 +1,6 @@
 package co.empathy.academy.gametracker.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
@@ -8,7 +9,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Document(collection = "games") // Persistent in MongoDB
-public class APIGames {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class APIGame {
 
     @Id
     private long id;
@@ -21,16 +23,16 @@ public class APIGames {
 
     private int playtime;
 
-    private List<String> platforms; // platform names
+    private List<Platform> platforms; // platform names
 
-    private List<String> genres; // genre names
+    private List<Genre> genres; // genre names
 
     // add more parameters as needed
 
-    public APIGames() {
+    public APIGame() {
     }
 
-    public APIGames(long id, String name, LocalDate released, String background_image, int playtime, List<String> platforms, List<String> genres) {
+    public APIGame(long id, String name, LocalDate released, String background_image, int playtime, List<Platform> platforms, List<Genre> genres) {
         this.id = id;
         this.name = name;
         this.released = released;
@@ -80,19 +82,19 @@ public class APIGames {
         this.playtime = playtime;
     }
 
-    public List<String> getPlatforms() {
+    public List<Platform> getPlatforms() {
         return platforms;
     }
 
-    public void setPlatforms(List<String> platforms) {
+    public void setPlatforms(List<Platform> platforms) {
         this.platforms = platforms;
     }
 
-    public List<String> getGenres() {
+    public List<Genre> getGenres() {
         return genres;
     }
 
-    public void setGenres(List<String> genres) {
+    public void setGenres(List<Genre> genres) {
         this.genres = genres;
     }
 
@@ -113,7 +115,7 @@ public class APIGames {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        APIGames game = (APIGames) o;
+        APIGame game = (APIGame) o;
         return id == game.id && Objects.equals(name, game.name) && Objects.equals(released, game.released);
     }
 
