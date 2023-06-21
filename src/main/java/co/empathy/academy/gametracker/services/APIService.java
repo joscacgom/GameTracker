@@ -17,9 +17,9 @@ import java.util.List;
 public class APIService {
 
     @Autowired
-    private GameRepository gameRepository;
+    private final GameRepository gameRepository;
 
-    private OkHttpClient client = new OkHttpClient();
+    private final OkHttpClient client = new OkHttpClient();
 
     public APIService(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
@@ -37,6 +37,7 @@ public class APIService {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful()) {
                 // Obtencion de la respuesta como cadena JSON
+                assert response.body() != null;
                 String jsonResponse = response.body().string();
 
                 if (jsonResponse.isBlank())
@@ -49,7 +50,7 @@ public class APIService {
                 List<APIGame> games = apiGameResponse.getResults(); // el json contiene en "results" los juegos
 
                 // Guarda los juegos en la bbdd Mongo
-                // gameRepository.saveAll(games);
+                gameRepository.saveAll(games);
 
                 return games;
             }
@@ -72,8 +73,10 @@ public class APIService {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful())
+            if (response.isSuccessful()) {
+                assert response.body() != null;
                 return response.body().string();
+            }
             else
                 throw new IOException("Error on API response.");
         } catch (IOException e) {
