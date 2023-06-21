@@ -1,5 +1,15 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import routes from './router/router'
+import { createApp } from 'vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faUser, faList, faCompass, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
-createApp(App).use(routes).mount('#app')
+import App from './App.vue';
+import router from './router/router';
+import './assets/css/global.css';
+
+library.add(faUser, faList, faCompass, faChevronLeft, faChevronRight);
+
+createApp(App)
+  .use(router)
+  .component('font-awesome-icon', FontAwesomeIcon)
+  .mount('#app');
