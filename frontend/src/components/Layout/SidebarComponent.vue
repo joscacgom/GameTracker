@@ -102,7 +102,6 @@
     display: flex;
     align-items: center;
   }
-  
   .icon {
     margin-right: 10px;
   }
