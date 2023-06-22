@@ -1,6 +1,6 @@
 <template>
     <div class="register-container">
-      <h2>Signup</h2>
+      <h2>Sign up</h2>
       <form @submit.prevent="login">
         <div>
           <label for="username">Username</label>
@@ -59,6 +59,8 @@
           this.error = 'An error occurred during login. Please try again later.';
         } finally {
           this.isRegisterIn = false;
+          this.$router.push('/login');
+
         }
       }
     }
