@@ -9,7 +9,7 @@
 
       <div class="header-container">
         <h1 class="title">My Lists</h1>
-        <router-link to="/lists">View all</router-link>
+        <router-link to="/my-lists">View all</router-link>
       </div>
       <ListsComponent></ListsComponent>
 

@@ -4,6 +4,7 @@ import RegisterForm from '../components/Auth/RegisterForm.vue';
 import WelcomeComponent from '../components/Home/WelcomeComponent.vue';
 import MainComponent from '../components/Home/MainComponent.vue';
 import ProfileComponent from '../components/Profile/ProfileComponent.vue';
+import MyListsComponent from '../components/Lists/MyListsComponent.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -23,6 +24,11 @@ const router = createRouter({
       path: '/profile',
       name: 'ProfileComponent',
       component: ProfileComponent
+    },
+    {
+      path: '/my-lists',
+      name: 'MyListsComponent',
+      component: MyListsComponent
     },
     {
       path: '/login',
