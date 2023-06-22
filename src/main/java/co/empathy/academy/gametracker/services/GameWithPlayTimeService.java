@@ -1,6 +1,6 @@
 package co.empathy.academy.gametracker.services;
 
-import co.empathy.academy.gametracker.models.GameWithPlayTime;
+import co.empathy.academy.gametracker.models.GameWithPlaytime;
 import co.empathy.academy.gametracker.repositories.GameWithPlayTimeRepository;
 
 import java.util.Optional;
@@ -16,13 +16,13 @@ public class GameWithPlayTimeService {
         this.gameWithPlayTimeRepository = gameWithPlayTimeRepository;
     }
 
-    public GameWithPlayTime updatePlaytimeHours(Long id, GameWithPlayTime updatedGameWithPlayTime) {
+    public GameWithPlaytime updatePlaytimeHours(Long id, GameWithPlaytime updatedGameWithPlaytime) {
         // get the game with playtime by id
-        Optional<GameWithPlayTime> optionalGameWithPlayTime = gameWithPlayTimeRepository.findById(id);
+        Optional<GameWithPlaytime> optionalGameWithPlayTime = gameWithPlayTimeRepository.findById(id);
         // if the game with playtime exists, update the playtime hours and save it
         if (optionalGameWithPlayTime.isPresent()) {
-            GameWithPlayTime gameWithPlayTime = optionalGameWithPlayTime.get();
-            gameWithPlayTime.setPlaytimeHours(updatedGameWithPlayTime.getPlaytimeHours());
+            GameWithPlaytime gameWithPlayTime = optionalGameWithPlayTime.get();
+            gameWithPlayTime.setPlaytimeHours(updatedGameWithPlaytime.getPlaytimeHours());
             return gameWithPlayTimeRepository.save(gameWithPlayTime);
         }
         return null;

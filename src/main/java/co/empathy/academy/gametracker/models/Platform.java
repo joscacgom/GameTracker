@@ -2,6 +2,9 @@ package co.empathy.academy.gametracker.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Platform {
 
