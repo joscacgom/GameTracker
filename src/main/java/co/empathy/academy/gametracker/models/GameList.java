@@ -1,42 +1,33 @@
 package co.empathy.academy.gametracker.models;
+
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Table(name = "game_lists")
+@Document(collection = "gameLists") // Persistent in MongoDB
 public class GameList {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+
+    @DBRef
     private User user;
 
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "game_list_games",
-            joinColumns = @JoinColumn(name = "game_list_id"),
-            inverseJoinColumns = @JoinColumn(name = "game_id")
-    )
-    private List<GameWithPlayTime> games;
+    @DBRef
+    private List<GameWithPlaytime> games;
 
-    @Column(nullable = false)
     private String status; // e.g., "pending," "playing," "completed"
 
-    @Column(nullable = false)
     private Integer totalPlaytime;
 
     public GameList() {
     }
 
-    public GameList(Long id, User user, List<GameWithPlayTime> games, String status, Integer totalPlaytime) {
+    public GameList(Long id, User user, List<GameWithPlaytime> games, String status, Integer totalPlaytime) {
         this.id = id;
         this.user = user;
         this.games = games;
@@ -60,11 +51,11 @@ public class GameList {
         this.user = user;
     }
 
-    public List<GameWithPlayTime> getGames() {
+    public List<GameWithPlaytime> getGames() {
         return games;
     }
 
-    public void setGames(List<GameWithPlayTime> games) {
+    public void setGames(List<GameWithPlaytime> games) {
         this.games = games;
     }
 

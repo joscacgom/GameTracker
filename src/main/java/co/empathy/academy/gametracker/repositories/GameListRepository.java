@@ -4,9 +4,9 @@ import co.empathy.academy.gametracker.models.GameList;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface GameListRepository extends JpaRepository<GameList, Long> {
+public interface GameListRepository extends MongoRepository<GameList, Long> {
     List<GameList> findByUserId(Long userId);
 
 }
