@@ -3,6 +3,7 @@ import LoginForm from '../components/Auth/LoginForm.vue';
 import RegisterForm from '../components/Auth/RegisterForm.vue';
 import WelcomeComponent from '../components/Home/WelcomeComponent.vue';
 import MainComponent from '../components/Home/MainComponent.vue';
+import ProfileComponent from '../components/Profile/ProfileComponent.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -17,6 +18,11 @@ const router = createRouter({
       path: '/home',
       name: 'MainComponent',
       component: MainComponent
+    },
+    {
+      path: '/profile',
+      name: 'ProfileComponent',
+      component: ProfileComponent
     },
     {
       path: '/login',
