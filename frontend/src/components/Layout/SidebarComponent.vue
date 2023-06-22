@@ -1,7 +1,14 @@
 <template>
     <aside class="sidebar">
       <img src="../../assets/joystick-white-removebg.png" alt="logo" />
+      <h3>GameTracker</h3>
       <ul>
+        <li>
+          <router-link to="/home">
+            <span class="icon"><font-awesome-icon icon="home" /></span>
+            Home
+          </router-link>
+        </li>
         <li>
           <router-link to="/profile">
             <span class="icon"><font-awesome-icon icon="user" /></span>
@@ -61,7 +68,13 @@
   img {
     width: 80px;
     margin-top:1rem;
-    margin-bottom: 1rem;
+  }
+
+  h3 {
+    color: #fff;
+    font-family: Poppins;
+    font-size: 20px;
+    font-weight: 600;
   }
   
   ul {

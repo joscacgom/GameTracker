@@ -101,7 +101,7 @@
   
   .register-container label {
     color: rgba(39, 40, 41, 0.3);
-    font-family: Poppins sans-serif;
+    font-family: Poppins;
     font-size: 18px;
     font-weight: 500;
     text-align: left;
@@ -124,7 +124,7 @@
     align-items: center;
     padding: 16px;
     margin: 8px 0px;
-    font-family: 'Poppins', sans-serif;
+    font-family: Poppins;
   }
   
   .register-container button {
@@ -144,7 +144,7 @@
     margin-left: auto;
     margin-right: auto;
   
-    font-family: 'Poppins', sans-serif;
+    font-family: Poppins;
     text-align: center;
     font-size: 18px;
     font-weight: 500;
