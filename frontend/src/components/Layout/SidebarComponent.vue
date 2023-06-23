@@ -10,15 +10,15 @@
           </router-link>
         </li>
         <li>
-          <router-link to="/profile">
-            <span class="icon"><font-awesome-icon icon="user" /></span>
-            Profile
-          </router-link>
-        </li>
-        <li>
           <router-link to="/my-lists">
             <span class="icon"><font-awesome-icon icon="list" /></span>
             My Lists
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/my-games">
+            <span class="icon"><font-awesome-icon icon="gamepad" /></span>
+            My Games
           </router-link>
         </li>
         <li>
@@ -28,10 +28,10 @@
           </router-link>
         </li>
       </ul>
+      <img class="avatar-pic" src="../../assets/placeholder/mc.jpeg" alt="avatar" @click="redirectToProfile" />
       <div class="logout">
         <button @click="logout">
-          <span class="icon"><font-awesome-icon icon="sign-out-alt" /></span>
-          Logout
+          <span class="icon"><font-awesome-icon icon="sign-out" size="lg" /></span>
         </button>
       </div>
     </aside>
@@ -47,6 +47,9 @@
     methods: {
       logout() {
         this.$router.push('/');
+      },
+      redirectToProfile() {
+        this.$router.push('/profile');
       },
     },
   };
@@ -70,11 +73,21 @@
     margin-top:1rem;
   }
 
+  .avatar-pic {
+    border-color: rgb(255, 255, 255);
+    border-style: solid;
+    width: 40px;
+    border-radius: 100%;
+    margin-bottom: 1rem;
+    cursor: pointer;
+  }
+
   h3 {
     color: #fff;
     font-family: Poppins;
     font-size: 20px;
     font-weight: 600;
+    border-bottom: #ffffff 1px solid;
   }
   
   ul {
