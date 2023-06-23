@@ -7,6 +7,7 @@ import ProfileComponent from '../components/Profile/ProfileComponent.vue';
 import MyListsComponent from '../components/Lists/MyListsComponent.vue';
 import ListDetailsComponent from '../components/Lists/ListDetailsComponent.vue';
 import NotFoundComponent from '../components/NotFound/NotFoundComponent.vue';
+import MyGamesComponent from '../components/Games/MyGamesComponent.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -37,6 +38,11 @@ const router = createRouter({
       path: '/my-lists',
       name: 'MyListsComponent',
       component: MyListsComponent
+    },
+    {
+      path: '/my-games',
+      name: 'MyGamesComponent',
+      component: MyGamesComponent
     },
     {
       path: '/login',
