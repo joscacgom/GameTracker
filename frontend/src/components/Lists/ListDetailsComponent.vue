@@ -47,7 +47,7 @@
       return {
         list: {},
         isLoading: false,
-        error: true,
+        error: false,
       };
     },
     mounted() {
