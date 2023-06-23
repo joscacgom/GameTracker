@@ -2,7 +2,7 @@
     <div class="lists-container">
       <div class="carousel-wrapper">
         <div class="carousel" :style="carouselStyle">
-          <div class="carousel-item" v-for="item in visibleItems" :key="item.id">
+          <div class="carousel-item" v-for="item in visibleItems" :key="item.id" @click="redirectToItemList(item.id)">
             <img :src="item.imageUrl" :alt="item.title" class="carousel-image" />
             <div class="carousel-overlay">
               <h3>{{ item.title }}</h3>
@@ -77,6 +77,9 @@
       },
     },
     methods: {
+      redirectToItemList(itemId) {
+        this.$router.push(`/list/${itemId}`);
+      },
       slideCarousel(direction) {
         const maxPosition = this.carouselItems.length - this.itemsToShow; // Maximum position of the carousel
   

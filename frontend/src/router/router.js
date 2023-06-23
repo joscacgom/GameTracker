@@ -5,6 +5,7 @@ import WelcomeComponent from '../components/Home/WelcomeComponent.vue';
 import MainComponent from '../components/Home/MainComponent.vue';
 import ProfileComponent from '../components/Profile/ProfileComponent.vue';
 import MyListsComponent from '../components/Lists/MyListsComponent.vue';
+import ListDetailsComponent from '../components/Lists/ListDetailsComponent.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -24,6 +25,12 @@ const router = createRouter({
       path: '/profile',
       name: 'ProfileComponent',
       component: ProfileComponent
+    },
+    {
+      path: '/list/:listId',
+      name: 'ListDetailsComponent',
+      component: ListDetailsComponent,
+      props: true
     },
     {
       path: '/my-lists',
