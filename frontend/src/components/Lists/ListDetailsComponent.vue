@@ -6,7 +6,7 @@
      </div>
       <SidebarComponent></SidebarComponent>
       <div v-if="isLoading" class="loading-container">
-        <h1>Loading...</h1>
+       <LoadingComponent></LoadingComponent>
       </div>
       <div v-else-if="error" class="error-container">
         <h1>{{ error }}</h1>
@@ -32,12 +32,13 @@
   
   <script>
   import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
-  
+  import LoadingComponent from '@/components/Loading/LoadingComponent.vue';
   export default {
     name: 'ListDetailsComponent',
     props: ['listId'],
     components: {
       SidebarComponent,
+      LoadingComponent,
     },
     data() {
       return {
@@ -93,7 +94,7 @@
             ],
           };
           this.isLoading = false;
-        }, 1000);
+        }, 2000);
   
         if (!this.listId) {
           this.error = 'List ID not provided.';
