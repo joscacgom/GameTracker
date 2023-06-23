@@ -6,6 +6,7 @@ import MainComponent from '../components/Home/MainComponent.vue';
 import ProfileComponent from '../components/Profile/ProfileComponent.vue';
 import MyListsComponent from '../components/Lists/MyListsComponent.vue';
 import ListDetailsComponent from '../components/Lists/ListDetailsComponent.vue';
+import NotFoundComponent from '../components/NotFound/NotFoundComponent.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -47,6 +48,10 @@ const router = createRouter({
       name: 'RegisterForm',
       component: RegisterForm
     },
+    {
+      path:'/:pathMatch(.*)*',
+      component: NotFoundComponent
+   }
   ]
 });
 
