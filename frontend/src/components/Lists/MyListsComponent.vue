@@ -6,7 +6,7 @@
       </div>
   
       <div class="carousel-container">
-        <div class="carousel-item" v-for="item in carouselItems" :key="item.id">
+        <div class="carousel-item" v-for="item in carouselItems" :key="item.id" @click="redirectToItemList(item.id)">
           <img :src="item.imageUrl" :alt="item.title" class="carousel-image" />
           <div class="carousel-overlay">
             <h3>{{ item.title }}</h3>
@@ -70,6 +70,9 @@
       createNewList() {
         this.showPopup = true;
       },
+      redirectToItemList(itemId) {
+        this.$router.push(`/list/${itemId}`);
+    },
       closePopup() {
         this.showPopup = false;
       },
@@ -123,7 +126,7 @@
     font-family: 'Poppins', sans-serif;
     font-size: 18px;
     font-weight: 500;
-    position: relative; /* Added position relative for overlay positioning */
+    position: relative; 
   }
   
   .carousel-image {
