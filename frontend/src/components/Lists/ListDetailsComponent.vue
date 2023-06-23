@@ -1,6 +1,6 @@
 <template>
     <div class="list-container">
-     <div class="header-container" v-if="!isLoading">
+     <div class="header-container" v-if="!isLoading && !error">
         <h1 class="title">{{ list.title }}</h1>
         <h3 class="subtitle">Check your {{ list.title }} games and track your progress, you can add more in the discover section.</h3>
      </div>
@@ -9,7 +9,7 @@
        <LoadingComponent></LoadingComponent>
       </div>
       <div v-else-if="error" class="error-container">
-        <h1>{{ error }}</h1>
+        <ErrorComponent></ErrorComponent>
       </div>
       
       <div v-else >
@@ -22,7 +22,7 @@
             </div>
         </div>
      </div>
-     <button v-if="!isLoading" class="discover-button" @click="navigateToDiscover">
+     <button v-if="!isLoading && !error" class="discover-button" @click="navigateToDiscover">
       <font-awesome-icon icon="compass" />
       Discover new games
     </button>
@@ -33,18 +33,21 @@
   <script>
   import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
   import LoadingComponent from '@/components/Loading/LoadingComponent.vue';
+  import ErrorComponent from '@/components/Error/ErrorComponent.vue';
+  
   export default {
     name: 'ListDetailsComponent',
     props: ['listId'],
     components: {
       SidebarComponent,
       LoadingComponent,
+      ErrorComponent,
     },
     data() {
       return {
         list: {},
         isLoading: false,
-        error: null,
+        error: true,
       };
     },
     mounted() {
@@ -97,7 +100,7 @@
         }, 2000);
   
         if (!this.listId) {
-          this.error = 'List ID not provided.';
+          this.error = true;
           this.isLoading = false;
         }
       },
