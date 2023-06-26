@@ -3,8 +3,8 @@
     <h2>Login</h2>
     <form @submit.prevent="login">
       <div>
-        <label for="email">Email</label>
-        <input type="email" id="email" v-model="email" placeholder="Enter your email..." required />
+        <label for="username">Username</label>
+        <input type="username" id="username" v-model="username" placeholder="Enter your username..." required />
       </div>
       <div>
         <label for="password">Password</label>
@@ -23,7 +23,7 @@ export default {
   name: 'LoginForm',
   data() {
     return {
-      email: '',
+      username: '',
       password: '',
       error: '',
       isLoggingIn: false
@@ -31,28 +31,44 @@ export default {
   },
   methods: {
     async login() {
-      try {
-        this.error = '';
-        this.isLoggingIn = true;
+  try {
+    this.error = '';
+    this.isLoggingIn = true;
 
-        // Simulate an API call with async/await
-        await new Promise(resolve => setTimeout(resolve, 1000));
+    const requestBody = {
+      username: this.username,
+      password: this.password
+    };
 
-        // Check if the email and password are valid
-        if (this.email === 'user@example.com' && this.password === 'password') {
-          console.log('Logged in with email:', this.email);
-        } else {
-          this.error = 'Invalid email or password';
-        }
-      } catch (error) {
-        console.error('An error occurred during login:', error);
-        this.error = 'An error occurred during login. Please try again later.';
-      } finally {
-        this.isLoggingIn = false;
-        this.$router.push('/home');
+    // Make the POST request
+    const response = await fetch('http://localhost:8080/authenticate/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody)
+    });
 
-      }
+    if (response.ok) {
+      const responseData = await response.json();
+
+      // Save the response data in sessionStorage
+      sessionStorage.setItem('jwtoken', responseData.jwtoken);
+      sessionStorage.setItem('username', responseData.username);
+
+      this.$router.push('/login');
+    } else {
+      const errorResponseText = await response.text();
+      this.error = errorResponseText || 'An error occurred during login.';
     }
+  } catch (error) {
+    console.error('An error occurred during login:', error);
+    this.error = 'An error occurred during login: ' + error.message;
+  } finally {
+    this.isLoggingIn = false;
+  }
+}
+
   }
 };
 </script>
