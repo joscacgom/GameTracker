@@ -1,7 +1,7 @@
 <template>
     <div class="register-container">
       <h2>Sign up</h2>
-      <form @submit.prevent="login">
+      <form @submit.prevent="register">
         <div>
           <label for="username">Username</label>
           <input type="username" id="username" v-model="username" placeholder="Enter your username..." required />
@@ -40,30 +40,77 @@
       };
     },
     methods: {
-      async login() {
-        try {
-          this.error = '';
-          this.isRegisterIn = true;
-  
-          // Simulate an API call with async/await
-          await new Promise(resolve => setTimeout(resolve, 1000));
-  
-          // Check if the email and password are valid
-          if (this.email === 'user@example.com' && this.password === 'password') {
-            console.log('Logged in with email:', this.email);
-          } else {
-            this.error = 'Invalid email or password';
-          }
-        } catch (error) {
-          console.error('An error occurred during login:', error);
-          this.error = 'An error occurred during login. Please try again later.';
-        } finally {
-          this.isRegisterIn = false;
-          this.$router.push('/login');
+  async register() {
+    try {
+      this.error = '';
+      this.isRegisterIn = true;
 
-        }
+      // Check if username is empty
+      if (!this.username) {
+        this.error = 'Username cannot be empty!';
+        return;
       }
+
+      // Check if email is empty
+      if (!this.email) {
+        this.error = 'Email cannot be empty!';
+        return;
+      }
+
+      // Check if password is empty
+      if (!this.password) {
+        this.error = 'Password cannot be empty!';
+        return;
+      }
+
+      // Check if password2 is empty
+      if (!this.password2) {
+        this.error = 'Repeat Password cannot be empty!';
+        return;
+      }
+
+      // Check if password is at least 8 characters
+      if (this.password.length < 8) {
+        this.error = 'Password must be at least 8 characters!';
+        return;
+      }
+
+      // Check if passwords match
+      if (this.password !== this.password2) {
+        this.error = 'Passwords must match!';
+        return;
+      }
+
+      const requestBody = {
+        username: this.username,
+        email: this.email,
+        password: this.password
+      };
+
+       // Make the POST request
+       const response = await fetch('http://localhost:8080/authenticate/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+      });
+
+      if (response.ok) {
+      this.$router.push('/home');
+    } else {
+      const errorResponseText = await response.text();
+      this.error = errorResponseText || 'An error occurred during login.';
     }
+
+    } catch (error) {
+      console.error('An error occurred during register:', error);
+      this.error = 'An error occurred during register: ' + error.message;
+    } finally {
+      this.isRegisterIn = false;
+    }
+  }
+      }
   };
   </script>
   
