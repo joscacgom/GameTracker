@@ -11,7 +11,7 @@ import java.util.Objects;
 public class User {
 
     @Id
-    private Long id;
+    private String id;
 
     private String username;
 
@@ -38,11 +38,11 @@ public class User {
         this.role = role;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

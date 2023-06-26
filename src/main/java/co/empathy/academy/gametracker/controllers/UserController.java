@@ -1,9 +1,11 @@
 package co.empathy.academy.gametracker.controllers;
 
+import co.empathy.academy.gametracker.models.AuthDTO;
 import co.empathy.academy.gametracker.models.User;
 import co.empathy.academy.gametracker.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +29,7 @@ public class UserController {
      * error response if the registration failed.
      *
      */
+    @CrossOrigin(origins = "http://localhost:8081")
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         // Extract the necessary details (username, email, password) from the request body
@@ -55,6 +58,7 @@ public class UserController {
      * response if the login failed.
      *
      */
+    @CrossOrigin(origins = "http://localhost:8081")
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User user) {
         // Extract the necessary details (username, password) from the request body
@@ -67,8 +71,10 @@ public class UserController {
             if(token == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
             }
+
+            AuthDTO authDTO = new AuthDTO(username, token);
             // Return the JWT token with HTTP status 200 (OK)
-            return ResponseEntity.ok(token);
+            return ResponseEntity.ok(authDTO);
         } catch (Exception e) {
             // Return an error response with HTTP status 401 (Unauthorized) and the error message
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
