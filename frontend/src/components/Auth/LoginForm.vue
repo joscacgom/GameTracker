@@ -56,7 +56,7 @@ export default {
       sessionStorage.setItem('jwtoken', responseData.jwtoken);
       sessionStorage.setItem('username', responseData.username);
 
-      this.$router.push('/login');
+      this.$router.push('/home');
     } else {
       const errorResponseText = await response.text();
       this.error = errorResponseText || 'An error occurred during login.';
