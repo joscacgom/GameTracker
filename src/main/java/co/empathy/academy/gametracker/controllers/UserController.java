@@ -1,5 +1,6 @@
 package co.empathy.academy.gametracker.controllers;
 
+import co.empathy.academy.gametracker.models.AuthDTO;
 import co.empathy.academy.gametracker.models.User;
 import co.empathy.academy.gametracker.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -70,8 +71,10 @@ public class UserController {
             if(token == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
             }
+
+            AuthDTO authDTO = new AuthDTO(username, token);
             // Return the JWT token with HTTP status 200 (OK)
-            return ResponseEntity.ok(token);
+            return ResponseEntity.ok(authDTO);
         } catch (Exception e) {
             // Return an error response with HTTP status 401 (Unauthorized) and the error message
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
