@@ -1,7 +1,9 @@
 package co.empathy.academy.gametracker.services;
 
 import co.empathy.academy.gametracker.models.Game;
+import co.empathy.academy.gametracker.models.Platform;
 import co.empathy.academy.gametracker.repositories.GameRepository;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import okhttp3.OkHttpClient;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,6 +23,7 @@ public class APIService {
     private final GameRepository gameRepository;
 
     private final OkHttpClient client = new OkHttpClient();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public APIService(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
@@ -44,10 +48,29 @@ public class APIService {
                     throw new IOException("Error response body is blank.");
 
                 // Des-serializar: Cadena JSON a Java
-                ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.registerModule(new JavaTimeModule()); // Java 8 date/time module
-                APIGameResponse apiGameResponse = objectMapper.readValue(jsonResponse, APIGameResponse.class);
-                List<Game> games = apiGameResponse.getResults(); // el json contiene en "results" los juegos
+                // El json contiene en "results" los juegos
+                JsonNode gamesNode = objectMapper.readTree(jsonResponse).get("results");
+                List<Game> games = new ArrayList<>();
+                if (gamesNode != null) {
+                    for (JsonNode gameNode : gamesNode) {
+                        Game game = objectMapper.readValue(gameNode.toString(), Game.class);
+
+                        // El json contiene en "platforms [{ platform" las plataformas
+                        List<Platform> platforms = new ArrayList<>();
+                        JsonNode platformsNode = gameNode.get("platforms");
+                        if (platformsNode != null) {
+                            for (JsonNode platformNode : platformsNode) {
+                                JsonNode platformObj = platformNode.get("platform");
+                                Platform platform = objectMapper.readValue(platformObj.toString(), Platform.class);
+                                platforms.add(platform);
+                            }
+                        }
+
+                        game.setPlatforms(platforms);
+                        games.add(game);
+                    }
+                }
 
                 // Guarda los juegos en la bbdd Mongo
                 gameRepository.saveAll(games);

@@ -32,23 +32,10 @@ public class Game {
     @Embedded
     private List<Genre> genres; // genre names
 
-    //@DBRef
-    //private List<GameList> gameLists;
-
     public Game() {
     }
 
-    public Game(long id, String name, LocalDate released, String background_image, int playtime, List<Platform> platforms, List<Genre> genres) {
-        this.id = id;
-        this.name = name;
-        this.released = released;
-        this.background_image = background_image;
-        this.playtime = playtime;
-        this.platforms = platforms;
-        this.genres = genres;
-    }
-
-    public Game(long id, String name, String description, LocalDate released, String background_image, int playtime, List<Platform> platforms, List<Genre> genres) {
+    public Game(Long id, String name, String description, LocalDate released, String background_image, int playtime, List<Platform> platforms, List<Genre> genres) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -59,11 +46,11 @@ public class Game {
         this.genres = genres;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -73,6 +60,14 @@ public class Game {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDate getReleased() {
