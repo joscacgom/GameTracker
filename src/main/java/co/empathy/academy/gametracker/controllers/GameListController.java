@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -219,6 +220,7 @@ public class GameListController {
      *   - 404 Not Found: If no game lists were found for the specified user
      *   - 401 Unauthorized: If the request is not authorized or the token is invalid
      */
+    @CrossOrigin(origins = "http://localhost:8081")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<GameList>> getGameListsByUserId(
             @PathVariable("userId") String userId,
