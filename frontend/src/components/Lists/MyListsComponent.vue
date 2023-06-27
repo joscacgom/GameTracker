@@ -1,31 +1,38 @@
 <template>
-    <div class="mylists-container">
-      <SidebarComponent></SidebarComponent>
-      <div class="header-container">
-        <h1 class="title">My Lists</h1>
+  <div class="mylists-container">
+    <SidebarComponent></SidebarComponent>
+    <div class="header-container">
+      <h1 class="title">My Lists</h1>
+    </div>
+
+    <div class="carousel-container">
+      <!-- Check if carouselItems is empty or null -->
+      <div v-if="!carouselItems || carouselItems.length === 0" class="empty-carousel">
+        <EmptyComponent></EmptyComponent>
       </div>
-  
-      <div class="carousel-container">
-        <div class="carousel-item" v-for="item in carouselItems" :key="item.id" @click="redirectToItemList(item.id)">
-          <img :src="item.imageUrl" :alt="item.title" class="carousel-image" />
-          <div class="carousel-overlay">
-            <h3>{{ item.title }}</h3>
-          </div>
+      <!-- Iterate over carouselItems if not empty -->
+      <div v-else class="carousel-item" v-for="item in carouselItems" :key="item.id" @click="redirectToItemList(item.id)">
+        <img :src="item.imageUrl" :alt="item.title" class="carousel-image" />
+        <div class="carousel-overlay">
+          <h3>{{ item.title }}</h3>
         </div>
       </div>
-  
-      <button class="create-list-button" @click="createNewList">
-        <font-awesome-icon icon="plus-circle" />
-        Create New List
-      </button>
-      <create-list-component :show-popup="showPopup" @close="closePopup"></create-list-component>
     </div>
-  </template>
+
+    <button class="create-list-button" @click="createNewList">
+      <font-awesome-icon icon="plus-circle" />
+      Create New List
+    </button>
+    <create-list-component :show-popup="showPopup" @close="closePopup"></create-list-component>
+  </div>
+</template>
+
   
   <script>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
   import CreateListComponent from '@/components/Lists/CreateListComponent.vue';
+  import EmptyComponent from '@/components/Empty/EmptyComponent.vue';
   
   export default {
     name: 'MyListsComponent',
@@ -33,6 +40,7 @@
       FontAwesomeIcon,
       SidebarComponent,
       CreateListComponent,
+      EmptyComponent,
     },
     data() {
       return {
