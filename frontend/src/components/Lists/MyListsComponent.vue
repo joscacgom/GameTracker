@@ -36,37 +36,42 @@
     },
     data() {
       return {
-        carouselItems: [
-          {
-            id: 1,
-            title: 'Pending',
-            imageUrl: require('@/assets/placeholder/mw2.jpeg'),
-          },
-          {
-            id: 2,
-            title: 'Ongoing',
-            imageUrl: require('@/assets/placeholder/rome2.jpeg'),
-          },
-          {
-            id: 3,
-            title: 'Completed',
-            imageUrl: require('@/assets/placeholder/alanwake.jpeg'),
-          },
-          {
-            id: 4,
-            title: 'Completed',
-            imageUrl: require('@/assets/placeholder/alanwake.jpeg'),
-          },
-          {
-            id: 5,
-            title: 'Completed',
-            imageUrl: require('@/assets/placeholder/mw2.jpeg'),
-          },
-        ],
+        carouselItems: [],
         showPopup: false,
+        loading: true,
       };
     },
+    mounted() {
+      this.fetchCarouselItems();
+   },
     methods: {
+      async fetchCarouselItems() {
+        try{
+          const userId = sessionStorage.getItem('userId');
+         
+        // Make the GET request
+        const response = await fetch(`http://localhost:8080/api/game-lists/user/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + sessionStorage.getItem('jwtoken')
+          },
+        });
+        
+      if (response.ok) {
+          const responseData = await response.json();
+          this.carouselItems = await responseData;
+          console.log(this.carouselItems)
+      }else{
+        console.log('An error response was received');
+      }
+
+      } catch (error) {
+        console.error('An error occurred during fetching:', error);
+      } finally {
+        this.loading = false;
+    }
+  },
       createNewList() {
         this.showPopup = true;
       },
