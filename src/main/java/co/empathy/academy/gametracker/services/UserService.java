@@ -74,4 +74,48 @@ public class UserService implements UserDetailsService {
         // Return null if authentication fails
         return null;
     }
+
+    /**
+     * Update the user's email and username.
+     *
+     * @param username The username of the user to update.
+     * @param email    The new email to set.
+     * @return The updated user.
+     * @throws Exception If the user is not found or the update fails.
+     */
+    public User updateUser(String currentUsername, String username, String email) throws Exception {
+        // Find the user by the username
+        User user = userRepository.findByUsername(currentUsername);
+
+        if (user == null) {
+            throw new Exception("User not found.");
+        }
+
+        // Update the email and username
+        user.setEmail(email);
+        user.setUsername(username);
+
+        // Save the updated user
+        User updatedUser = userRepository.save(user);
+
+        return updatedUser;
+    }
+
+    /**
+     * Delete a user by username.
+     *
+     * @param username The username of the user to delete.
+     * @throws Exception If the user is not found or the delete fails.
+     */
+    public void changePassword(String currentUsername, String newPassword) throws Exception {
+        User user = userRepository.findByUsername(currentUsername);
+
+        if (user == null) {
+            throw new Exception("User not found.");
+        }
+
+        user.setPassword(newPassword);
+
+        userRepository.save(user);
+    }
 }
