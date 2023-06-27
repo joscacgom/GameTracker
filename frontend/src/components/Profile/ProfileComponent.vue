@@ -86,43 +86,90 @@
       },
   
       async updateProfile() {
+
+      try{
+
         this.error = '';
         this.isUpdatingInfo = true;
   
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        this.isUpdatingInfo = false;
-  
-        // api.updateProfile({
-        //   avatar: this.avatar,
-        //   username: this.username,
-        //   email: this.email,
-        //   password: this.password
-        // }).then(response => {
-        //   // Handle the response from the server or perform any necessary actions
-        // }).catch(error => {
-        //   // Handle the error from the server or perform any necessary actions
-        // });
-      },
+        const requestBody = {
+          username: this.username,
+          email: this.email,
+          currentUsername: sessionStorage.getItem('username')
+      };
+
+      // Make the PUT request
+      const response = await fetch('http://localhost:8080/authenticate/update', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + sessionStorage.getItem('jwtoken')
+        },
+        body: JSON.stringify(requestBody)
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+
+        // Save the response data in sessionStorage
+        sessionStorage.setItem('username', responseData.username);
+      } else {
+        const errorResponseText = await response.text();
+        this.error = errorResponseText || 'An error occurred during updating.';
+      }
+    }catch (error) {
+      console.error('An error occurred during updating:', error);
+      this.error = 'An error occurred during updating: ' + error.message;
+    } finally {
+      this.isUpdatingInfo = false;
+    }
+  },
 
       async changePassword() {
-        this.error = '';
-        this.isUpdatingPassword = true;
-  
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        try{
+
+          this.error = '';
+          this.isUpdatingPassword = true;
+
+          // Check if password is at least 8 characters
+          if (this.password.length < 8) {
+            this.error = 'Password must be at least 8 characters!';
+            return;
+          }
+
+          // Check if passwords match
+          if (this.password !== this.password2) {
+            this.error = 'Passwords must match!';
+            return;
+          }
+    
+          const requestBody = {
+            currentUsername: sessionStorage.getItem('username'),
+            newPassword: this.password,
+        };
+
+        // Make the PATCH request
+        const response = await fetch('http://localhost:8080/authenticate/update', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + sessionStorage.getItem('jwtoken')
+          },
+          body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+          const errorResponseText = await response.text();
+          this.error = errorResponseText || 'An error occurred during updating.';
+        }
+      }catch (error) {
+        console.error('An error occurred during updating:', error);
+        this.error = 'An error occurred during updating: ' + error.message;
+      } finally {
         this.isUpdatingPassword = false;
-  
-        // api.updateProfile({
-        //   avatar: this.avatar,
-        //   username: this.username,
-        //   email: this.email,
-        //   password: this.password
-        // }).then(response => {
-        //   // Handle the response from the server or perform any necessary actions
-        // }).catch(error => {
-        //   // Handle the error from the server or perform any necessary actions
-        // });
-      },
-    },
+    }
+  },
+},
   };
   </script>
   
