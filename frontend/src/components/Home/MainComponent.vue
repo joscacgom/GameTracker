@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      username: 'John Doe',
+      username: sessionStorage.getItem('username'),
     };
   },
   methods: {

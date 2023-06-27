@@ -1,11 +1,11 @@
 <template>
-    <div class="profile-container">
-      <SidebarComponent></SidebarComponent>
-      <div class="header-container">
-        <h1 class="title">Profile</h1>
-      </div>
-  
-      <div class="avatar-container">
+  <div class="profile-container">
+    <SidebarComponent></SidebarComponent>
+    <div class="header-container">
+      <h1 class="title">Profile</h1>
+    </div>
+
+    <div class="avatar-container">
         <img :src="avatar" :alt="username" class="avatar" />
         <div class="overlay" v-if="hovered" ref="overlayRef">
           <div @click="openFileInput">
@@ -14,46 +14,63 @@
           <input ref="fileInput" type="file" accept="image/*" @change="handleAvatarChange" style="display: none;" />
         </div>
       </div>
-  
+
+    <div class="forms-container">
       <div class="form-container">
         <div>
           <label for="username">Username</label>
-          <input type="text" id="username" v-model="username" placeholder="Enter your username..." required />
+          <input type="text" id="username" v-model="username" placeholder="Enter new username..." required />
         </div>
         <div>
           <label for="email">Email</label>
-          <input type="email" id="email" v-model="email" placeholder="Enter your email..." required />
+          <input type="email" id="email" v-model="email" placeholder="Enter new email..." required />
         </div>
+        <button @click="updateProfile" :disabled="isUpdatingInfo">
+          {{ isUpdatingInfo ? 'Saving...' : 'Save changes' }}
+        </button>
+        <p v-if="error" class="error">{{ error }}</p>
+      </div>
+
+      <div class="form-container">
         <div>
           <label for="password">Password</label>
-          <input type="password" id="password" v-model="password" placeholder="Enter your password..." required />
+          <input type="password" id="password" v-model="password" placeholder="Enter new password..." required />
         </div>
-        <button @click="updateProfile" :disabled="isUpdating">
-          {{ isUpdating ? 'Saving...' : 'Save changes' }}
+
+        <div>
+          <label for="password2">Confirm Password</label>
+          <input type="password" id="password2" v-model="password2" placeholder="Repeat new password..." required />
+        </div>
+        <button @click="changePassword" :disabled="isUpdatingPassword">
+          {{ isUpdatingPassword ? 'Saving...' : 'Change password' }}
         </button>
         <p v-if="error" class="error">{{ error }}</p>
       </div>
     </div>
-  </template>
+  </div>
+</template>
+
   
   <script>
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   
   export default {
     name: 'ProfileComponent',
     components: {
-      FontAwesomeIcon,
       SidebarComponent,
+      FontAwesomeIcon,
     },
     data() {
       return {
         avatar: require('@/assets/placeholder/mc.jpeg'),
-        username: '',
+        username: sessionStorage.getItem('username'),
         email: '',
         password: '',
+        password2:'',
         error: '',
-        isUpdating: false,
+        isUpdatingInfo: false,
+        isUpdatingPassword: false,
         hovered: false,
       };
     },
@@ -70,10 +87,29 @@
   
       async updateProfile() {
         this.error = '';
-        this.isUpdating = true;
+        this.isUpdatingInfo = true;
   
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        this.isUpdating = false;
+        this.isUpdatingInfo = false;
+  
+        // api.updateProfile({
+        //   avatar: this.avatar,
+        //   username: this.username,
+        //   email: this.email,
+        //   password: this.password
+        // }).then(response => {
+        //   // Handle the response from the server or perform any necessary actions
+        // }).catch(error => {
+        //   // Handle the error from the server or perform any necessary actions
+        // });
+      },
+
+      async changePassword() {
+        this.error = '';
+        this.isUpdatingPassword = true;
+  
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        this.isUpdatingPassword = false;
   
         // api.updateProfile({
         //   avatar: this.avatar,
@@ -98,6 +134,14 @@
     justify-content: center;
     min-height: 100vh;
   }
+
+  .forms-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 2rem
+  }
+
   
   .header-container {
     display: flex;
@@ -175,7 +219,7 @@
   
   .form-container label {
     color: rgba(39, 40, 41, 0.3);
-    font-family: Poppins sans-serif;
+    font-family: Poppins;
     font-size: 18px;
     font-weight: 500;
     text-align: left;
