@@ -24,21 +24,21 @@ public class APIController {
     }
 
     @GetMapping("/listGames")
-    public ResponseEntity<String> getAListOfGames() {
+    public ResponseEntity<List<Game>> getAListOfGames() {
         List<Game> games = apiService.getAListOfGames();
         if (games != null)
-            return ResponseEntity.ok(games.toString()); // Retorno: respuesta ok con games en el cuerpo.
+            return ResponseEntity.ok(games); // Retorno: respuesta ok con games en el cuerpo.
         else // Retorno: respuesta de error con mensaje.
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while getting a list of games from RAWG API.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @GetMapping("/gameDetails/{game_id}")
-    public ResponseEntity<String> getGameDetails(@PathVariable String game_id) {
-        String data = apiService.getGameDetails(game_id);
-        if (data != null)
-            return ResponseEntity.ok(data); // Retorno: respuesta ok con data en el cuerpo.
+    public ResponseEntity<Game> getGameDetails(@PathVariable String game_id) {
+        Game game = apiService.getGameDetails(game_id);
+        if (game != null)
+            return ResponseEntity.ok(game); // Retorno: respuesta ok con data en el cuerpo.
         else // Retorno: respuesta de error con mensaje.
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while getting game details from RAWG API.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
 }
