@@ -21,28 +21,33 @@ const router = createRouter({
     {
       path: '/home',
       name: 'MainComponent',
-      component: MainComponent
+      component: MainComponent,
+      meta: { requiresAuth: true }
     },
     {
       path: '/profile',
       name: 'ProfileComponent',
-      component: ProfileComponent
+      component: ProfileComponent,
+      meta: { requiresAuth: true }
     },
     {
       path: '/list/:listId',
       name: 'ListDetailsComponent',
       component: ListDetailsComponent,
-      props: true
+      props: true,
+      meta: { requiresAuth: true }
     },
     {
       path: '/my-lists',
       name: 'MyListsComponent',
-      component: MyListsComponent
+      component: MyListsComponent,
+      meta: { requiresAuth: true }
     },
     {
       path: '/my-games',
       name: 'MyGamesComponent',
-      component: MyGamesComponent
+      component: MyGamesComponent,
+      meta: { requiresAuth: true }
     },
     {
       path: '/login',
@@ -57,8 +62,38 @@ const router = createRouter({
     {
       path:'/:pathMatch(.*)*',
       component: NotFoundComponent
+
    }
   ]
+});
+
+const isAuthenticated = () => {
+  const username = sessionStorage.getItem('username');
+  const token = sessionStorage.getItem('jwtoken');
+  
+  const authenticated = username !== null && token !== null;
+
+  if (!authenticated) {
+    router.push({ name: 'LoginForm' });
+  }
+
+  return authenticated;
+};
+
+router.beforeEach((to, from, next) => {
+  // Check if the route requires authentication
+  if (to.meta.requiresAuth) {
+    // If the user is authenticated, allow navigation
+    if (isAuthenticated()) {
+      next();
+    } else {
+      // If the user is not authenticated, redirect to the login page or any other route
+      next({ name: 'LoginForm' });
+    }
+  } else {
+    // If the route doesn't require authentication, allow navigation
+    next();
+  }
 });
 
 export default router;

@@ -46,6 +46,8 @@
     },
     methods: {
       logout() {
+        sessionStorage.removeItem('jwtoken');
+        sessionStorage.removeItem('username');
         this.$router.push('/');
       },
       redirectToProfile() {
