@@ -221,7 +221,7 @@ public class GameListController {
      */
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<GameList>> getGameListsByUserId(
-            @PathVariable("userId") Long userId,
+            @PathVariable("userId") String userId,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
         // Validate the JWT token

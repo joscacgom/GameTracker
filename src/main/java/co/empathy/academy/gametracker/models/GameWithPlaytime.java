@@ -10,7 +10,7 @@ import java.util.Objects;
 public class GameWithPlaytime {
 
     @Id
-    private Long id;
+    private String id;
 
     @DBRef
     private Game game;
@@ -20,17 +20,17 @@ public class GameWithPlaytime {
     public GameWithPlaytime() {
     }
 
-    public GameWithPlaytime(Long id, Game game, Integer playtimeHours) {
+    public GameWithPlaytime(String id, Game game, Integer playtimeHours) {
         this.id = id;
         this.game = game;
         this.playtimeHours = playtimeHours;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

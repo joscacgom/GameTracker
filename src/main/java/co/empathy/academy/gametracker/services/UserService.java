@@ -118,4 +118,18 @@ public class UserService implements UserDetailsService {
 
         userRepository.save(user);
     }
+
+    /**
+     * Get a user by username.
+     *
+     * @param username The username of the user to get.
+     * @throws Exception If the user is not found.
+     */
+    public String getUserId(String username) {
+        User user = userRepository.findByUsername(username);
+        if(user == null) {
+            throw new IllegalArgumentException("User not found.");
+        }
+        return user.getId();
+    }
 }
