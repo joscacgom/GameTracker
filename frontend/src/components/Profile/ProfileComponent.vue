@@ -149,7 +149,7 @@
         };
 
         // Make the PATCH request
-        const response = await fetch('http://localhost:8080/authenticate/update', {
+        const response = await fetch('http://localhost:8080/authenticate/change-password', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
