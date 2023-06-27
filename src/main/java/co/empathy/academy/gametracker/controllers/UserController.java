@@ -116,8 +116,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         
-        
-        
         // Extract the necessary details (username, email) from the request body
         String username = userUpdateDTO.getUsername();
         String email = userUpdateDTO.getEmail();
@@ -148,7 +146,17 @@ public class UserController {
     @CrossOrigin(origins = "http://localhost:8081")
     @PatchMapping("/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO, @RequestHeader("Authorization") String authorizationHeader) {
+        // Validate the JWT token
+        // Extract the token from the authorization header
+        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
 
+        // Load user details from the token
+        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+
+        // Check if the token is valid
+        if (token == null || !jwtUtils.validateToken(token, userDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         try {
             userService.changePassword(changePasswordDTO.getCurrentUsername(), changePasswordDTO.getNewPassword());
 
