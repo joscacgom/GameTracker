@@ -8,6 +8,7 @@ import MyListsComponent from '../components/Lists/MyListsComponent.vue';
 import ListDetailsComponent from '../components/Lists/ListDetailsComponent.vue';
 import NotFoundComponent from '../components/NotFound/NotFoundComponent.vue';
 import MyGamesComponent from '../components/Games/MyGamesComponent.vue';
+import DiscoverComponent from '@/components/Home/DiscoverComponent.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -58,6 +59,11 @@ const router = createRouter({
       path: '/register',
       name: 'RegisterForm',
       component: RegisterForm
+    },
+    {
+      path: '/discover',
+      name: 'Discover',
+      component: DiscoverComponent
     },
     {
       path:'/:pathMatch(.*)*',

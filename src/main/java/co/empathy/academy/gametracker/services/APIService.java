@@ -55,6 +55,8 @@ public class APIService {
                 if (gamesNode != null) {
                     for (JsonNode gameNode : gamesNode) {
                         Game game = objectMapper.readValue(gameNode.toString(), Game.class);
+                        if (game == null)
+                            throw new IOException("Error while mapping: null game.");
 
                         // El json contiene en "platforms [{ platform" las plataformas
                         List<Platform> platforms = new ArrayList<>();
@@ -85,11 +87,10 @@ public class APIService {
         }
     }
 
-    public String getGameDetails(String game_id) {
-        OkHttpClient client = new OkHttpClient();
-
+    public Game getGameDetails(String game_id) {
+        // Llamada a RAWGAPI
         Request request = new Request.Builder()
-                .url("https://rawg-video-games-database.p.rapidapi.com/games/" + game_id)
+                .url("https://rawg-video-games-database.p.rapidapi.com/games/" + game_id + "?key=6ecc279ebc114b0194d9600c889c4ab9")
                 .get()
                 .addHeader("X-RapidAPI-Key", "2f671919fcmsh2c7423d14d84b80p1f2e01jsnfe69a30cb963")
                 .addHeader("X-RapidAPI-Host", "rawg-video-games-database.p.rapidapi.com")
@@ -97,8 +98,35 @@ public class APIService {
 
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful()) {
+                // Obtencion de la respuesta como cadena JSON
                 assert response.body() != null;
-                return response.body().string();
+                String jsonResponse = response.body().string();
+
+                if (jsonResponse.isBlank())
+                    throw new IOException("Error response body is blank.");
+
+                // Des-serializar: Cadena JSON a Java
+                objectMapper.registerModule(new JavaTimeModule()); // Java 8 date/time module
+                Game game = objectMapper.readValue(jsonResponse, Game.class);
+                if (game == null)
+                    throw new IOException("Error while mapping: null game.");
+
+                // El json contiene en "platforms" las plataformas
+                JsonNode platformsNode = objectMapper.readTree(jsonResponse).get("platforms");
+                List<Platform> platforms = new ArrayList<>();
+                if (platformsNode != null) {
+                    for (JsonNode platformNode : platformsNode) {
+                        JsonNode platformObj = platformNode.get("platform");
+                        Platform platform = objectMapper.readValue(platformObj.toString(), Platform.class);
+                        platforms.add(platform);
+                    }
+                }
+                game.setPlatforms(platforms);
+
+                // Guarda el juego en la bbdd Mongo
+                gameRepository.save(game);
+
+                return game;
             }
             else
                 throw new IOException("Error on API response.");
