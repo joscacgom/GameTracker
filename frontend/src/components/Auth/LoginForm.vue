@@ -55,6 +55,7 @@ export default {
       // Save the response data in sessionStorage
       sessionStorage.setItem('jwtoken', responseData.jwtoken);
       sessionStorage.setItem('username', responseData.username);
+      sessionStorage.setItem('userId', responseData.id);
 
       this.$router.push('/home');
     } else {

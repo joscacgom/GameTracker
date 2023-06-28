@@ -16,7 +16,7 @@ public class GameWithPlayTimeService {
         this.gameWithPlayTimeRepository = gameWithPlayTimeRepository;
     }
 
-    public GameWithPlaytime updatePlaytimeHours(Long id, GameWithPlaytime updatedGameWithPlaytime) {
+    public GameWithPlaytime updatePlaytimeHours(String id, GameWithPlaytime updatedGameWithPlaytime) {
         // get the game with playtime by id
         Optional<GameWithPlaytime> optionalGameWithPlayTime = gameWithPlayTimeRepository.findById(id);
         // if the game with playtime exists, update the playtime hours and save it

@@ -48,7 +48,7 @@ public class GameListService {
      * @return The game list with the specified ID, or null if not found.
      */
     public GameList getGameList(String listId) {
-        Optional<GameList> optionalGameList = gameListRepository.findById(Long.parseLong(listId));
+        Optional<GameList> optionalGameList = gameListRepository.findById(listId);
         return optionalGameList.orElse(null);
     }
 
@@ -58,7 +58,7 @@ public class GameListService {
      * @param userId The ID of the user.
      * @return The list of game lists associated with the user.
      */
-    public List<GameList> getGameListsByUserId(Long userId) {
+    public List<GameList> getGameListsByUserId(String userId) {
         return gameListRepository.findByUserId(userId);
     }
 
@@ -68,7 +68,7 @@ public class GameListService {
      * @param listId The ID of the game list to delete.
      */
     public void deleteGameList(String listId) {
-        gameListRepository.deleteById(Long.parseLong(listId));
+        gameListRepository.deleteById(listId);
     }
 }
 

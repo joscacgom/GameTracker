@@ -2,6 +2,8 @@ package co.empathy.academy.gametracker.models;
 
 public class AuthDTO {
 
+    private String id;
+
     private String username;
 
     private String JWToken;
@@ -9,9 +11,10 @@ public class AuthDTO {
     public AuthDTO() {
     }
 
-    public AuthDTO(String username, String JWToken) {
+    public AuthDTO(String username, String JWToken, String id) {
         this.username = username;
         this.JWToken = JWToken;
+        this.id = id;
     }
 
     public String getUsername() {
@@ -30,11 +33,20 @@ public class AuthDTO {
         this.JWToken = JWToken;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "AuthDTO{" +
                 "username='" + username + '\'' +
                 ", JWToken='" + JWToken + '\'' +
+                ", id='" + id + '\'' +
                 '}';
     }
     

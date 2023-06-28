@@ -79,11 +79,12 @@ public class UserController {
         try {
             // Call the loginUser method of the userService to authenticate the user and generate JWT token
             String token = userService.loginUser(username, password);
+            String id = userService.getUserId(username);
             if(token == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
             }
 
-            AuthDTO authDTO = new AuthDTO(username, token);
+            AuthDTO authDTO = new AuthDTO(username, token, id);
             // Return the JWT token with HTTP status 200 (OK)
             return ResponseEntity.ok(authDTO);
         } catch (Exception e) {

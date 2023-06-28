@@ -41,7 +41,7 @@ public class GameWithPlaytimeController {
     @PutMapping("/{id}")
     public ResponseEntity<GameWithPlaytime> updatePlaytimeHours(
             @RequestBody GameWithPlaytime gameWithPlaytime,
-            @PathVariable("id") Long id,
+            @PathVariable("id") String id,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
         // Validate the JWT token

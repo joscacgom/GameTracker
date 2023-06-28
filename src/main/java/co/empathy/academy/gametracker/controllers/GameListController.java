@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,6 +49,7 @@ public class GameListController {
      *   - 201 Created: If the game list was created successfully
      *   - 401 Unauthorized: If the request is not authorized or the token is invalid
      */
+    @CrossOrigin(origins = "http://localhost:8081")
     @PostMapping
     public ResponseEntity<GameList> createGameList(@RequestBody GameList gameList, @RequestHeader("Authorization") String authorizationHeader) {
         // Validate the JWT token
@@ -85,6 +87,7 @@ public class GameListController {
      *   - 404 Not Found: If the specified game list does not exist
      *   - 401 Unauthorized: If the request is not authorized or the token is invalid
      */
+    @CrossOrigin(origins = "http://localhost:8081")
     @PutMapping("/{listId}")
     public ResponseEntity<GameList> updateGameList(@PathVariable("listId") String listId, @RequestBody GameList gameList, @RequestHeader("Authorization") String authorizationHeader) {
         // Validate the JWT token
@@ -128,6 +131,7 @@ public class GameListController {
      *   - 404 Not Found: If the specified game list or game does not exist
      *   - 401 Unauthorized: If the request is not authorized or the token is invalid
      */
+    @CrossOrigin(origins = "http://localhost:8081")
     @PutMapping("/{listId}/game/{gameId}")
     public ResponseEntity<GameList> updateGameFromGameList(
             @PathVariable("listId") String listId,
@@ -219,9 +223,10 @@ public class GameListController {
      *   - 404 Not Found: If no game lists were found for the specified user
      *   - 401 Unauthorized: If the request is not authorized or the token is invalid
      */
+    @CrossOrigin(origins = "http://localhost:8081")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<GameList>> getGameListsByUserId(
-            @PathVariable("userId") Long userId,
+            @PathVariable("userId") String userId,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
         // Validate the JWT token
@@ -263,6 +268,7 @@ public class GameListController {
      *   - 404 Not Found: If the specified game list or game does not exist
      *   - 401 Unauthorized: If the request is not authorized or the token is invalid
      */
+    @CrossOrigin(origins = "http://localhost:8081")
     @DeleteMapping("/{listId}/games/{gameId}")
     public ResponseEntity<GameList> deleteGameFromGameList(
             @PathVariable("listId") String listId,
@@ -334,6 +340,7 @@ public class GameListController {
      *   - 404 Not Found: If the specified game list does not exist
      *   - 401 Unauthorized: If the request is not authorized or the token is invalid
      */
+    @CrossOrigin(origins = "http://localhost:8081")
     @GetMapping("/{listId}")
     public ResponseEntity<GameList> getGameList(
             @PathVariable("listId") String listId,
@@ -382,6 +389,7 @@ public class GameListController {
      *   - 404 Not Found: If the specified game list does not exist
      *   - 401 Unauthorized: If the request is not authorized or the token is invalid
      */
+    @CrossOrigin(origins = "http://localhost:8081")
     @DeleteMapping("/{listId}")
     public ResponseEntity<Void> deleteGameList(
             @PathVariable("listId") String listId,
