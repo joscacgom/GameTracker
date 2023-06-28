@@ -12,11 +12,12 @@
           <label for="status">Status Name</label>
           <input type="text" id="status" v-model="status" placeholder="Example: Pending, completed, wishlist..." required>
           <div class="button-container">
-            <button type="submit" class="create-button">
+            <button type="submit" class="create-button" :disabled="isCreating">
                 <font-awesome-icon icon="plus-circle" />
-                Create
+                {{ isCreating ? 'Creating...' : 'Create' }}
             </button>
           </div>
+          <p v-if="error" class="error">{{ error }}</p>
     
         </form>
       </div>
@@ -39,21 +40,55 @@
     },
     data() {
       return {
-        status: '', // Initialize status as an empty string
+        status: '',
+        error: '',
+        isCreating: false,
       };
     },
     methods: {
       closePopup() {
         this.$emit('close');
       },
-      submitForm() {
-        // Validate and process the form submission
-        // You can access the status value using this.status
-        // For example, you can emit an event with the status data to the parent component
-        this.$emit('create-list', { status: this.status });
-        this.status = ''; // Reset the status value
-        this.closePopup();
-      },
+      async submitForm() {
+        try {
+          this.isCreating = true;
+          this.error = '';
+
+          const requestBody = {
+            user:{
+              id: sessionStorage.getItem('userId'),
+              username: sessionStorage.getItem('username')
+            },
+            status: this.status,
+            totalPlaytime: 0,
+          };
+
+          // Make the POST request
+          const response = await fetch('http://localhost:8080/api/game-lists', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + sessionStorage.getItem('jwtoken')
+            },
+            body: JSON.stringify(requestBody)
+          });
+
+          if (!response.ok) {
+          const errorResponseText = await response.text();
+          this.error = errorResponseText || 'An error occurred during creating.';
+        }else{
+          this.$emit('create-list', { status: this.status });
+        }
+
+        } catch (error) {
+          console.error('An error occurred during creating:', error);
+          this.error = 'An error occurred during creating: ' + error.message;
+        } finally {
+          this.isCreating = false;
+        }
+            this.status = ''; // Reset the status value
+            this.closePopup();
+          },
     },
   };
   </script>
