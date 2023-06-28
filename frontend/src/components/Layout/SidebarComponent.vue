@@ -1,41 +1,42 @@
 <template>
-    <aside class="sidebar">
-      <img src="../../assets/joystick-white-removebg.png" alt="logo" />
-      <h3>GameTracker</h3>
-      <ul>
-        <li>
-          <router-link to="/home">
-            <span class="icon"><font-awesome-icon icon="home" /></span>
-            Home
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/my-lists">
-            <span class="icon"><font-awesome-icon icon="list" /></span>
-            My Lists
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/my-games">
-            <span class="icon"><font-awesome-icon icon="gamepad" /></span>
-            My Games
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/discover">
-            <span class="icon"><font-awesome-icon icon="compass" /></span>
-            Discover
-          </router-link>
-        </li>
-      </ul>
-      <img class="avatar-pic" src="../../assets/placeholder/mc.jpeg" alt="avatar" @click="redirectToProfile" />
-      <div class="logout">
-        <button @click="logout">
-          <span class="icon"><font-awesome-icon icon="sign-out" size="lg" /></span>
-        </button>
-      </div>
-    </aside>
-  </template>
+  <aside class="sidebar">
+    <img src="../../assets/joystick-white-removebg.png" alt="logo" />
+    <h3>GameTracker</h3>
+    <ul>
+      <li>
+        <router-link to="/home" class="sidebar-link">
+          <span class="icon"><font-awesome-icon icon="home" /></span>
+          Home
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/my-lists" class="sidebar-link">
+          <span class="icon"><font-awesome-icon icon="list" /></span>
+          My Lists
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/my-games" class="sidebar-link">
+          <span class="icon"><font-awesome-icon icon="gamepad" /></span>
+          My Games
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/discover" class="sidebar-link">
+          <span class="icon"><font-awesome-icon icon="compass" /></span>
+          Discover
+        </router-link>
+      </li>
+    </ul>
+    <img class="avatar-pic" src="../../assets/placeholder/mc.jpeg" alt="avatar" @click="redirectToProfile" />
+    <div class="logout">
+      <button @click="logout">
+        <span class="icon"><font-awesome-icon icon="sign-out" size="lg" /></span>
+      </button>
+    </div>
+  </aside>
+</template>
+
   
   <script>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -72,9 +73,9 @@
   
   img {
     width: 80px;
-    margin-top:1rem;
+    margin-top: 1rem;
   }
-
+  
   .avatar-pic {
     border-color: rgb(255, 255, 255);
     border-style: solid;
@@ -83,7 +84,7 @@
     margin-bottom: 1rem;
     cursor: pointer;
   }
-
+  
   h3 {
     color: #fff;
     font-family: Poppins;
@@ -110,9 +111,24 @@
     display: flex;
     align-items: center;
   }
+  .sidebar-link {
+    position: relative;
+  }
   
-  a:hover {
-    color: #ccc;
+  .sidebar-link::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: #fff;
+    transition: width 0.3s;
+  }
+  
+  .sidebar-link:hover::before {
+    width: 100%;
   }
   
   .logout {
@@ -130,8 +146,10 @@
     display: flex;
     align-items: center;
   }
+  
   .icon {
     margin-right: 10px;
   }
   </style>
+  
   
