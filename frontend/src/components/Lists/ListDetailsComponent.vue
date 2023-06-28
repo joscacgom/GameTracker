@@ -6,7 +6,7 @@
      </div>
       <SidebarComponent></SidebarComponent>
       <div v-if="isLoading" class="loading-container">
-       <LoadingComponent></LoadingComponent>
+       <LoadingComponent type="big"></LoadingComponent>
       </div>
       <div v-else-if="error" class="error-container">
         <ErrorComponent></ErrorComponent>

@@ -78,6 +78,7 @@
           this.error = errorResponseText || 'An error occurred during creating.';
         }else{
           this.$emit('create-list', { status: this.status });
+          this.$router.push('/my-lists');
         }
 
         } catch (error) {

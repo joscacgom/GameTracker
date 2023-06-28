@@ -5,6 +5,18 @@
     </div>
   </template>
 
+<script>
+export default {
+  name: 'LoadingComponent',
+  props: {
+    type: {
+      type: String, // big or small
+      required: true,
+    },
+  },
+};
+</script>
+
   <style scoped>
   .empty-container {
     display: flex;
@@ -17,6 +29,11 @@
     margin-bottom: 15rem;
 
   }
+  .loading-container.small {
+    height: 50vh;
+    margin-left: 0;
+    margin-top:-2rem;
+}
   .empty-container span {
     font-size: 40px;
   }

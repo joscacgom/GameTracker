@@ -5,16 +5,20 @@
       <h1 class="title">My Lists</h1>
     </div>
 
-    <div class="carousel-container">
-      <!-- Check if carouselItems is empty or null -->
+    <div v-if="loading" class="loading-container">
+      <LoadingComponent type="big"></LoadingComponent>
+    </div>
+    <div v-else class="carousel-container">
       <div v-if="!carouselItems || carouselItems.length === 0" class="empty-carousel">
-        <EmptyComponent></EmptyComponent>
+        <EmptyComponent type="big"></EmptyComponent>
       </div>
-      <!-- Iterate over carouselItems if not empty -->
       <div v-else class="carousel-item" v-for="item in carouselItems" :key="item.id" @click="redirectToItemList(item.id)">
-        <img :src="item.imageUrl" :alt="item.title" class="carousel-image" />
-        <div class="carousel-overlay">
-          <h3>{{ item.title }}</h3>
+        <div :class="{'carousel-image': true, 'default-image': !item.games || item.games.length === 0}">
+          <img v-if="item.games && item.games.length > 0" :src="item.games[0].background_image" :alt="item.status" />
+          <img v-else src="../../assets/placeholder/default-list-img.png" alt="Default Image" />
+          <div v-if="!item.games || item.games.length === 0 || hoveredItem === item.id" class="carousel-overlay">
+            <h3>{{ item.status }}</h3>
+          </div>
         </div>
       </div>
     </div>
@@ -27,185 +31,218 @@
   </div>
 </template>
 
-  
-  <script>
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-  import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
-  import CreateListComponent from '@/components/Lists/CreateListComponent.vue';
-  import EmptyComponent from '@/components/Empty/EmptyComponent.vue';
-  
-  export default {
-    name: 'MyListsComponent',
-    components: {
-      FontAwesomeIcon,
-      SidebarComponent,
-      CreateListComponent,
-      EmptyComponent,
-    },
-    data() {
-      return {
-        carouselItems: [],
-        showPopup: false,
-        loading: true,
-      };
-    },
-    mounted() {
-      this.fetchCarouselItems();
-   },
-    methods: {
-      async fetchCarouselItems() {
-        try{
-          const userId = sessionStorage.getItem('userId');
-         
+<script>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
+import CreateListComponent from '@/components/Lists/CreateListComponent.vue';
+import EmptyComponent from '@/components/Empty/EmptyComponent.vue';
+import LoadingComponent from '@/components/Loading/LoadingComponent.vue';
+
+export default {
+  name: 'MyListsComponent',
+  components: {
+    FontAwesomeIcon,
+    SidebarComponent,
+    CreateListComponent,
+    EmptyComponent,
+    LoadingComponent,
+  },
+  data() {
+    return {
+      carouselItems: [],
+      showPopup: false,
+      loading: true,
+      hoveredItem: null,
+    };
+  },
+  mounted() {
+    this.fetchCarouselItems();
+  },
+  methods: {
+    async fetchCarouselItems() {
+      try {
+        const userId = sessionStorage.getItem('userId');
+
         // Make the GET request
         const response = await fetch(`http://localhost:8080/api/game-lists/user/${userId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + sessionStorage.getItem('jwtoken')
+            Authorization: 'Bearer ' + sessionStorage.getItem('jwtoken'),
           },
         });
-        
-      if (response.ok) {
+
+        if (response.ok) {
           const responseData = await response.json();
           this.carouselItems = await responseData;
-          console.log(this.carouselItems)
-      }else{
-        console.log('An error response was received');
-      }
-
+        } else {
+          console.log('An error response was received');
+        }
       } catch (error) {
         console.error('An error occurred during fetching:', error);
       } finally {
         this.loading = false;
-    }
+      }
+    },
+    createNewList() {
+      this.showPopup = true;
+    },
+    redirectToItemList(itemId) {
+      this.$router.push(`/list/${itemId}`);
+    },
+    showOverlay(itemId) {
+      this.hoveredItem = itemId;
+    },
+    hideOverlay(itemId) {
+      if (this.hoveredItem === itemId) {
+        this.hoveredItem = null;
+      }
+    },
+    closePopup() {
+      this.showPopup = false;
+    },
   },
-      createNewList() {
-        this.showPopup = true;
-      },
-      redirectToItemList(itemId) {
-        this.$router.push(`/list/${itemId}`);
-    },
-      closePopup() {
-        this.showPopup = false;
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
-  .mylists-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-  }
-  
-  .header-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 2rem;
-  }
-  
-  .title {
-    width: 182px;
-    height: 30px;
-    color: rgb(252, 9, 76);
-    font-family: 'Poppins', sans-serif;
-    font-size: 24px;
-    font-weight: 600;
-    text-align: center;
-    margin-left: 10rem;
-  }
-  
-  .carousel-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    margin-top: 2rem;
-    margin-left: 15rem;
-  }
-  
-  .carousel-item {
-    width: calc(100% / 4 - 1rem);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 1rem;
-    font-family: 'Poppins', sans-serif;
-    font-size: 18px;
-    font-weight: 500;
-    position: relative; 
-  }
-  
-  .carousel-image {
-    width: 200px;
-    height: 250px;
-    object-fit: cover;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-    cursor: pointer;
-    transition: transform 0.3s;
-  }
-  
-  .carousel-item:hover .carousel-image {
-    transform: scale(1.05);
-  }
-  
-  .carousel-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgb(252, 9, 76);
-    padding: 10px;
-    font-family: 'Poppins', sans-serif;
-    text-align: center;
-    color: #fff;
-    opacity: 0;
-    transition: opacity 0.3s;
-    width: 50%;
-    max-width: 200px;
-  }
-  
-  .carousel-item:hover .carousel-overlay {
-    opacity: 1;
-  }
-  
-  .carousel-overlay h3 {
-    margin: 0;
-    font-size: 18px;
-  }
-  
-  .carousel-title {
-    margin-top: 0.5rem;
-  }
-  
-  .create-list-button {
-    border: none;
-    background-color: rgb(252, 9, 76);
-    color: #fff;
-    cursor: pointer;
-    height: 48px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 16px;
-    margin-top: 10px;
-    margin-left: 10rem;
-    margin-bottom: 2rem;
-    font-family: 'Poppins', sans-serif;
-    text-align: center;
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 18px;
-  }
-  </style>
-  
+};
+</script>
+
+<style scoped>
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+.mylists-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.header-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.title {
+  width: 182px;
+  height: 30px;
+  color: rgb(252, 9, 76);
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  margin-left: 10rem;
+}
+
+.carousel-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-top: 2rem;
+  margin-left: 15rem;
+  gap: 4.5rem;
+}
+
+.carousel-item {
+  width: calc(100% / 4 - 1rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  position: relative;
+}
+
+.carousel-image {
+  width: 200px;
+  height: 250px;
+  object-fit: cover;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.carousel-item:hover .carousel-image {
+  transform: scale(1.05);
+}
+
+.carousel-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(252, 9, 76);
+  padding: 10px;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s;
+  width: auto;
+  max-width: 200px;
+}
+
+.carousel-item:hover .carousel-overlay,
+.carousel-overlay.hovered {
+  opacity: 1;
+}
+
+.carousel-overlay h3 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.carousel-title {
+  margin-top: 0.5rem;
+}
+
+.create-list-button {
+  border: none;
+  background-color: rgb(252, 9, 76);
+  color: #fff;
+  cursor: pointer;
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 16px;
+  margin-top: 10px;
+  margin-left: 10rem;
+  margin-bottom: 2rem;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.default-image {
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.default-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+</style>
