@@ -9,6 +9,7 @@ import ListDetailsComponent from '../components/Lists/ListDetailsComponent.vue';
 import NotFoundComponent from '../components/NotFound/NotFoundComponent.vue';
 import MyGamesComponent from '../components/Games/MyGamesComponent.vue';
 import DiscoverComponent from '@/components/Home/DiscoverComponent.vue';
+import GameDetailsComponent from '@/components/Games/GameDetailsComponent.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -64,6 +65,11 @@ const router = createRouter({
       path: '/discover',
       name: 'Discover',
       component: DiscoverComponent
+    },
+    {
+      path: '/details',
+      name: 'GameDetails',
+      component: GameDetailsComponent
     },
     {
       path:'/:pathMatch(.*)*',
