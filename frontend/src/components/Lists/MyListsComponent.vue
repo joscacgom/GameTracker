@@ -13,12 +13,14 @@
         <EmptyComponent type="big"></EmptyComponent>
     </div>
     <div v-else class="carousel-container">
-      <div class="carousel-item" v-for="item in carouselItems" :key="item.id" @click="redirectToItemList(item.id)">
-        <div :class="{'carousel-image': true, 'default-image': !item.games || item.games.length === 0}">
-          <img v-if="item.games && item.games.length > 0" :src="item.games[0].background_image" :alt="item.status" />
-          <img v-else src="../../assets/placeholder/default-list-img.png" alt="Default Image" />
-          <div v-if="!item.games || item.games.length === 0 || hoveredItem === item.id" class="carousel-overlay">
-            <h3>{{ item.status }}</h3>
+      <div class="carousel-item-wrapper">
+        <div class="carousel-item" v-for="item in carouselItems" :key="item.id" @click="redirectToItemList(item.id)">
+          <div :class="{'carousel-image': true, 'default-image': !item.games || item.games.length === 0}">
+            <img v-if="item.games && item.games.length > 0" :src="item.games[0].background_image" :alt="item.status" />
+            <img v-else src="../../assets/placeholder/default-list-img.png" alt="Default Image" />
+            <div v-if="!item.games || item.games.length === 0 || hoveredItem === item.id" class="carousel-overlay">
+              <h3>{{ item.status }}</h3>
+            </div>
           </div>
         </div>
       </div>
@@ -144,18 +146,26 @@ export default {
   margin-left: 10rem;
 }
 
-.carousel-container {
+.carousel-item-wrapper {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
+  gap: 2rem;
+}
+
+.carousel-container {
+  display: flex;
+  flex-wrap: wrap;
+
+  justify-content: flex-start;
   margin-top: 2rem;
   margin-left: 15rem;
-  gap: 4.5rem;
+  gap: 2rem;
 }
 
 .carousel-item {
-  width: calc(100% / 4 - 1rem);
   display: flex;
+  flex: 1 0 21%;
   flex-direction: column;
   align-items: center;
   margin-bottom: 1rem;

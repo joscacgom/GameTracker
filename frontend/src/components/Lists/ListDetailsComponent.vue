@@ -153,7 +153,7 @@ export default {
   }
   
   .carousel-item {
-    width: calc(100% / 4 - 1rem);
+    flex: 1 0 21%; 
     display: flex;
     flex-direction: column;
     align-items: center;

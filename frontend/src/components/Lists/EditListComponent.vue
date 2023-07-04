@@ -172,14 +172,14 @@
   }
 
   .popup-container form {
-    max-width: 400px;
+    max-width: 200px;
     width: 100%;
     padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0 auto; 
+    margin:0 auto;
 }
 
 .popup-container input {
@@ -190,7 +190,7 @@
   border-radius: 10px;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   padding: 16px;
   margin: 8px 0px;
