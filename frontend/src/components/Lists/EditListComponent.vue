@@ -143,6 +143,7 @@
             this.error = errorResponseText || 'An error occurred during editing.';
         } else {
             this.$emit('edit-list', { status: this.status });
+            this.$router.push('/my-lists');
         }
         }
     } catch (error) {
@@ -285,6 +286,12 @@
     font-weight: 500;
     line-height: 18px;
 
+  }
+
+  .button-container button:disabled {
+    background-color: rgb(252, 9, 76);
+    opacity: 0.5;
+    cursor: not-allowed;
   }
   
   .popup-content {
