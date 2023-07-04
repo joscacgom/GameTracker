@@ -4,12 +4,23 @@
       <div class="header-container">
         <h1 class="title">My Games</h1>
       </div>
+
+      <div v-if="loading" class="loading-container">
+      <LoadingComponent type="big"></LoadingComponent>
+    </div>
+
+    <div v-if="!carouselItems || carouselItems.length === 0" class="empty-carousel">
+        <EmptyComponent type="big"></EmptyComponent>
+    </div>
   
-      <div class="carousel-container">
-        <div class="carousel-item" v-for="item in carouselItems" :key="item.id" @click="redirectToItemGame(item.id)">
-          <img :src="item.imageUrl" :alt="item.title" class="carousel-image" />
+      <div v-else class="carousel-container">
+        <div class="carousel-item" v-for="item in carouselItems" :key="item.id" @click="redirectToItemGame(item.game.id)">
+          <img :src="item.background_image" :alt="item.game.name" class="carousel-image" />
           <div class="carousel-overlay">
-            <h3>{{ item.playTime }}</h3>
+            <h3>{{ item.game.name }}</h3>
+            <h3>{{ item.playtimeHours }} hours spent</h3>
+            <h3>{{ item.gameList.status }}</h3>
+            <span class="edit-icon" @click="edit(item.game.id)"><font-awesome-icon icon="edit" /></span>
           </div>
         </div>
       </div>
@@ -18,72 +29,76 @@
         <font-awesome-icon icon="compass" />
         Discover New Games
       </button>
-      <create-list-component :show-popup="showPopup" @close="closePopup"></create-list-component>
+      <edit-game-component :show-popup="showPopup" :gameId="gameId" @close="closePopup"></edit-game-component>
+
     </div>
   </template>
   
   <script>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
-  import CreateListComponent from '@/components/Lists/CreateListComponent.vue';
+  import EmptyComponent from '@/components/Empty/EmptyComponent.vue';
+  import LoadingComponent from '@/components/Loading/LoadingComponent.vue';
   
   export default {
     name: 'MyListsComponent',
     components: {
       FontAwesomeIcon,
       SidebarComponent,
-      CreateListComponent,
+      EmptyComponent,
+      LoadingComponent,
     },
     data() {
       return {
-        carouselItems: [
-          {
-            id: 1,
-            title: 'Call of Duty: Modern Warfare 2',
-            playTime: '0 hours spent',
-            imageUrl: require('@/assets/placeholder/mw2.jpeg'),
-          },
-          {
-            id: 2,
-            title: 'Total War: Rome II',
-            playTime: '12 hours spent',
-            imageUrl: require('@/assets/placeholder/rome2.jpeg'),
-          },
-          {
-            id: 3,
-            title: 'Alan Wake',
-            playTime: '2 hours spent',
-            imageUrl: require('@/assets/placeholder/alanwake.jpeg'),
-          },
-          {
-            id: 4,
-            title: 'Alan Wake',
-            playTime: '37 hours spent',
-            imageUrl: require('@/assets/placeholder/alanwake.jpeg'),
-          },
-          {
-            id: 5,
-            title: 'Call of Duty: Modern Warfare 2',
-            playTime: '23 hours spent',
-            imageUrl: require('@/assets/placeholder/mw2.jpeg'),
-          },
-        ],
+        carouselItems: [],
+        loading: true,
         showPopup: false,
+        gameId: '',
       };
     },
+    mounted() {
+    this.fetchCarouselItems();
+  },
     methods: {
-      createNewList() {
-        this.showPopup = true;
-      },
       redirectToItemGame(itemId) {
         this.$router.push(`/game/${itemId}`);
+    },
+    closePopup() {
+      this.showPopup = false;
+    },
+    edit(gameId) {
+      this.gameId = gameId;
+      this.showPopup = true;
+    },
+    async fetchCarouselItems() {
+      try {
+        const userId = sessionStorage.getItem('userId');
+
+        // Make the GET request
+        const response = await fetch(`http://localhost:8080/api/game-with-playtime/user/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + sessionStorage.getItem('jwtoken'),
+          },
+        });
+
+        if (response.ok) {
+          const responseData = await response.json();
+          this.carouselItems = await responseData;
+        } else {
+          console.log('An error response was received');
+        }
+      } catch (error) {
+        console.error('An error occurred during fetching:', error);
+      } finally {
+        this.loading = false;
+      }
     },
     redirectToDiscover() {
         this.$router.push(`/discover`);
     },
-      closePopup() {
-        this.showPopup = false;
-      },
+
     },
   };
   </script>
@@ -126,7 +141,7 @@
   }
   
   .carousel-item {
-    width: calc(100% / 4 - 1rem);
+    flex: 1 0 21%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -201,6 +216,15 @@
     font-size: 18px;
     font-weight: 500;
     line-height: 18px;
+  }
+
+  .edit-icon {
+    margin: 0.5rem;
+    cursor: pointer;
+  }
+
+  .edit-icon :hover {
+    color: rgb(241, 112, 148);
   }
   </style>
   

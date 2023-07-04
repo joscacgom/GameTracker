@@ -64,12 +64,15 @@ const router = createRouter({
     {
       path: '/discover',
       name: 'Discover',
-      component: DiscoverComponent
+      component: DiscoverComponent,
+      meta: { requiresAuth: true }
     },
     {
-      path: '/details',
+      path: '/game/:gameId',
       name: 'GameDetails',
-      component: GameDetailsComponent
+      component: GameDetailsComponent,
+      props: true,
+      meta: { requiresAuth: true }
     },
     {
       path:'/:pathMatch(.*)*',
