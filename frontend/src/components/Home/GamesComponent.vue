@@ -1,15 +1,24 @@
 <template>
     <div class="games-container">
-      <div class="carousel-wrapper">
+      <div v-if="loading" class="loading-container">
+        <LoadingComponent type="small"></LoadingComponent>
+      </div>
+      <div v-else class="carousel-wrapper">
         <div class="carousel" :style="carouselStyle">
-          <div class="carousel-item" v-for="item in visibleItems" :key="item.id">
-            <img :src="item.imageUrl" :alt="item.playTime" class="carousel-image" />
+          <div v-if="!carouselItems || carouselItems.length === 0" class="empty-carousel">
+            <EmptyComponent type="small"></EmptyComponent>
+          </div>
+          <div class="carousel-item" v-else v-for="item in visibleItems" :key="item.game.id" @click="redirectToItemList(item.id)">
+            <img :src="item.background_image" :alt="item.game.name" class="carousel-image" />
             <div class="carousel-overlay">
-              <h3>{{ item.playTime }}</h3>
+              <h3>{{ item.game.name }}</h3>
+              <h3>{{ item.playtimeHours }} hours spent</h3>
+              <h3>{{ item.gameList.status }}</h3>
+              <span class="edit-icon" @click="edit(item.game.id)"><font-awesome-icon icon="edit" /></span>
             </div>
           </div>
         </div>
-        <div class="navigation-arrows">
+        <div class="navigation-arrows" v-if="carouselItems || carouselItems.length !== 0">
           <div class="arrow left-arrow" @click="slideCarousel('left')">
             <font-awesome-icon icon="chevron-left" />
           </div>
@@ -18,49 +27,36 @@
           </div>
         </div>
       </div>
+      <edit-game-component :show-popup="showPopup" :gameId="gameId" @close="closePopup"></edit-game-component>
+
     </div>
   </template>
   
   <script>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+  import EmptyComponent from '@/components/Empty/EmptyComponent.vue';
+  import LoadingComponent from '@/components/Loading/LoadingComponent.vue';
+  import EditGameComponent from '@/components/Games/EditGameComponent.vue';
   
   export default {
     name: 'GamesComponent',
     components: {
       FontAwesomeIcon,
+      EmptyComponent,
+      LoadingComponent,
+      EditGameComponent,
     },
     data() {
       return {
-        carouselItems: [
-          {
-            id: 1,
-            playTime: '0 hours spent',
-            imageUrl: require('@/assets/placeholder/mw2.jpeg'),
-          },
-          {
-            id: 2,
-            playTime: '12 hours spent',
-            imageUrl: require('@/assets/placeholder/rome2.jpeg'),
-          },
-          {
-            id: 3,
-            playTime: '2 hours spent',
-            imageUrl: require('@/assets/placeholder/alanwake.jpeg'),
-          },
-          {
-            id: 4,
-            playTime: '37 hours spent',
-            imageUrl: require('@/assets/placeholder/alanwake.jpeg'),
-          },
-          {
-            id: 5,
-            playTime: '23 hours spent',
-            imageUrl: require('@/assets/placeholder/mw2.jpeg'),
-          },
-        ],
+        carouselItems: [],
         currentPosition: 0, // Current position of the carousel
         itemsToShow: 3, // Number of items to show at a time
+        loading: true,
+        hoveredItem: null,
       };
+    },
+    mounted() {
+      this.fetchCarouselItems();
     },
     computed: {
       visibleItems() {
@@ -77,6 +73,34 @@
       },
     },
     methods: {
+      async fetchCarouselItems() {
+      try {
+        const userId = sessionStorage.getItem('userId');
+
+        // Make the GET request
+        const response = await fetch(`http://localhost:8080/api/game-with-playtime/user/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + sessionStorage.getItem('jwtoken'),
+          },
+        });
+
+        if (response.ok) {
+          const responseData = await response.json();
+          this.carouselItems = await responseData;
+        } else {
+          console.log('An error response was received');
+        }
+      } catch (error) {
+        console.error('An error occurred during fetching:', error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    redirectToItemList(itemId) {
+      this.$router.push(`/game/${itemId}`);
+    },
       slideCarousel(direction) {
         const maxPosition = this.carouselItems.length - this.itemsToShow; // Maximum position of the carousel
   
@@ -101,100 +125,100 @@
   }
   
   .carousel-wrapper {
-    position: relative;
-  }
-  
-  .carousel {
-    display: flex;
-    overflow: hidden;
-    height: 270px;
-    width: 100%;
-  }
-  
-  .carousel-item {
-    padding: 10px;
-    width: 184px;
-    height: 240px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    position: relative;
-  }
-  
-  .carousel-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-    cursor: pointer;
-    transition: transform 0.3s;
-  }
-  
-  .carousel-item:hover .carousel-image {
-    transform: scale(1.05);
-  }
-  
-  .carousel-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgb(252, 9, 76);
-    padding: 10px;
-    font-family: Poppins;
-    text-align: center;
-    color: #fff;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  
-  .carousel-item:hover .carousel-overlay {
-    opacity: 1;
-  }
-  
-  .carousel-overlay h3 {
-    margin: 0;
-    font-size: 14px;
-  }
-  
-  .navigation-arrows {
-    display: flex;
-    justify-content: space-between;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 100%;
-  }
-  
-  .arrow {
-    background-color: rgba(0, 0, 0, 0.3);
-    color: #fff;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .arrow i {
-    font-size: 16px;
-  }
-  
-  .arrow:hover {
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-  
-  .left-arrow {
-    margin-left: 20px;
-  }
-  
-  .right-arrow {
-    margin-right: 20px;
-  }
+  position: relative;
+}
+
+.carousel {
+  display: flex;
+  overflow: hidden;
+  height: 270px;
+  width: 100%;
+}
+
+.carousel-item {
+  padding: 10px;
+  width: 184px;
+  height: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  position: relative;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.carousel-item:hover .carousel-image {
+  transform: scale(1.05);
+}
+
+.carousel-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(252, 9, 76);
+  padding: 10px;
+  font-family: Poppins;
+  text-align: center;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.carousel-item:hover .carousel-overlay {
+  opacity: 1;
+}
+
+.carousel-overlay h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.navigation-arrows {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+}
+
+.arrow {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.arrow i {
+  font-size: 16px;
+}
+
+.arrow:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.left-arrow {
+  margin-left: 20px;
+}
+
+.right-arrow {
+  margin-right: 20px;
+}
   </style>
   

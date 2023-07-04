@@ -12,7 +12,7 @@
          <label for="status">Status list</label>
          <select id="status" v-model="gameList" required>
             <option value="" disabled>Select a status list</option>
-            <option v-for="list in lists" :value="list" :selected="list.status === gameList.status">{{ list.status }}</option>
+            <option v-for="list in lists" :value="list" :selected="list.status === gameList.status" :key="list.status">{{ list.status }}</option>
          </select>
 
           <label for="status">Playtime</label>
