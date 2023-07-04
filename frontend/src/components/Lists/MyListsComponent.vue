@@ -8,11 +8,12 @@
     <div v-if="loading" class="loading-container">
       <LoadingComponent type="big"></LoadingComponent>
     </div>
-    <div v-else class="carousel-container">
-      <div v-if="!carouselItems || carouselItems.length === 0" class="empty-carousel">
+
+    <div v-if="!carouselItems || carouselItems.length === 0" class="empty-carousel">
         <EmptyComponent type="big"></EmptyComponent>
-      </div>
-      <div v-else class="carousel-item" v-for="item in carouselItems" :key="item.id" @click="redirectToItemList(item.id)">
+    </div>
+    <div v-else class="carousel-container">
+      <div class="carousel-item" v-for="item in carouselItems" :key="item.id" @click="redirectToItemList(item.id)">
         <div :class="{'carousel-image': true, 'default-image': !item.games || item.games.length === 0}">
           <img v-if="item.games && item.games.length > 0" :src="item.games[0].background_image" :alt="item.status" />
           <img v-else src="../../assets/placeholder/default-list-img.png" alt="Default Image" />

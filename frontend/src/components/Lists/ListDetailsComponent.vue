@@ -1,7 +1,7 @@
 <template>
   <div class="list-container">
     <div class="header-container" v-if="!isLoading && !error">
-      <h1 class="title">{{ list.status }}</h1>
+      <h1 class="title">{{ list.status }} <span class="edit-icon" @click="edit"><font-awesome-icon icon="edit" /></span></h1>
       <h3 class="subtitle">Check your {{ list.status }} games and track your progress. You can add more in the discover section.</h3>
     </div>
     <SidebarComponent></SidebarComponent>
@@ -28,6 +28,7 @@
       <font-awesome-icon icon="compass" />
       Discover new games
     </button>
+    <edit-list-component :show-popup="showPopup" :listId="listId" @close="closePopup"></edit-list-component>
   </div>
 </template>
 
@@ -37,6 +38,7 @@ import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
 import LoadingComponent from '@/components/Loading/LoadingComponent.vue';
 import ErrorComponent from '@/components/Error/ErrorComponent.vue';
 import EmptyComponent from '@/components/Empty/EmptyComponent.vue';
+import EditListComponent from '@/components/Lists/EditListComponent.vue';
 export default {
   name: 'ListDetailsComponent',
   props: {
@@ -50,12 +52,14 @@ export default {
     LoadingComponent,
     ErrorComponent,
     EmptyComponent,
+    EditListComponent,
   },
   data() {
     return {
       list: {},
       isLoading: true,
       error: false,
+      showPopup: false,
     };
   },
   mounted() {
@@ -64,6 +68,12 @@ export default {
   methods: {
     navigateToDiscover() {
       this.$router.push('/discover');
+    },
+    closePopup() {
+      this.showPopup = false;
+    },
+    edit() {
+      this.showPopup = true;
     },
     async fetchListDetails() {
       try {
@@ -196,7 +206,14 @@ export default {
   .carousel-title {
     margin-top: 0.5rem;
   }
-  
+  .edit-icon {
+    margin: 0.5rem;
+    cursor: pointer;
+  }
+
+  .edit-icon :hover {
+    color: rgb(241, 112, 148);
+  }
   .discover-button {
     border: none;
     background-color: rgb(252, 9, 76);

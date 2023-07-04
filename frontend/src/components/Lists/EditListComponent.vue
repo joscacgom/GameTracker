@@ -5,17 +5,23 @@
             <button @click="closePopup" class="close-button">
                 <font-awesome-icon icon="close" />
             </button>
-             <h3 class="title">Create a new list</h3>
-             <p>You can add games to your status list reaching out the Discover section.</p>
+             <h3 class="title">Edit</h3>
+             <p>Change status name or delete list.</p>
         </div>        
         <form @submit.prevent="submitForm">
           <label for="status">Status Name</label>
           <input type="text" id="status" v-model="status" placeholder="Example: Pending, completed, wishlist..." required>
           <div class="button-container">
-            <button type="submit" class="create-button" :disabled="isCreating">
+            <button type="submit" class="button" :disabled="isEditing">
                 <font-awesome-icon icon="plus-circle" />
-                {{ isCreating ? 'Creating...' : 'Create' }}
+                {{ isEditing ? 'Editing...' : 'Edit' }}
             </button>
+            <button type="submit" class="button" :disabled="isDeleting" @click="deleteList">
+                <font-awesome-icon icon="trash-can" />
+                {{ isDeleting ? 'Deleting...' : 'Delete' }}
+            </button>
+
+
           </div>
           <p v-if="error" class="error">{{ error }}</p>
     
@@ -37,60 +43,117 @@
         type: Boolean,
         required: true,
       },
+      listId: {
+        type: String,
+        required: true,
+      },
     },
     data() {
       return {
         status: '',
         error: '',
-        isCreating: false,
+        list: {},
+        isEditing: false,
+        isDeleting: false,
       };
     },
+    mounted() {
+    this.fetchListDetails();
+  },
     methods: {
       closePopup() {
         this.$emit('close');
       },
-      async submitForm() {
-        try {
-          this.isCreating = true;
-          this.error = '';
+      async fetchListDetails() {
+      try {
+        const response = await fetch(`http://localhost:8080/api/game-lists/${this.listId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + sessionStorage.getItem('jwtoken'),
+          },
+        });
 
-          const requestBody = {
-            user:{
-              id: sessionStorage.getItem('userId'),
-              username: sessionStorage.getItem('username')
-            },
-            status: this.status,
-            totalPlaytime: 0,
-          };
+        if (response.ok) {
+          const responseData = await response.json();
+          this.list= responseData;
+          this.status = responseData.status;
+        } else {
+          console.log('An error response was received');
+        }
+      } catch (error) {
+        console.error('An error occurred during fetching:', error);
+      } finally {
+        this.isLoading = false;
+      }
 
-          // Make the POST request
-          const response = await fetch('http://localhost:8080/api/game-lists', {
-            method: 'POST',
+    },
+    async deleteList() {
+    try {
+        this.isDeleting = true;
+        this.error = '';
+
+        // Make the DELETE request
+        const response = await fetch(`http://localhost:8080/api/game-lists/${this.listId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + sessionStorage.getItem('jwtoken')
+        }
+        });
+
+        if (!response.ok) {
+            const errorResponseText = await response.text();
+            this.error = errorResponseText || 'An error occurred during deletion.';
+        } else {
+        this.$emit('delete-list');
+        this.$router.push('/my-lists');
+        }
+    } catch (error) {
+        console.error('An error occurred during deletion:', error);
+        this.error = 'An error occurred during deletion: ' + error.message;
+    } finally {
+        this.isDeleting = false;
+        this.closePopup();
+    }
+    },
+
+    async submitForm() {
+    try {
+        this.isEditing = true;
+        this.error = '';
+
+        if (this.isDeleting) {
+        await this.deleteList();
+        } else {
+        const requestBody = {...this.list, status: this.status}
+
+        // Make the PUT request to update the list
+        const response = await fetch(`http://localhost:8080/api/game-lists/${this.listId}`, {
+            method: 'PUT',
             headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + sessionStorage.getItem('jwtoken')
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + sessionStorage.getItem('jwtoken')
             },
             body: JSON.stringify(requestBody)
-          });
+        });
 
-          if (!response.ok) {
-          const errorResponseText = await response.text();
-          this.error = errorResponseText || 'An error occurred during creating.';
-        }else{
-          const responseData = await response.json();
-          this.$emit('create-list', { status: this.status });
-          this.$router.push('/list/' + responseData.id);
+        if (!response.ok) {
+            const errorResponseText = await response.text();
+            this.error = errorResponseText || 'An error occurred during editing.';
+        } else {
+            this.$emit('edit-list', { status: this.status });
         }
+        }
+    } catch (error) {
+        console.error('An error occurred during editing:', error);
+        this.error = 'An error occurred during editing: ' + error.message;
+    } finally {
+        this.isEditing = false;
+        this.closePopup();
+    }
+    },
 
-        } catch (error) {
-          console.error('An error occurred during creating:', error);
-          this.error = 'An error occurred during creating: ' + error.message;
-        } finally {
-          this.isCreating = false;
-        }
-            this.status = ''; // Reset the status value
-            this.closePopup();
-          },
     },
   };
   </script>
@@ -203,7 +266,7 @@
   width: 24px;
   height: 24px;
 }
-  .create-button{
+  .button{
     border: none;
     background-color: rgb(252, 9, 76);
     color: #fff;
