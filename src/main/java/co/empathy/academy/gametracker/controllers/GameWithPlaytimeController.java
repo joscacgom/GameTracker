@@ -1,8 +1,11 @@
 package co.empathy.academy.gametracker.controllers;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,6 +70,45 @@ public class GameWithPlaytimeController {
         // Return the updated game with playtime hours
         return ResponseEntity.ok(updatedGameWithPlaytime);
     }
+
+     /**
+   * Get the games with playtime hours for a specific user.
+   *
+   * @param userId              The ID of the user.
+   * @param authorizationHeader The Authorization header containing the JWT token.
+   * @return ResponseEntity containing the list of games with playtime hours if successful,
+   * or a not found response if the user was not found or the user's games were not found.
+   */
+  @GetMapping("/user/{userId}")
+  public ResponseEntity<List<GameWithPlaytime>> getGamesByUserId(
+      @PathVariable("userId") String userId,
+      @RequestHeader("Authorization") String authorizationHeader
+  ) {
+    // Validate the JWT token
+    // Extract the token from the authorization header
+    String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+
+    // Load user details from the token
+    UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+
+    // Check if the token is valid
+    if (token == null || !jwtUtils.validateToken(token, userDetails)) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    // Get the games with playtime hours for the user
+    List<GameWithPlaytime> games = gameWithPlayTimeService.getGamesByUserId(userId);
+
+    // Check if the user or their games were not found
+    if (games == null || games.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    // Return the list of games with playtime hours
+    return ResponseEntity.ok(games);
+  }
+
+
 
     /*
      * Helper method to extract the JWT token from the Authorization header.

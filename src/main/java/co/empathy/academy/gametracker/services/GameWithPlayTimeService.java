@@ -3,6 +3,8 @@ package co.empathy.academy.gametracker.services;
 import co.empathy.academy.gametracker.models.GameWithPlaytime;
 import co.empathy.academy.gametracker.repositories.GameWithPlayTimeRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -26,5 +28,24 @@ public class GameWithPlayTimeService {
             return gameWithPlayTimeRepository.save(gameWithPlayTime);
         }
         return null;
+    }
+
+     /**
+     * Get the games with playtime hours for a specific user.
+     *
+     * @param userId The ID of the user.
+     * @return The list of games with playtime hours for the user.
+     */
+    public List<GameWithPlaytime> getGamesByUserId(String userId) {
+        List<GameWithPlaytime> userGames = gameWithPlayTimeRepository.findByUserId(userId);
+        List<GameWithPlaytime> games = new ArrayList<>();
+        
+        for (GameWithPlaytime game : userGames) {
+            if (game.getUser().getId().equals(userId)) {
+                games.add(game);
+            }
+        }
+        
+        return games;
     }
 }
