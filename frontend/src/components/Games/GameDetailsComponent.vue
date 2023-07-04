@@ -12,10 +12,10 @@
           </div>
         </div>
         <h1 class="game-details_name">{{ game.name }}</h1>
-        <p class="game-details_released">Released on: {{ game.released }}</p>
+        <p class="game-details_released"><span class="highlight">Released on: </span>{{ game.released }}</p>
         <p class="game-details_description" v-html="game.description"></p>
-        <p class="game-details_playtime">Playtime: {{ game.playtime }}</p>
-        <div class="game-details_platforms">Platforms:
+        <p class="game-details_playtime"><span class="highlight">Playtime: </span>{{ game.playtime }}</p>
+        <div class="game-details_platforms"><span class="highlight">Platforms:</span>
           <div class="game-details_platforms_platform" v-for="(platform, $index) in game.platforms" :key="$index">
             <div v-text="platform"></div>
           </div>
@@ -68,8 +68,8 @@ export default {
 }
 
 .game {
-  margin: 2rem;
-  margin-left: 10rem;
+  margin: 2em;
+  margin-left: 10em;
   width: 900px;
   box-shadow: 0px 15px 35px -5px rgba(50, 88, 130, 0.32);
   border-radius: 15px;
@@ -161,5 +161,10 @@ export default {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 12px;
   border: none;
+  cursor: pointer;
+}
+
+.highlight {
+  opacity: 0.7;
 }
 </style>
