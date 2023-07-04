@@ -24,9 +24,9 @@ export default {
     align-items: center;
     gap:1rem;
     justify-content: center;
-    margin-left: -5rem;
-    margin-top: 15rem;
-    margin-bottom: 15rem;
+    margin-left: 10rem;
+    margin-top: 5rem;
+    margin-bottom: 5rem;
 
   }
   .loading-container.small {

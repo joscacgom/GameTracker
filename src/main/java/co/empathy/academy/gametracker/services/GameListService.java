@@ -36,7 +36,15 @@ public class GameListService {
      */
     public GameList updateGameList(String listId, GameList gameList) {
         GameList existingGameList = getGameList(listId);
-        existingGameList.getGames().addAll(gameList.getGames());
+        if(existingGameList == null) {
+            return null;
+        }
+        if(gameList.getGames() != null){
+            existingGameList.getGames().addAll(gameList.getGames());
+        }
+        if(gameList.getStatus() != null){
+            existingGameList.setStatus(gameList.getStatus());
+        }
         existingGameList.setTotalPlaytime(gameList.getTotalPlaytime());
         return gameListRepository.save(existingGameList);
     }

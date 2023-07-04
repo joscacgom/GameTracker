@@ -96,15 +96,12 @@ public class GameListController {
 
         // Load user details from the token
         UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
-
         // Check if the token is valid
         if (token == null || !jwtUtils.validateToken(token, userDetails)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
         // Update the game list
         GameList updatedGameList = gameListService.updateGameList(listId, gameList);
-
         // Check if the game list was found
         if (updatedGameList == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
