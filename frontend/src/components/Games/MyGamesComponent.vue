@@ -20,6 +20,7 @@
             <h3>{{ item.game.name }}</h3>
             <h3>{{ item.playtimeHours }} hours spent</h3>
             <h3>{{ item.gameList.status }}</h3>
+            <span class="edit-icon" @click="edit(item.game.id)"><font-awesome-icon icon="edit" /></span>
           </div>
         </div>
       </div>
@@ -28,6 +29,8 @@
         <font-awesome-icon icon="compass" />
         Discover New Games
       </button>
+      <edit-game-component :show-popup="showPopup" :gameId="gameId" @close="closePopup"></edit-game-component>
+
     </div>
   </template>
   
@@ -49,6 +52,8 @@
       return {
         carouselItems: [],
         loading: true,
+        showPopup: false,
+        gameId: '',
       };
     },
     mounted() {
@@ -57,6 +62,13 @@
     methods: {
       redirectToItemGame(itemId) {
         this.$router.push(`/game/${itemId}`);
+    },
+    closePopup() {
+      this.showPopup = false;
+    },
+    edit(gameId) {
+      this.gameId = gameId;
+      this.showPopup = true;
     },
     async fetchCarouselItems() {
       try {
@@ -204,6 +216,15 @@
     font-size: 18px;
     font-weight: 500;
     line-height: 18px;
+  }
+
+  .edit-icon {
+    margin: 0.5rem;
+    cursor: pointer;
+  }
+
+  .edit-icon :hover {
+    color: rgb(241, 112, 148);
   }
   </style>
   
