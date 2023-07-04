@@ -18,7 +18,10 @@ public class GameWithPlaytime {
     @DBRef
     private User user;
 
-    private Integer playtimeHours; // user time spend playing on game
+    @DBRef
+    private GameList gameList;
+
+    private Integer playtimeHours;
 
     public GameWithPlaytime() {
     }
@@ -59,6 +62,14 @@ public class GameWithPlaytime {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public GameList getGameList() {
+        return gameList;
+    }
+
+    public void setGameList(GameList gameList) {
+        this.gameList = gameList;
     }
 
     @Override

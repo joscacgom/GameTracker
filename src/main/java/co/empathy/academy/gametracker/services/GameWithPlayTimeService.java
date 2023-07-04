@@ -48,4 +48,21 @@ public class GameWithPlayTimeService {
         
         return games;
     }
+    /**
+     * Get a game with playtime given an Id.
+     * 
+     * @param id The ID of the game with playtime.
+     * @param updatedGameWithPlaytime The updated game with playtime.
+     * @return The game with playtime.
+     */
+    public GameWithPlaytime updateGameWithPlaytime(String id, GameWithPlaytime updatedGameWithPlaytime) {
+        GameWithPlaytime gameWithPlaytime = gameWithPlayTimeRepository.findById(id).orElse(null);
+        if (gameWithPlaytime != null) {
+            gameWithPlaytime.setPlaytimeHours(updatedGameWithPlaytime.getPlaytimeHours());
+            gameWithPlaytime.setGameList(updatedGameWithPlaytime.getGameList());
+
+            return gameWithPlayTimeRepository.save(gameWithPlaytime);
+        }
+        return gameWithPlaytime;
+    }
 }
