@@ -33,10 +33,10 @@ public class APIController {
     }
 
     @GetMapping("/gameDetails/{game_id}")
-    public ResponseEntity<Game> getGameDetails(@PathVariable String game_id) {
+    public ResponseEntity<Game> getGameDetails(@PathVariable Long game_id) {
         Game game = apiService.getGameDetails(game_id);
         if (game != null)
-            return ResponseEntity.ok(game); // Retorno: respuesta ok con data en el cuerpo.
+            return ResponseEntity.ok(game); // Retorno: respuesta ok con el juego en el cuerpo.
         else // Retorno: respuesta de error con mensaje.
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }

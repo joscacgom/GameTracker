@@ -38,20 +38,25 @@ export default {
   },
   data() {
     return {
-      game: {
-        name: "Grand Theft Auto V",
-        description: "<p>Rockstar Games se hizo más grande desde su entrega anterior de la serie. Obtienes la construcción del mundo complicada y realista de Liberty City de GTA4 en el escenario de Los Santos, un viejo favorito de los fans, GTA San Andreas. 561 vehículos diferentes (incluidos todos los transportes que puede operar) y la cantidad aumenta con cada actualización.<br />Narración simultánea desde tres perspectivas únicas:<br />Sigue a Michael, ex-criminal que vive su vida de ocio lejos del pasado, Franklin, un niño que busca un futuro mejor, y Trevor, el pasado exacto del que Michael está tratando de huir.<br />GTA Online proporcionará muchos desafíos adicionales incluso para los jugadores experimentados, recién llegados del modo historia. Ahora tendrás otros jugadores cerca que pueden ayudarte con la misma probabilidad que arruinar tu misión. Los jugadores pueden experimentar todas las mecánicas de GTA actualizadas a través del personaje personalizable único, y el contenido de la comunidad combinado con el sistema de nivelación tiende a mantener a todos ocupados y comprometidos.</p>",
-        released: "2013-09-16",
-        background_image: "https://media.rawg.io/media/games/456/456dea5e1c7e3cd07060c14e96612001.jpg",
-        playtime: 73,
-        platforms: ["PlayStation", "Xbox"],
-        genres: ["Action", "Adventure"]
-      }
+      game: {}
     };
   },
+  mounted() {
+    this.getGameDetails(this.$route.params.gameId);
+  },
   methods: {
-    logout() {
-      this.$router.push('/');
+    async getGameDetails(id) {
+      try {
+        const response = await fetch(`http://localhost:8080/api/game/${id}`);
+        if (response.ok) {
+          const responseData = await response.json();
+          this.game = await responseData;
+        } else {
+          console.log('An error response was received');
+        }
+      } catch(error) {
+        console.error(error);
+      }
     }
   }
 }

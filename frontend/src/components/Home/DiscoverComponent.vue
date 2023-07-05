@@ -36,13 +36,8 @@
         selectedFilters: [],
         selected: 'Show all'
       };
-    },
-    methods: {
-      logout() {
-        this.$router.push('/');
-      }
     }
-  };
+  }
 </script>
 
 <style scoped>
