@@ -14,8 +14,9 @@ public class GameController {
     @Autowired
     private GameRepository gameRepository;
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/{gameId}")
-    public Game getGameDetails(@PathVariable("gameId") Long gameId) {
+    public Game getGameDetails(@PathVariable Long gameId) {
         Optional<Game> game = gameRepository.findById(gameId);
         return game != null ? game.get() : null;
     }

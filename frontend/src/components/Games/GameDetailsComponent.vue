@@ -1,14 +1,14 @@
 <template>
   <div class="game-details-container">
     <SidebarComponent></SidebarComponent>
-    <div class="game">
+    <div class="game" v-if="game">
       <div class="game-cover">
         <div class="game-cover_item" :style="{ backgroundImage: `url(${game.background_image})` }"></div>
       </div>
       <div class="game-details">
         <div class="game-details_genres">
           <div class="game-details_genres_genre" v-for="(genre, $index) in game.genres" :key="$index">
-            <div v-text="genre"></div>
+            <div v-text="genre.name"></div>
           </div>
         </div>
         <h1 class="game-details_name">{{ game.name }}</h1>
@@ -17,7 +17,7 @@
         <p class="game-details_playtime"><span class="highlight">Playtime: </span>{{ game.playtime }}</p>
         <div class="game-details_platforms"><span class="highlight">Platforms:</span>
           <div class="game-details_platforms_platform" v-for="(platform, $index) in game.platforms" :key="$index">
-            <div v-text="platform"></div>
+            <div v-text="platform.name"></div>
           </div>
         </div>
       </div>
@@ -25,6 +25,7 @@
         <button class="game-bt_add"> Add to list</button>
       </div>
     </div>
+    <div class="loading" v-else>Loading...</div>
   </div>
 </template>
 
@@ -41,22 +42,16 @@ export default {
       game: {}
     };
   },
-  mounted() {
-    this.getGameDetails(this.$route.params.gameId);
-  },
-  methods: {
-    async getGameDetails(id) {
-      try {
-        const response = await fetch(`http://localhost:8080/api/game/${id}`);
-        if (response.ok) {
-          const responseData = await response.json();
-          this.game = await responseData;
-        } else {
-          console.log('An error response was received');
-        }
-      } catch(error) {
-        console.error(error);
-      }
+  async mounted() {
+    try {
+      const id = this.$route.params.gameId;
+      const response = await fetch(`http://localhost:8080/api/game/${id}`);
+      if (!response.ok)
+        throw new Error('Unable to fetch game data');
+      const data = await response.json();
+      this.game = await data;
+    } catch(error) {
+      console.error(error);
     }
   }
 }
@@ -171,5 +166,11 @@ export default {
 
 .highlight {
   opacity: 0.7;
+}
+
+.loading {
+  color: rgb(252, 9, 76);
+  font-family: Poppins;
+  font-size: 20px;
 }
 </style>
