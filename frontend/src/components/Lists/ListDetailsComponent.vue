@@ -236,5 +236,36 @@ export default {
     font-weight: 500;
     line-height: 18px;
   }
+
+  @media (max-width: 768px) {
+  .list-container {
+    margin-top: 2rem;
+  }
+  .title,
+  .subtitle,
+  .carousel-container,
+  .carousel-item {
+    margin-left: 0;
+  }
+
+  .subtitle {
+    width: 90%;
+  }
+
+  .loading-container,
+  .empty-container,
+  .error-container {
+    margin-left: 0;
+    margin-top:1rem;
+  }
+
+  .discover-button {
+    margin-left: 0;
+  }
+
+  .carousel-item {
+    flex-basis: 45%;
+  }
+}
   </style>
   

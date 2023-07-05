@@ -256,4 +256,22 @@ export default {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 4px;
 }
+
+@media (max-width: 768px) {
+
+  .mylists-container {
+    margin-top: 5rem;
+  }
+  .title {
+    margin-left: 0;
+  }
+
+  .carousel-container {
+    margin-left: 0;
+  }
+
+  .create-list-button {
+    margin-left: 0;
+  }
+}
 </style>
