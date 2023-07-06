@@ -210,5 +210,27 @@
     text-align: center;
     margin-top: 10px;
   }
+
+  @media (max-width: 768px) {
+  .register-container {
+    padding: 0px 20px;
+  }
+
+  .register-container form {
+    max-width: 100%;
+  }
+
+  .register-container input {
+    width: 90%;
+  }
+
+  .register-container button {
+    width: 100%;
+  }
+
+  .register-container label {
+    width: 100%;
+  }
+}
   </style>
   

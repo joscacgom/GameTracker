@@ -107,7 +107,7 @@ export default {
 @media screen and (max-width: 768px) {
 
   .welcome-container {
-    margin-top:7rem;
+    margin-top:5rem;
   }
 
   .avatar {

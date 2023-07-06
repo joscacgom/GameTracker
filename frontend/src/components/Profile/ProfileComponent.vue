@@ -338,13 +338,18 @@
     flex-direction: column;
     margin-left: 0;
     gap: 0;
+    width: 100%;
   }
 
   .form-container {
     margin-left:0;
+    width: 100%;
 
   }
 
+  .form-container input {
+    width: 300px;
+  }
 
   .avatar-container {
     margin-left: 0;
@@ -354,7 +359,7 @@
   .form-container button {
     margin-left: auto;
     margin-right: auto;
-    width: 368px;
+    width: 330px;
     
   }
 }

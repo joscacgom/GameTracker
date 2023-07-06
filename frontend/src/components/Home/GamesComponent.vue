@@ -229,6 +229,13 @@
     max-width: 200px;
     margin: 0 auto;
   }
+
+  .empty-carousel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 8rem;
+  }
   
   .carousel {
     height: auto;

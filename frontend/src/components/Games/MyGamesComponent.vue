@@ -226,5 +226,25 @@
   .edit-icon :hover {
     color: rgb(241, 112, 148);
   }
+
+  @media (max-width: 768px) {
+
+.mygames-container {
+  margin-top: 5rem;
+}
+.title {
+  margin-left: 0;
+}
+
+.carousel-container {
+  margin-left: 0;
+}
+
+.discover-button {
+  margin-left: 0;
+}
+
+
+}
   </style>
   

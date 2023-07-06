@@ -229,11 +229,12 @@ button {
   ul {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
     gap: 1rem;
   }
 
   li {
+    flex: 0 1 30%;
     padding: 5px;
   }
 
