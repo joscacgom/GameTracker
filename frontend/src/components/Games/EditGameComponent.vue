@@ -89,6 +89,7 @@
         if (response.ok) {
           const responseData = await response.json();
           this.lists = await responseData;
+         
         } else {
           console.log('An error response was received');
         }

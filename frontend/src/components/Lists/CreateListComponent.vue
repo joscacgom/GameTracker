@@ -27,6 +27,9 @@
   
   <script>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+  import { toast } from 'vue3-toastify';
+  import 'vue3-toastify/dist/index.css';
+
   export default {
     name: 'CreateListComponent',
     components: {
@@ -76,10 +79,33 @@
           if (!response.ok) {
           const errorResponseText = await response.text();
           this.error = errorResponseText || 'An error occurred during creating.';
+          toast('An error has ocurred', {
+            type: 'error',
+            position: 'top-right',
+            duration: 3000,
+            theme: 'colored',
+            icon: {
+              name: 'times-circle',
+            },
+            transition: 'Vue-Toastification__bounce',
+          });
         }else{
           const responseData = await response.json();
           this.$emit('create-list', { status: this.status });
-          this.$router.push('/list/' + responseData.id);
+          toast('List created successfully!', {
+            type: 'success',
+            position: 'top-right',
+            duration: 3000,
+            theme: 'colored',
+            icon: {
+              name: 'check-circle',
+            },
+            transition: 'Vue-Toastification__bounce',
+          });
+
+          setTimeout(() => {
+            this.$router.push('/list/' + responseData.id);
+          }, 3000);
         }
 
         } catch (error) {
@@ -133,6 +159,15 @@
   margin: 8px 0px;
   font-family: Poppins;
   box-sizing: border-box;
+}
+
+.error {
+  color: rgb(252, 9, 76);
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  margin: 8px 0px;
 }
 
 .popup-container label {
