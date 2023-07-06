@@ -10,16 +10,18 @@
         <h2 class="all-title">Games</h2>
         <div class="filters-container">
           <div class="filters-scroll-container">
-            <div class="filter-category" v-for="(category, index) in filteredCategories" :key="index">
+            <div class="filter-category" v-for="(category, index) in visibleCategories" :key="index">
               <h3>{{ category.name }}</h3>
               <select v-model="category.selected">
                 <option v-for="(filter, filterIndex) in category.filters" :key="filterIndex">{{ filter }}</option>
               </select>
             </div>
           </div>
+          <button class="scroll-button" @click="scrollLeft">&lt;</button>
+          <button class="scroll-button" @click="scrollRight">&gt;</button>
         </div>
-        <GamesComponent></GamesComponent>
       </div>
+      <GamesComponent></GamesComponent>
     </div>
   </div>
 </template>
@@ -69,7 +71,10 @@ export default {
           name: 'Year',
           filters: ['2023', '2022', '2021', '2020', 'Any']
         }
-      ]
+      ],
+      visibleCategories: [],
+      visibleStartIndex: 0,
+      visibleEndIndex: 3
     };
   },
   computed: {
@@ -77,7 +82,30 @@ export default {
       return this.filterCategories; 
     }
   },
+  mounted() {
+    this.updateVisibleCategories();
+  },
   methods: {
+    scrollLeft() {
+      if (this.visibleStartIndex > 0) {
+        this.visibleStartIndex--;
+        this.visibleEndIndex--;
+        this.updateVisibleCategories();
+      }
+    },
+    scrollRight() {
+      if (this.visibleEndIndex < this.filterCategories.length - 1) {
+        this.visibleStartIndex++;
+        this.visibleEndIndex++;
+        this.updateVisibleCategories();
+      }
+    },
+    updateVisibleCategories() {
+      this.visibleCategories = this.filterCategories.slice(
+        this.visibleStartIndex,
+        this.visibleEndIndex + 1
+  );
+},
     filterGames() {
       console.log('filtering games');
     }
@@ -154,24 +182,26 @@ export default {
   }
 
   .filters-container {
+    position: relative;
     width: 100%;
-    overflow-x: auto;
-    white-space: nowrap;
+    overflow: hidden;
     margin-top: 1rem;
   }
 
   .filters-scroll-container {
-    display: inline-flex;
+    display: flex;
     flex-wrap: nowrap;
     padding-bottom: 10px;
+    transition: transform 250ms ease-in-out;
+    transform: translateX(0);
   }
 
   .filter-category {
     flex-shrink: 0;
-    margin-right: 15px;
+    margin-right: 10px;
     font-family: Poppins;
     color: rgb(252, 9, 76);
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .filter-category h3 {
@@ -184,9 +214,36 @@ export default {
     border-bottom: 1px solid rgb(252, 9, 76);
     border-radius: 0;
     font-family: Poppins;
-    color: rgb(252, 9, 76);
+    color: #575756;
     font-size: 16px;
     cursor: pointer;
+  }
+
+  .scroll-button {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    color: rgb(252, 9, 76);
+    cursor: pointer;
+    transition: opacity 250ms ease-in-out;
+    z-index: 1;
+  }
+
+  .scroll-button:hover {
+    opacity: 0.7;
+  }
+
+  .scroll-button:first-child {
+    left: 0;
+    margin-right: 1rem;
+  }
+
+  .scroll-button:last-child {
+    right: 0;
   }
 
   @media (max-width: 768px) {
@@ -210,10 +267,8 @@ export default {
     }
 
     .filters-container {
-      justify-content: flex-start;
-      align-items: flex-start;
-      margin-top: 1rem;
-    }
+      justify-content: center;
+  }
 
     .filters-container select {
       width: 100%;
