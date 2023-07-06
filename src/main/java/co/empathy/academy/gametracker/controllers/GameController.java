@@ -14,7 +14,17 @@ public class GameController {
     @Autowired
     private GameRepository gameRepository;
 
-    @CrossOrigin(origins = "*")
+    public GameController(GameRepository gameRepository) {
+        this.gameRepository = gameRepository;
+    }
+
+    /**
+     * Obtains a game with its information (details) from Mongo database
+     * @param gameId, Long, identifier of the game
+     * @return game, Game object with the details,
+     *  or null, if it is not in the ddbb
+     */
+    @CrossOrigin(origins = "http://localhost:8081")
     @GetMapping("/{gameId}")
     public Game getGameDetails(@PathVariable Long gameId) {
         Optional<Game> game = gameRepository.findById(gameId);

@@ -23,6 +23,11 @@ public class APIController {
         this.apiService = apiService;
     }
 
+    /**
+     * Obtains a list of games from RAWG API
+     * @return a response with the list of games in its body, ResponseEntity<List<Game>>,
+     *  or the Http status (error)
+     */
     @GetMapping("/listGames")
     public ResponseEntity<List<Game>> getAListOfGames() {
         List<Game> games = apiService.getAListOfGames();
@@ -32,6 +37,11 @@ public class APIController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    /**
+     * Obtains a game with more details (information) from RAWG API
+     * @return a response with the game in its body, ResponseEntity<Game>,
+     *  or the Http status (error)
+     */
     @GetMapping("/gameDetails/{game_id}")
     public ResponseEntity<Game> getGameDetails(@PathVariable Long game_id) {
         Game game = apiService.getGameDetails(game_id);

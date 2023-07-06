@@ -29,6 +29,10 @@ public class APIService {
         this.gameRepository = gameRepository;
     }
 
+    /**
+     * Obtains a list of games from RAWG API
+     * @return games, a List<Game>
+     */
     public List<Game> getAListOfGames() {
         // Llamada a RAWGAPI
         Request request = new Request.Builder()
@@ -87,6 +91,11 @@ public class APIService {
         }
     }
 
+    /**
+     * Obtains more information about a game from the RAWG API
+     * @param game_id, Long, identifier of the game
+     * @return game, a Game object with more details
+     */
     public Game getGameDetails(Long game_id) {
         // Llamada a RAWGAPI
         Request request = new Request.Builder()

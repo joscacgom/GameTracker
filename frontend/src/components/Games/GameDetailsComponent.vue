@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="game-bt">
-        <button class="game-bt_add"> Add to list</button>
+        <button class="game-bt_add" @click="addToList"> Add to list</button>
       </div>
     </div>
     <div class="loading" v-else>Loading...</div>
@@ -39,7 +39,8 @@ export default {
   },
   data() {
     return {
-      game: {}
+      game: {},
+      lists: []
     };
   },
   async mounted() {
@@ -52,6 +53,11 @@ export default {
       this.game = await data;
     } catch(error) {
       console.error(error);
+    }
+  },
+  methods: {
+    addToList() {
+      this.$router.push('/my-lists');
     }
   }
 }
