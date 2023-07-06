@@ -14,7 +14,6 @@
           <input ref="fileInput" type="file" accept="image/*" @change="handleAvatarChange" style="display: none;" />
         </div>
       </div>
-
     <div class="forms-container">
       <div class="form-container">
         <div>
@@ -326,5 +325,43 @@
     text-align: center;
     margin-top: 10px;
   }
+
+  @media (max-width: 768px) {
+
+  .profile-container {
+    margin-top: 5rem;
+  }
+  .title {
+    margin-left: 0;
+  }
+  .forms-container {
+    flex-direction: column;
+    margin-left: 0;
+    gap: 0;
+    width: 100%;
+  }
+
+  .form-container {
+    margin-left:0;
+    width: 100%;
+
+  }
+
+  .form-container input {
+    width: 300px;
+  }
+
+  .avatar-container {
+    margin-left: 0;
+    margin-top: 1rem;
+  }
+
+  .form-container button {
+    margin-left: auto;
+    margin-right: auto;
+    width: 330px;
+    
+  }
+}
   </style>
   

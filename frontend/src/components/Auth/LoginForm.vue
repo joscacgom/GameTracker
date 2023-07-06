@@ -170,4 +170,26 @@ export default {
   text-align: center;
   margin-top: 10px;
 }
+
+@media (max-width: 768px) {
+  .login-container {
+    padding: 0px 20px;
+  }
+
+  .login-container form {
+    max-width: 100%;
+  }
+
+  .login-container input {
+    width: 90%;
+  }
+
+  .login-container button {
+    width: 100%;
+  }
+
+  .login-container label {
+    width: 100%;
+  }
+}
 </style>

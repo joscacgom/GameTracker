@@ -307,5 +307,10 @@
   .popup-content button {
     margin-top: 1rem;
   }
+  @media (max-width: 768px) {
+  .popup-content {
+    margin-top:5rem;
+  }
+}
   </style>
   

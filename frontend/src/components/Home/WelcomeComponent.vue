@@ -79,6 +79,15 @@
     line-height: 18px;
     
   }
+  @media (max-width: 768px) {
+  .welcome-container img {
+    width: 80%;
+  }
+
+  .welcome-container button {
+    width: 80%;
+  }
+}
 
   </style>
   

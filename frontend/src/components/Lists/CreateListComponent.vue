@@ -237,5 +237,33 @@
   .popup-content button {
     margin-top: 1rem;
   }
+
+  @media (max-width: 768px) {
+
+  .popup-content {
+    width: 80%;
+    margin-top:7rem;
+  }
+
+  .popup-container label {
+    width: 100%;
+    margin-right: 1rem;
+  }
+  .popup-container input {
+    justify-content: center;
+    align-items: center;
+    margin: 8px 0px;
+    margin-right: 2.5rem;
+  }
+  .close-button {
+    margin-left:1rem;
+  }
+
+  .create-button{
+    margin:0 auto;
+    margin-right: 1rem;
+  }
+
+}
   </style>
   

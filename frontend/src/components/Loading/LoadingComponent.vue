@@ -66,4 +66,56 @@ export default {
     transform: translateY(-20px);
   }
 }
+
+@media screen and (max-width: 768px) {
+  .loading-container {
+    margin-left: 0;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .loading-container.small {
+    height: 40vh;
+    margin-top: -1rem;
+  }
+
+  .loading-container img {
+    width: 80px;
+  }
+
+  .loading-container img.small {
+    width: 40px;
+  }
+
+  .spinner {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .loading-container {
+    margin-left: 0;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .loading-container.small {
+    height: 30vh;
+    margin-top: -0.5rem;
+  }
+
+  .loading-container img {
+    width: 60px;
+  }
+
+  .loading-container img.small {
+    width: 30px;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+  }
+}
 </style>

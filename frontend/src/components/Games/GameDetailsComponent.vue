@@ -167,4 +167,82 @@ export default {
 .highlight {
   opacity: 0.7;
 }
+
+@media screen and (min-width: 1024px) {
+  .game-details-container {
+    margin-top: 5rem;
+    margin-left: 15rem;
+  }
+  .game {
+    margin: 1em;
+    padding: 1em;
+  }
+
+  .game-cover {
+    height: 250px;
+    margin: 15px 0;
+    width: 100%;
+  }
+
+  .game-details_genres,
+  .game-details_platforms {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .game-details_genres_genre,
+  .game-details_platforms_platform {
+    margin: 0.5em 0;
+  }
+
+  .game-details_description {
+    text-align: justify;
+    width: 100%;
+  }
+
+  .game-bt_add {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+
+
+@media screen and (max-width: 768px) {
+
+  .game-details-container {
+    margin-top: 5rem;
+  }
+  .game {
+    margin: 1em;
+    padding: 1em;
+  }
+
+  .game-cover {
+    height: 250px;
+    margin: 15px 0;
+    width: 100%;
+  }
+
+  .game-details_genres,
+  .game-details_platforms {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .game-details_genres_genre,
+  .game-details_platforms_platform {
+    margin: 0.5em 0;
+  }
+
+  .game-details_description {
+    text-align: justify;
+    width: 100%;
+  }
+
+  .game-bt_add {
+    width: 100%;
+    max-width: 200px;
+  }
+}
 </style>

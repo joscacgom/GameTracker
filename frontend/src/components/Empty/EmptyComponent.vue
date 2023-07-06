@@ -45,5 +45,37 @@ export default {
     font-family: 'Poppins', sans-serif;
     text-align: center;
   }
-  </style>
+
+@media screen and (max-width: 768px) {
+  .empty-container {
+    flex-direction: column;
+    margin-top:0;
+    margin-bottom:3rem;
+  }
+
+  .empty-container span {
+    font-size: 30px;
+  }
+
+  .empty-message {
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .empty-container {
+    margin-left: 0;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .empty-container span {
+    font-size: 24px;
+  }
+
+  .empty-message {
+    font-size: 14px;
+  }
+}
+ </style>
   
