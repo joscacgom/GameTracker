@@ -258,6 +258,12 @@
     line-height: 18px;
 
   }
+
+  .create-button:hover,
+  .close-button:hover {
+    background-color: rgb(252, 9, 76);
+    opacity: 0.8;
+  }
   
   .popup-content {
     background-color: #fff;

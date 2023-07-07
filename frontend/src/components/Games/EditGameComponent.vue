@@ -299,6 +299,12 @@
     margin-bottom: 1rem;
 }
 
+  .close-button:hover,
+  .button-container button:hover {
+    background-color: rgb(252, 9, 76);
+    opacity: 0.8;
+  }
+
 .close-button svg {
   width: 24px;
   height: 24px;
