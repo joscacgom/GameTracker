@@ -53,7 +53,8 @@
   <script>
   import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-  
+  import { toast } from 'vue3-toastify';
+  import 'vue3-toastify/dist/index.css';
   export default {
     name: 'ProfileComponent',
     components: {
@@ -112,9 +113,30 @@
 
         // Save the response data in sessionStorage
         sessionStorage.setItem('username', responseData.username);
+
+        toast('User info updated succesfully!', {
+              type: 'success',
+              position: 'top-right',
+              duration: 3000,
+              theme: 'colored',
+              icon: {
+                name: 'check-circle',
+              },
+              transition: 'Vue-Toastification__bounce',
+            });
       } else {
         const errorResponseText = await response.text();
         this.error = errorResponseText || 'An error occurred during updating.';
+        toast('An error has ocurred', {
+              type: 'error',
+              position: 'top-right',
+              duration: 3000,
+              theme: 'colored',
+              icon: {
+                name: 'times-circle',
+              },
+              transition: 'Vue-Toastification__bounce',
+            });
       }
     }catch (error) {
       console.error('An error occurred during updating:', error);
@@ -160,6 +182,27 @@
         if (!response.ok) {
           const errorResponseText = await response.text();
           this.error = errorResponseText || 'An error occurred during updating.';
+          toast('An error has ocurred', {
+              type: 'error',
+              position: 'top-right',
+              duration: 3000,
+              theme: 'colored',
+              icon: {
+                name: 'times-circle',
+              },
+              transition: 'Vue-Toastification__bounce',
+            });
+        }else{
+          toast('Password changed successfully!', {
+              type: 'success',
+              position: 'top-right',
+              duration: 3000,
+              theme: 'colored',
+              icon: {
+                name: 'check-circle',
+              },
+              transition: 'Vue-Toastification__bounce',
+            });
         }
       }catch (error) {
         console.error('An error occurred during updating:', error);

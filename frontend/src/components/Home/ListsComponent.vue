@@ -118,6 +118,7 @@ export default {
 .lists-container {
   max-width: 800px;
   margin: 0 auto;
+  width: 612px;
 }
 
 .carousel-wrapper {
@@ -233,6 +234,10 @@ export default {
 }
 
 @media screen and (max-width: 600px) {
+
+  .lists-container {
+    width: 100%;
+  }
   .carousel-item {
     width: 100%;
     height: auto;

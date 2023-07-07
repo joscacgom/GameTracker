@@ -248,7 +248,7 @@ export default {
 
   @media (max-width: 768px) {
     .discover-container {
-      margin-top: 5rem;
+      padding: 1rem;
     }
 
     .browse-container {

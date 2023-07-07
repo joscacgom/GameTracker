@@ -89,6 +89,7 @@
         if (response.ok) {
           const responseData = await response.json();
           this.lists = await responseData;
+         
         } else {
           console.log('An error response was received');
         }
@@ -297,6 +298,12 @@
     align-items: center; 
     margin-bottom: 1rem;
 }
+
+  .close-button:hover,
+  .button-container button:hover {
+    background-color: rgb(252, 9, 76);
+    opacity: 0.8;
+  }
 
 .close-button svg {
   width: 24px;
