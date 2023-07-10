@@ -220,5 +220,32 @@
 .right-arrow {
   margin-right: 20px;
 }
+
+
+@media screen and (max-width: 600px) {
+  .carousel-item {
+    width: 100%;
+    height: auto;
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  .empty-carousel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 8rem;
+  }
+  
+  .carousel {
+    height: auto;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .carousel-item {
+    max-width: 160px;
+  }
+}
   </style>
   

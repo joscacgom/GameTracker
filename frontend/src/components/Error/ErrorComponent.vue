@@ -24,5 +24,36 @@
     font-family: 'Poppins', sans-serif;
     text-align: center;
   }
+  @media screen and (max-width: 768px) {
+  .error-container {
+    margin-left: 0;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .error-container span {
+    font-size: 30px;
+  }
+
+  .error-message {
+    font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .error-container {
+    margin-left: 0;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .error-container span {
+    font-size: 24px;
+  }
+
+  .error-message {
+    font-size: 16px;
+  }
+}
   </style>
   

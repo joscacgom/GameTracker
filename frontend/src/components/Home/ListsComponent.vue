@@ -118,6 +118,7 @@ export default {
 .lists-container {
   max-width: 800px;
   margin: 0 auto;
+  width: 612px;
 }
 
 .carousel-wrapper {
@@ -230,5 +231,34 @@ export default {
   object-fit: fill;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 4px;
+}
+
+@media screen and (max-width: 600px) {
+
+  .lists-container {
+    width: 100%;
+  }
+  .carousel-item {
+    width: 100%;
+    height: auto;
+    max-width: 200px;
+    margin: 0 auto;
+  }
+  .empty-carousel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 8rem;
+  }
+  
+  .carousel {
+    height: auto;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .carousel-item {
+    max-width: 160px;
+  }
 }
 </style>
