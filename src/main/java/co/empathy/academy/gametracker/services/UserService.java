@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,8 +34,13 @@ public class UserService implements UserDetailsService {
             throw new IllegalArgumentException("Email already exists.");
         }
 
-        // Create a new user object
-        User user = new User(username, email, password, "USER");
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        // Encode the password
+        String encodedPassword = passwordEncoder.encode(password);
+
+        // Create a new user object with the encoded password
+        User user = new User(username, email, encodedPassword, "USER");
 
         // Save the user to the repository
         return userRepository.save(user);
@@ -60,14 +66,15 @@ public class UserService implements UserDetailsService {
     public String loginUser(String username, String password) {
         // Find the user by username
         User user = userRepository.findByUsername(username);
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         // Check if the user exists and the provided password matches the stored encoded password
-        if (user != null && password.equals(user.getPassword())) {
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
 
             UserDetails userDetails = loadUserByUsername(username);
             // Generate and return a JWT token
             String token = jwtUtils.generateToken(userDetails);
-            
+
             return token;
         }
 
@@ -114,7 +121,14 @@ public class UserService implements UserDetailsService {
             throw new Exception("User not found.");
         }
 
-        user.setPassword(newPassword);
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+
+        // Encode the new password
+        String encodedPassword = passwordEncoder.encode(newPassword);
+
+        // Update the user's password
+        user.setPassword(encodedPassword);
 
         userRepository.save(user);
     }

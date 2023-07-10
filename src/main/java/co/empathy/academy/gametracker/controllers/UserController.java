@@ -47,6 +47,7 @@ public class UserController {
         String username = user.getUsername();
         String email = user.getEmail();
         String password = user.getPassword();
+        
 
         try {
             // Call the registerUser method of the userService to register the user
