@@ -15,7 +15,7 @@
 
       <div class="header-container">
         <h1 class="title">My Games</h1>
-        <router-link to="/games">View all</router-link>
+        <router-link to="/my-games">View all</router-link>
       </div>
       <GamesComponent></GamesComponent>
     </div>

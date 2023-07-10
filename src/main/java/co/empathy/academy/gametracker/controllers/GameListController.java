@@ -267,7 +267,7 @@ public class GameListController {
         }
 
         // Get the current game
-        Game currentGame = gameService.getGame(gameId);
+        Game currentGame = gameService.getGame(Long.valueOf(gameId));
 
         // Check if the current game exists
         if (currentGame == null) {
