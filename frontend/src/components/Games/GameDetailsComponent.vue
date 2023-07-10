@@ -1,14 +1,14 @@
 <template>
   <div class="game-details-container">
     <SidebarComponent></SidebarComponent>
-    <div class="game">
+    <div class="game" v-if="game">
       <div class="game-cover">
         <div class="game-cover_item" :style="{ backgroundImage: `url(${game.background_image})` }"></div>
       </div>
       <div class="game-details">
         <div class="game-details_genres">
           <div class="game-details_genres_genre" v-for="(genre, $index) in game.genres" :key="$index">
-            <div v-text="genre"></div>
+            <div v-text="genre.name"></div>
           </div>
         </div>
         <h1 class="game-details_name">{{ game.name }}</h1>
@@ -17,41 +17,53 @@
         <p class="game-details_playtime"><span class="highlight">Playtime: </span>{{ game.playtime }}</p>
         <div class="game-details_platforms"><span class="highlight">Platforms:</span>
           <div class="game-details_platforms_platform" v-for="(platform, $index) in game.platforms" :key="$index">
-            <div v-text="platform"></div>
+            <div v-text="platform.name"></div>
           </div>
         </div>
       </div>
       <div class="game-bt">
-        <button class="game-bt_add"> Add to list</button>
+        <button class="game-bt_add" @click="addToList"> Add to list</button>
+        <select-list-component :show-popup="showPopup" @close="closePopup"></select-list-component>
       </div>
     </div>
+    <div class="loading" v-else>Loading...</div>
   </div>
 </template>
 
 <script>
 import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
+import SelectListComponent from '@/components/Games/SelectListComponent.vue';
 
 export default {
   name: 'GameDetailsComponent',
   components: {
-    SidebarComponent
+    SidebarComponent,
+    SelectListComponent
   },
   data() {
     return {
-      game: {
-        name: "Grand Theft Auto V",
-        description: "<p>Rockstar Games se hizo más grande desde su entrega anterior de la serie. Obtienes la construcción del mundo complicada y realista de Liberty City de GTA4 en el escenario de Los Santos, un viejo favorito de los fans, GTA San Andreas. 561 vehículos diferentes (incluidos todos los transportes que puede operar) y la cantidad aumenta con cada actualización.<br />Narración simultánea desde tres perspectivas únicas:<br />Sigue a Michael, ex-criminal que vive su vida de ocio lejos del pasado, Franklin, un niño que busca un futuro mejor, y Trevor, el pasado exacto del que Michael está tratando de huir.<br />GTA Online proporcionará muchos desafíos adicionales incluso para los jugadores experimentados, recién llegados del modo historia. Ahora tendrás otros jugadores cerca que pueden ayudarte con la misma probabilidad que arruinar tu misión. Los jugadores pueden experimentar todas las mecánicas de GTA actualizadas a través del personaje personalizable único, y el contenido de la comunidad combinado con el sistema de nivelación tiende a mantener a todos ocupados y comprometidos.</p>",
-        released: "2013-09-16",
-        background_image: "https://media.rawg.io/media/games/456/456dea5e1c7e3cd07060c14e96612001.jpg",
-        playtime: 73,
-        platforms: ["PlayStation", "Xbox"],
-        genres: ["Action", "Adventure"]
-      }
+      game: {},
+      showPopup: false
     };
   },
+  async mounted() {
+    try {
+      const id = this.$route.params.gameId;
+      const response = await fetch(`http://localhost:8080/api/game/${id}`);
+      if (!response.ok)
+        throw new Error('Unable to fetch game data');
+      const data = await response.json();
+      this.game = await data;
+    } catch(error) {
+      console.error(error);
+    }
+  },
   methods: {
-    logout() {
-      this.$router.push('/');
+    addToList() {
+      this.showPopup = true;
+    },
+    closePopup() {
+      this.showPopup = false;
     }
   }
 }
@@ -168,81 +180,9 @@ export default {
   opacity: 0.7;
 }
 
-@media screen and (min-width: 1024px) {
-  .game-details-container {
-    margin-top: 5rem;
-    margin-left: 15rem;
-  }
-  .game {
-    margin: 1em;
-    padding: 1em;
-  }
-
-  .game-cover {
-    height: 250px;
-    margin: 15px 0;
-    width: 100%;
-  }
-
-  .game-details_genres,
-  .game-details_platforms {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .game-details_genres_genre,
-  .game-details_platforms_platform {
-    margin: 0.5em 0;
-  }
-
-  .game-details_description {
-    text-align: justify;
-    width: 100%;
-  }
-
-  .game-bt_add {
-    width: 100%;
-    max-width: 200px;
-  }
-}
-
-
-
-@media screen and (max-width: 768px) {
-
-  .game-details-container {
-    margin-top: 5rem;
-  }
-  .game {
-    margin: 1em;
-    padding: 1em;
-  }
-
-  .game-cover {
-    height: 250px;
-    margin: 15px 0;
-    width: 100%;
-  }
-
-  .game-details_genres,
-  .game-details_platforms {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .game-details_genres_genre,
-  .game-details_platforms_platform {
-    margin: 0.5em 0;
-  }
-
-  .game-details_description {
-    text-align: justify;
-    width: 100%;
-  }
-
-  .game-bt_add {
-    width: 100%;
-    max-width: 200px;
-  }
+.loading {
+  color: rgb(252, 9, 76);
+  font-family: Poppins;
+  font-size: 20px;
 }
 </style>

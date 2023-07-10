@@ -2,6 +2,8 @@ package co.empathy.academy.gametracker.controllers;
 
 import java.util.List;
 
+import co.empathy.academy.gametracker.models.Game;
+import co.empathy.academy.gametracker.services.GameService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,13 +29,15 @@ import co.empathy.academy.gametracker.utils.JWTUtils;
 public class GameListController {
 
     private final GameListService gameListService;
+    private final GameService gameService;
     private final UserService userService;
     private final JWTUtils jwtUtils;
 
-    public GameListController(GameListService gameListService, JWTUtils jwtUtils, UserService userService) {
+    public GameListController(GameListService gameListService, GameService gameService, UserService userService, JWTUtils jwtUtils) {
         this.gameListService = gameListService;
-        this.jwtUtils = jwtUtils;
+        this.gameService = gameService;
         this.userService = userService;
+        this.jwtUtils = jwtUtils;
     }
 
     /*
@@ -157,7 +161,7 @@ public class GameListController {
         }
 
         // Get the new game list
-        GameList newGameList = gameListService.getGameList(gameList.getId().toString());
+        GameList newGameList = gameListService.getGameList(gameList.getId());
 
         // Check if the new game list exists
         if (newGameList == null) {
@@ -169,7 +173,7 @@ public class GameListController {
         GameWithPlaytime gameToUpdate = null;
 
         for (GameWithPlaytime game : currentGames) {
-            if (game.getId().toString().equals(gameId)) {
+            if (game.getId().equals(gameId)) {
                 gameToUpdate = game;
                 break;
             }
@@ -195,10 +199,95 @@ public class GameListController {
         }
 
         // Update the new game list
-        GameList updatedNewGameList = gameListService.updateGameList(newGameList.getId().toString(), gameList);
+        GameList updatedNewGameList = gameListService.updateGameList(newGameList.getId(), gameList);
 
         // Check if the new game list was updated successfully
         if (updatedNewGameList == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+        // Return the updated current game list
+        return ResponseEntity.ok(updatedCurrentGameList);
+    }
+
+    /*
+     * Endpoint to add a game to a game list.
+     *
+     * Request: PUT /api/game-lists/{listId}/add/{gameId}
+     * Path Parameters:
+     *   - listId: ID of the game list where the game is going to be added
+     *   - gameId: ID of the game to be added
+     * Headers:
+     *   - Authorization: Bearer <JWT Token>
+     * Body:
+     *   - gameList: GameList object representing the updated game list with the added game
+     *
+     * Returns:
+     *   - 200 OK: If the game was added successfully
+     *   - 404 Not Found: If the specified game list or game does not exist
+     *   - 401 Unauthorized: If the request is not authorized or the token is invalid
+     *   - 409 Conflict: If the game is already in the list
+     */
+    @CrossOrigin(origins = "http://localhost:8081")
+    @PutMapping("/{listId}/add/{gameId}")
+    public ResponseEntity<GameList> addGameToGameList(
+            @PathVariable("listId") String listId,
+            @PathVariable("gameId") String gameId,
+            @RequestBody GameList gameList,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        // Validate the JWT token
+        // Extract the token from the authorization header
+        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+
+        // Load user details from the token
+        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+
+        // Check if the token is valid
+        if (token == null || !jwtUtils.validateToken(token, userDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // Get the current game list
+        GameList currentGameList = gameListService.getGameList(listId);
+
+        // Check if the current game list exists
+        if (currentGameList == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        // Check the game to be added is not in the current game list
+        List<GameWithPlaytime> currentGames = currentGameList.getGames();
+        if (currentGames.size() > 0) {
+            for (GameWithPlaytime game : currentGames) {
+                if (game.getId().equals(gameId)) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT).build();
+                }
+            }
+        }
+
+        // Get the current game
+        Game currentGame = gameService.getGame(gameId);
+
+        // Check if the current game exists
+        if (currentGame == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        // Create the game to add
+        GameWithPlaytime gameToAdd = new GameWithPlaytime();
+        gameToAdd.setGame(currentGame);
+
+        // Add the game to the game list
+        currentGames.add(gameToAdd);
+        currentGameList.setGames(currentGames);
+        gameList.setGames(currentGames);
+
+        // Update the current game list
+        GameList updatedCurrentGameList = gameListService.updateGameList(listId, currentGameList);
+
+        // Check if the current game list was updated successfully
+        if (updatedCurrentGameList == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 

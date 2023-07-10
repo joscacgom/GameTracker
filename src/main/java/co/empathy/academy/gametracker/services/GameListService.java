@@ -30,19 +30,19 @@ public class GameListService {
     /**
      * Updates an existing game list.
      *
-     * @param listId    The ID of the game list to update.
-     * @param gameList  The updated game list.
+     * @param listId   The ID of the game list to update.
+     * @param gameList The updated game list.
      * @return The updated game list.
      */
     public GameList updateGameList(String listId, GameList gameList) {
         GameList existingGameList = getGameList(listId);
-        if(existingGameList == null) {
+        if (existingGameList == null) {
             return null;
         }
-        if(gameList.getGames() != null){
+        if (gameList.getGames() != null) {
             existingGameList.getGames().addAll(gameList.getGames());
         }
-        if(gameList.getStatus() != null){
+        if (gameList.getStatus() != null) {
             existingGameList.setStatus(gameList.getStatus());
         }
         existingGameList.setTotalPlaytime(gameList.getTotalPlaytime());
