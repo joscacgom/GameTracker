@@ -4,6 +4,7 @@ import co.empathy.academy.gametracker.models.Game;
 import co.empathy.academy.gametracker.repositories.GameRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,14 +17,21 @@ public class GameService {
     }
 
     /**
-     * Retrieves a game by its ID.
-     *
-     * @param gameId The ID of the game.
-     * @return The game with the specified ID, or null if not found.
+     * Retrieves a game by its ID
+     * @param gameId, The ID of the game
+     * @return the game with the specified ID, or null if not found
      */
-    public Game getGame(String gameId) {
-        Optional<Game> optionalGame = gameRepository.findById(Long.valueOf(gameId));
+    public Game getGame(Long gameId) {
+        Optional<Game> optionalGame = gameRepository.findById(gameId);
         return optionalGame.orElse(null);
+    }
+
+    /**
+     * Obtains the list of games from Mongo database
+     * @return all games in database, List<Game>
+     */
+    public List<Game> getGames() {
+        return gameRepository.findAll();
     }
 
 }
