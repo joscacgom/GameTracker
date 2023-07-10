@@ -21,20 +21,20 @@
           <button class="scroll-button" @click="scrollRight">&gt;</button>
         </div>
       </div>
-      <GamesComponent></GamesComponent>
+      <AllGamesComponent></AllGamesComponent>
     </div>
   </div>
 </template>
 
 <script>
 import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
-import GamesComponent from '@/components/Home/GamesComponent.vue';
+import AllGamesComponent from '@/components/Home/AllGamesComponent.vue';
 
 export default {
   name: 'DiscoverComponent',
   components: {
     SidebarComponent,
-    GamesComponent
+    AllGamesComponent
   },
   data() {
     return {
