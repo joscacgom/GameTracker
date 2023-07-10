@@ -199,11 +199,11 @@
 }
 
 .left-arrow {
-  margin-left: -35px;
+  margin-left: -30px;
 }
 
 .right-arrow {
-  margin-right: -10px;
+  margin-right: 30px;
 }
 
 @media screen and (max-width: 600px) {
