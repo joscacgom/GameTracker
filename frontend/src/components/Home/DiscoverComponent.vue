@@ -41,19 +41,23 @@ export default {
       filterCategories: [
         {
           name: 'Genre',
-          filters: ['Any', 'Action', 'Adventure', 'RPG', 'Strategy', 'Sports']
+          filters: ['Any', 'Action', 'Indie', 'Adventure', 'RPG', 'Strategy', 'Shooter', 'Casual', 'Simulation', 'Puzzle', 'Arcade', 'Platformer', 'Massively Multiplayer', 'Racing' ,'Sports', 'Fighting', 'Family', 'Board Games', 'Educational', 'Card' ]
         },
         {
           name: 'Platform',
-          filters: ['Any', 'PC', 'PlayStation', 'Xbox', 'Nintendo', 'Mobile']
+          filters: ['Any', 'PC', 'PlayStation 5', 'Xbox Series S/X', 'Nintendo Switch', 'Android', 'iOS', 'PlayStation 4', 'Xbox One', 'PlayStation 3', 'Xbox 360', 'Linux', 'macOS', 'PS Vita']
         },
         {
           name: 'Developers',
-          filters: ['Any', 'Developer 1', 'Developer 2', 'Developer 3', 'Developer 4', 'Developer 5']
+          filters: ['Any', 'electronic-arts', 'valve-software', 'microsoft-studios', 'Developer 4', 'Developer 5']
         },
         {
           name: 'Publishers',
           filters: ['Any', 'Publisher 1', 'Publisher 2', 'Publisher 3', 'Publisher 4', 'Publisher 5']
+        },
+        {
+          name: 'Playtime',
+          filters: ['Any', '10', '10-20', '20-30', '30-40', '40-50', '50-60', '60-70', '70-80', '80-90', '90-100', '100+']
         },
         {
           name: 'Metacritic',
@@ -65,7 +69,11 @@ export default {
         },
         {
           name: 'TBA',
-          filters: ['Any', 'TBA 1', 'TBA 2', 'TBA 3', 'TBA 4', 'TBA 5']
+          filters: ['Any', 'true', 'false']
+        },
+        {
+          name: 'Rating',
+          filters: ['Any', 'Rating 1', 'Rating 2', 'Rating 3', 'Rating 4', 'Rating 5']
         },
         {
           name: 'Year',

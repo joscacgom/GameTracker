@@ -14,7 +14,7 @@
         <h1 class="game-details_name">{{ game.name }}</h1>
         <p class="game-details_released"><span class="highlight">Released on: </span>{{ game.released }}</p>
         <p class="game-details_description" v-html="game.description"></p>
-        <p class="game-details_playtime"><span class="highlight">Playtime: </span>{{ game.playtime }}</p>
+        <p class="game-details_playtime"><span class="highlight">Playtime: </span>{{ game.playtime }} hours</p>
         <div class="game-details_platforms"><span class="highlight">Platforms:</span>
           <div class="game-details_platforms_platform" v-for="(platform, $index) in game.platforms" :key="$index">
             <div v-text="platform.name"></div>
@@ -184,5 +184,9 @@ export default {
   color: rgb(252, 9, 76);
   font-family: Poppins;
   font-size: 20px;
+}
+
+span {
+color: rgb(252, 9, 76);
 }
 </style>
