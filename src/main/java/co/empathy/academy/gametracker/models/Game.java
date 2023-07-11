@@ -1,6 +1,7 @@
 package co.empathy.academy.gametracker.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Embedded;
@@ -32,10 +33,24 @@ public class Game {
     @Embedded
     private List<Genre> genres; // genre names
 
+    @Embedded
+    private List<Developer> developers; // platform names
+
+    @Embedded
+    private List<Publisher> publishers; // genre names
+
+    private Integer metacritic;
+
+    private Boolean tba;
+
+    private Integer rating;
+
+    private EsrbRating esrb_rating;
+
     public Game() {
     }
 
-    public Game(Long id, String name, String description, LocalDate released, String background_image, int playtime, List<Platform> platforms, List<Genre> genres) {
+    public Game(Long id, String name, String description, LocalDate released, String background_image, int playtime, List<Platform> platforms, List<Genre> genres, List<Developer> developers, List<Publisher> publishers, Integer metacritic, Boolean tba, Integer rating, EsrbRating esrb_rating) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -44,6 +59,12 @@ public class Game {
         this.playtime = playtime;
         this.platforms = platforms;
         this.genres = genres;
+        this.developers = developers;
+        this.publishers = publishers;
+        this.metacritic = metacritic;
+        this.tba = tba;
+        this.rating = rating;
+        this.esrb_rating = esrb_rating;
     }
 
     public Long getId() {
@@ -110,6 +131,54 @@ public class Game {
         this.genres = genres;
     }
 
+    public EsrbRating getEsrb_rating() {
+        return esrb_rating;
+    }
+
+    public void setEsrb_rating(EsrbRating esrb_rating) {
+        this.esrb_rating = esrb_rating;
+    }
+
+    public List<Developer> getDevelopers() {
+        return developers;
+    }
+
+    public void setDevelopers(List<Developer> developers) { 
+        this.developers = developers; 
+    }
+
+    public List<Publisher> getPublishers() {
+        return publishers;
+    }
+
+    public void setPublishers(List<Publisher> publishers) { 
+        this.publishers = publishers; 
+    }
+
+    public Integer getMetacritic() {
+        return metacritic;
+    }
+
+    public void setMetacritic(Integer metacritic) {
+        this.metacritic = metacritic;
+    }
+
+    public Boolean getTba() {
+        return tba;
+    }
+
+    public void setTba(Boolean tba) {
+        this.tba = tba;
+    }
+
+    public Integer getRating() { 
+        return rating; 
+    }
+
+    public void setRating(Integer rating) { 
+        this.rating = rating; 
+    }
+
     @Override
     public String toString() {
         return "Game{" +
@@ -121,6 +190,12 @@ public class Game {
                 ", playtime=" + playtime +
                 ", platforms=" + platforms +
                 ", genres=" + genres +
+                ", developers=" + developers +
+                ", publishers=" + publishers +
+                ", metacritic=" + metacritic +
+                ", tba=" + tba +
+                ", rating=" + rating +
+                ", esrb_rating=" + esrb_rating +
                 '}';
     }
 
