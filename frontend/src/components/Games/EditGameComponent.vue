@@ -22,7 +22,7 @@
                 <font-awesome-icon icon="plus-circle" />
                 {{ isEditing ? 'Editing...' : 'Edit' }}
             </button>
-            <button type="submit" class="button" :disabled="isDeleting" @click="deleteList">
+            <button type="submit" class="button" :disabled="isDeleting" @click="deleteGame">
                 <font-awesome-icon icon="trash-can" />
                 {{ isDeleting ? 'Deleting...' : 'Delete' }}
             </button>
@@ -40,7 +40,7 @@
   <script>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   export default {
-    name: 'CreateListComponent',
+    name: 'EditGameComponent',
     components: {
         FontAwesomeIcon
     },
@@ -124,7 +124,7 @@
       }
 
     },
-    async deleteList() {
+    async deleteGame() {
     try {
         this.isDeleting = true;
         this.error = '';

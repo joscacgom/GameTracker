@@ -4,7 +4,7 @@
     <div class="content">
       <div class="welcome-message">
         <img class="avatar" src="../../assets/placeholder/mc.jpeg" alt="Avatar" />
-        <p>Welcome, {{ username }}</p>
+        <p>Welcome, <span class="username">{{ username }}</span></p>
       </div>
 
       <div class="header-container">
@@ -97,11 +97,27 @@ export default {
   text-align: center;
 }
 
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.username {
+  color: rgb(252, 9, 76);
+  display: inline-block;
+  animation: fade-in 1s ease-in-out;
+
+}
 .avatar {
   width: 75px;
   height: 75px;
   border-radius: 50%;
   margin-right: 10px;
+  animation: fade-in 1s ease-in-out;
+
 }
 
 @media screen and (max-width: 768px) {
@@ -111,8 +127,8 @@ export default {
   }
 
   .avatar {
-    width: 45px;
-    height: 45px;
+    width: 75px;
+    height: 75px;
     margin-right:0;
   }
   .content {
@@ -124,7 +140,6 @@ export default {
     flex-direction: column;
     align-items: flex-end;
   }
-
 
   .title {
     width: 100%;

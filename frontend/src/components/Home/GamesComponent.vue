@@ -6,7 +6,7 @@
       <div v-else class="carousel-wrapper">
         <div class="carousel" :style="carouselStyle">
           <div v-if="!carouselItems || carouselItems.length === 0" class="empty-carousel">
-            <EmptyComponent type="small"></EmptyComponent>
+            <EmptyComponent  type="small"></EmptyComponent>
           </div>
           <div class="carousel-item" v-else v-for="item in visibleItems" :key="item.game.id" @click="redirectToItemList(item.id)">
             <img :src="item.background_image" :alt="item.game.name" class="carousel-image" />
@@ -222,7 +222,7 @@
 }
 
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 768px) {
   .carousel-item {
     width: 100%;
     height: auto;
@@ -234,7 +234,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 8rem;
+    margin-left: 3.5rem;
   }
   
   .carousel {

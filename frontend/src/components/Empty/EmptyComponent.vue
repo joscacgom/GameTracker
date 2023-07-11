@@ -29,6 +29,22 @@ export default {
     margin-bottom: 5rem;
 
   }
+
+  @keyframes moveUpDown {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    25% {
+        transform: translateY(-10px);
+    }
+
+    75% {
+        transform: translateY(10px);
+    }
+  }
   .loading-container.small {
     height: 50vh;
     margin-left: 0;
@@ -36,6 +52,7 @@ export default {
 }
   .empty-container span {
     font-size: 40px;
+    animation: moveUpDown 2s ease-in-out infinite;
   }
   .empty-message {
     opacity: 0.5;
