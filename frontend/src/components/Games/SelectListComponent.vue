@@ -11,20 +11,20 @@
         <p>Game added to your list.</p>
       </div>
       <div v-else>
-      <div v-if="!gameLists || gameLists.length === 0" class="empty-gameLists">
-        <p>First, create your own list to add games.</p>
-      </div>
-      <div v-else class="content-gameLists">
-        <p>Select one of your lists to add the game.</p>
-        <form @submit.prevent="submitForm">
-          <div class="lists-container" v-for="list in gameLists" :key="list.id">
-            <label><input type="radio" name="r" :value="list" v-model="selectedList"> {{ list.status }}</label>
-          </div>
-          <div class="button-container">
-            <button type="submit" class="add-button">Add</button>
-          </div>
-        </form>
-      </div>
+        <div v-if="!gameLists || gameLists.length === 0" class="empty-gameLists">
+          <p>First, create your own list to add games.</p>
+        </div>
+        <div v-else class="content-gameLists">
+          <p>Select one of your lists to add the game.</p>
+          <form @submit.prevent="submitForm" name="listForm">
+            <div class="lists-container" v-for="list in gameLists" :key="list.id">
+              <label><input type="radio" name="r" :value="list" v-model="selectedList"> {{ list.status }}</label>
+            </div>
+            <div class="button-container">
+              <button type="submit" class="add-button">Add</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -96,8 +96,8 @@
           });
           if (!response.ok) {
             this.added = false;
-            const errorResponseText = await response.text();
-            this.error = errorResponseText || 'An error occurred during editing.';
+            console.log('Something happen while adding the game to the list');
+            this.error = await response.text();
           }
           else {
             this.added = true;

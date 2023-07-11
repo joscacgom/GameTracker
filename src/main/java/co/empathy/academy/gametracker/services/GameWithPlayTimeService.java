@@ -18,6 +18,16 @@ public class GameWithPlayTimeService {
         this.gameWithPlayTimeRepository = gameWithPlayTimeRepository;
     }
 
+    /**
+     * Create a new GameWithPlaytime on Mongo ddbb
+     *
+     * @param gameToAdd the game to be added on ddbb
+     * @return the new game added
+     */
+    public GameWithPlaytime createGame(GameWithPlaytime gameToAdd) {
+        return gameWithPlayTimeRepository.save(gameToAdd);
+    }
+
     public GameWithPlaytime updatePlaytimeHours(String id, GameWithPlaytime updatedGameWithPlaytime) {
         // get the game with playtime by id
         Optional<GameWithPlaytime> optionalGameWithPlayTime = gameWithPlayTimeRepository.findById(id);
@@ -65,4 +75,5 @@ public class GameWithPlayTimeService {
         }
         return gameWithPlaytime;
     }
+
 }
