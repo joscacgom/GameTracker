@@ -10,6 +10,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -21,6 +22,16 @@ public class APIService {
 
     @Autowired
     private final GameRepository gameRepository;
+
+    @Value("${rapidapi.key}")
+    private String rapidAPIKey;
+
+    @Value("${rapidapi.host}")
+    private String rapidAPIHost;
+
+    @Value("${rapidapi.url.key}")
+    private String rapidAPIUrlKey;
+
 
     private final OkHttpClient client = new OkHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -36,10 +47,10 @@ public class APIService {
     public List<Game> getAListOfGames() {
         // Llamada a RAWGAPI
         Request request = new Request.Builder()
-                .url("https://rawg-video-games-database.p.rapidapi.com/games?key=6ecc279ebc114b0194d9600c889c4ab9")
+                .url("https://rawg-video-games-database.p.rapidapi.com/games?key=" + rapidAPIUrlKey)
                 .get()
-                .addHeader("X-RapidAPI-Key", "2f671919fcmsh2c7423d14d84b80p1f2e01jsnfe69a30cb963")
-                .addHeader("X-RapidAPI-Host", "rawg-video-games-database.p.rapidapi.com")
+                .addHeader("X-RapidAPI-Key", rapidAPIKey)
+                .addHeader("X-RapidAPI-Host", rapidAPIHost)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -99,10 +110,10 @@ public class APIService {
     public Game getGameDetails(Long game_id) {
         // Llamada a RAWGAPI
         Request request = new Request.Builder()
-                .url("https://rawg-video-games-database.p.rapidapi.com/games/" + game_id + "?key=6ecc279ebc114b0194d9600c889c4ab9")
+                .url("https://rawg-video-games-database.p.rapidapi.com/games/" + game_id + "?key=" + rapidAPIUrlKey)
                 .get()
-                .addHeader("X-RapidAPI-Key", "2f671919fcmsh2c7423d14d84b80p1f2e01jsnfe69a30cb963")
-                .addHeader("X-RapidAPI-Host", "rawg-video-games-database.p.rapidapi.com")
+                .addHeader("X-RapidAPI-Key", rapidAPIKey)
+                .addHeader("X-RapidAPI-Host", rapidAPIHost)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
