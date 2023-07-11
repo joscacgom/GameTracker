@@ -15,7 +15,7 @@
 
       <div class="header-container">
         <h1 class="title">My Games</h1>
-        <router-link to="/games">View all</router-link>
+        <router-link to="/my-games">View all</router-link>
       </div>
       <GamesComponent></GamesComponent>
     </div>
@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      username: 'John Doe',
+      username: sessionStorage.getItem('username'),
     };
   },
   methods: {
@@ -102,5 +102,49 @@ export default {
   height: 75px;
   border-radius: 50%;
   margin-right: 10px;
+}
+
+@media screen and (max-width: 768px) {
+
+  .welcome-container {
+    margin-top:5rem;
+  }
+
+  .avatar {
+    width: 45px;
+    height: 45px;
+    margin-right:0;
+  }
+  .content {
+    margin-left: 0;
+    padding: 10px;
+  }
+
+  .header-container {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+
+  .title {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .avatar {
+    width: 50px;
+    height: 50px;
+  }
+
+  .welcome-message {
+    font-size: 16px;
+  }
+
+  .header-container a {
+    font-size: 12px;
+    margin-top: 1rem;
+  }
 }
 </style>

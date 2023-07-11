@@ -29,6 +29,10 @@ public class APIService {
         this.gameRepository = gameRepository;
     }
 
+    /**
+     * Obtains a list of games from RAWG API
+     * @return games, a List<Game>
+     */
     public List<Game> getAListOfGames() {
         // Llamada a RAWGAPI
         Request request = new Request.Builder()
@@ -87,7 +91,12 @@ public class APIService {
         }
     }
 
-    public Game getGameDetails(String game_id) {
+    /**
+     * Obtains more information about a game from the RAWG API
+     * @param game_id, Long, identifier of the game
+     * @return game, a Game object with more details
+     */
+    public Game getGameDetails(Long game_id) {
         // Llamada a RAWGAPI
         Request request = new Request.Builder()
                 .url("https://rawg-video-games-database.p.rapidapi.com/games/" + game_id + "?key=6ecc279ebc114b0194d9600c889c4ab9")

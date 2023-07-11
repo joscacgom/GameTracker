@@ -49,5 +49,17 @@
       transform: translateX(0);
     }
   }
+
+
+@media (max-width: 767px) {
+  .not-found-message {
+    font-size: 18px;
+    margin-top: -1.5rem;
+  }
+
+  .not-found-status {
+    font-size: 60px;
+  }
+}
   </style>
   

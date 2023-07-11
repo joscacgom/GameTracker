@@ -1,112 +1,110 @@
 <template>
-    <div class="list-container">
-     <div class="header-container" v-if="!isLoading && !error">
-        <h1 class="title">{{ list.title }}</h1>
-        <h3 class="subtitle">Check your {{ list.title }} games and track your progress, you can add more in the discover section.</h3>
-     </div>
-      <SidebarComponent></SidebarComponent>
-      <div v-if="isLoading" class="loading-container">
-       <LoadingComponent></LoadingComponent>
-      </div>
-      <div v-else-if="error" class="error-container">
-        <ErrorComponent></ErrorComponent>
-      </div>
-      
-      <div v-else >
-        <div class="carousel-container">
-            <div class="carousel-item" v-for="game in list.games" :key="game.id">
-            <img :src="game.imageUrl" :alt="game.title" class="carousel-image" />
-            <div class="carousel-overlay">
-                <h3>{{ game.playTime }}</h3>
-            </div>
-            </div>
+  <div class="list-container">
+    <div class="header-container" v-if="!isLoading && !error">
+      <h1 class="title">{{ list.status }} <span class="edit-icon" @click="edit"><font-awesome-icon icon="edit" /></span></h1>
+      <h3 class="subtitle">Check your {{ list.status }} games and track your progress. You can add more in the discover section.</h3>
+    </div>
+    <SidebarComponent></SidebarComponent>
+    <div v-if="isLoading" class="loading-container">
+      <LoadingComponent type="big"></LoadingComponent>
+    </div>
+    <div v-else-if="error" class="error-container">
+      <ErrorComponent></ErrorComponent>
+    </div>
+    <div v-else-if="!list.games" class="empty-container">
+      <EmptyComponent type="big"></EmptyComponent>
+    </div>
+    <div v-else>
+      <div class="carousel-container">
+        <div class="carousel-item" v-for="game in list.games" :key="game.id">
+          <img :src="game.background_image" :alt="game.title" class="carousel-image" />
+          <div class="carousel-overlay">
+            <h3>{{ game.playTime }}</h3>
+          </div>
         </div>
-     </div>
-     <button v-if="!isLoading && !error" class="discover-button" @click="navigateToDiscover">
+      </div>
+    </div>
+    <button v-if="!isLoading && !error" class="discover-button" @click="navigateToDiscover">
       <font-awesome-icon icon="compass" />
       Discover new games
     </button>
-     </div>
-      
-  </template>
-  
-  <script>
-  import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
-  import LoadingComponent from '@/components/Loading/LoadingComponent.vue';
-  import ErrorComponent from '@/components/Error/ErrorComponent.vue';
-  
-  export default {
-    name: 'ListDetailsComponent',
-    props: ['listId'],
-    components: {
-      SidebarComponent,
-      LoadingComponent,
-      ErrorComponent,
+    <edit-list-component :show-popup="showPopup" :listId="listId" @close="closePopup"></edit-list-component>
+  </div>
+</template>
+
+
+<script>
+import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
+import LoadingComponent from '@/components/Loading/LoadingComponent.vue';
+import ErrorComponent from '@/components/Error/ErrorComponent.vue';
+import EmptyComponent from '@/components/Empty/EmptyComponent.vue';
+import EditListComponent from '@/components/Lists/EditListComponent.vue';
+export default {
+  name: 'ListDetailsComponent',
+  props: {
+    listId: {
+      type: String,
+      required: true,
     },
-    data() {
-      return {
-        list: {},
-        isLoading: false,
-        error: false,
-      };
+  },
+  components: {
+    SidebarComponent,
+    LoadingComponent,
+    ErrorComponent,
+    EmptyComponent,
+    EditListComponent,
+  },
+  data() {
+    return {
+      list: {},
+      isLoading: true,
+      error: false,
+      showPopup: false,
+    };
+  },
+  mounted() {
+    this.fetchListDetails();
+  },
+  methods: {
+    navigateToDiscover() {
+      this.$router.push('/discover');
     },
-    mounted() {
-      this.fetchListDetails();
+    closePopup() {
+      this.showPopup = false;
     },
-    methods: {
-      navigateToDiscover() {
-        this.$router.push('/discover');
-      },
-      fetchListDetails() {
-        this.isLoading = true;
-  
-        setTimeout(() => {
-          this.list = {
-            title: 'Favourites',
-            games: [
-            {
-                id: 1,
-                title: 'Call of Duty: Modern Warfare 2',
-                playTime: '10 hours spent',
-                imageUrl: require('@/assets/placeholder/mw2.jpeg'),
-            },
-            {
-                id: 2,
-                title: 'Rome 2: Total War spent',
-                playTime: '20 hours spent',
-                imageUrl: require('@/assets/placeholder/rome2.jpeg'),
-            },
-            {
-                id: 3,
-                title: 'Alan Wake',
-                playTime: '30 hours spent',
-                imageUrl: require('@/assets/placeholder/alanwake.jpeg'),
-            },
-            {
-                id: 4,
-                title: 'Alan Wake',
-                playTime: '30 hours spent',
-                imageUrl: require('@/assets/placeholder/alanwake.jpeg'),
-            },
-            {
-                id: 5,
-                title: 'Call of Duty: Modern Warfare 2',
-                playTime: '10 hours spent',
-                imageUrl: require('@/assets/placeholder/mw2.jpeg'),
-            },
-            ],
-          };
-          this.isLoading = false;
-        }, 2000);
-  
-        if (!this.listId) {
-          this.error = true;
-          this.isLoading = false;
+    edit() {
+      this.showPopup = true;
+    },
+    async fetchListDetails() {
+      try {
+        const response = await fetch(`http://localhost:8080/api/game-lists/${this.listId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + sessionStorage.getItem('jwtoken'),
+          },
+        });
+
+        if (response.ok) {
+          const responseData = await response.json();
+          this.list = responseData;
+        } else {
+          console.log('An error response was received');
         }
-      },
+      } catch (error) {
+        console.error('An error occurred during fetching:', error);
+      } finally {
+        this.isLoading = false;
+      }
+
+      if (!this.listId) {
+        this.error = true;
+        this.isLoading = false;
+      }
     },
-  };
-  </script>
+  },
+};
+</script>
   
   <style scoped>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
@@ -155,7 +153,7 @@
   }
   
   .carousel-item {
-    width: calc(100% / 4 - 1rem);
+    flex: 1 0 21%; 
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -208,7 +206,14 @@
   .carousel-title {
     margin-top: 0.5rem;
   }
-  
+  .edit-icon {
+    margin: 0.5rem;
+    cursor: pointer;
+  }
+
+  .edit-icon :hover {
+    color: rgb(241, 112, 148);
+  }
   .discover-button {
     border: none;
     background-color: rgb(252, 9, 76);
@@ -231,5 +236,55 @@
     font-weight: 500;
     line-height: 18px;
   }
+
+  @keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+  .discover-button:hover {
+    background-color: rgb(252, 9, 76);
+    opacity: 0.8;
+    transition: all 0.3s linear;
+    animation: pulse 1s ease-in-out infinite;
+  }
+
+  @media (max-width: 768px) {
+  .list-container {
+    margin-top: 2rem;
+  }
+  .title,
+  .subtitle,
+  .carousel-container,
+  .carousel-item {
+    margin-left: 0;
+  }
+
+  .subtitle {
+    width: 90%;
+  }
+
+  .loading-container,
+  .empty-container,
+  .error-container {
+    margin-left: 0;
+    margin-top:1rem;
+  }
+
+  .discover-button {
+    margin-left: 0;
+  }
+
+  .carousel-item {
+    flex-basis: 45%;
+  }
+}
   </style>
   

@@ -21,6 +21,9 @@
         <button type="submit" :disabled="isRegisterIn">
           {{ isRegisterIn ? 'Register in...' : 'Register' }}
         </button>
+        <p class="info" @click="redirectToLogin">
+          Already have an account?
+        </p>
         <p v-if="error" class="error">{{ error }}</p>
       </form>
     </div>
@@ -40,6 +43,9 @@
       };
     },
     methods: {
+    redirectToLogin() {
+      this.$router.push('/login');
+    },
   async register() {
     try {
       this.error = '';
@@ -210,5 +216,60 @@
     text-align: center;
     margin-top: 10px;
   }
+
+  .info{
+    color: rgb(241, 112, 148);
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 400;
+    text-align: center;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+
+.info:hover {
+  text-decoration: underline;
+}
+  @keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+  .register-container button:hover {
+    background-color: rgb(252, 9, 76);
+    opacity: 0.8;
+    transition: all 0.3s linear;
+    animation: pulse 1s ease-in-out infinite;
+  }
+
+
+  @media (max-width: 768px) {
+  .register-container {
+    padding: 0px 20px;
+  }
+
+  .register-container form {
+    max-width: 100%;
+  }
+
+  .register-container input {
+    width: 90%;
+  }
+
+  .register-container button {
+    width: 100%;
+  }
+
+  .register-container label {
+    width: 100%;
+  }
+}
   </style>
   

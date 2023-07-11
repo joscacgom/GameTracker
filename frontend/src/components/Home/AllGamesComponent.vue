@@ -1,50 +1,43 @@
 <template>
-    <div class="games-container">
-      <div v-if="loading" class="loading-container">
-        <LoadingComponent type="small"></LoadingComponent>
-      </div>
-      <div v-else class="carousel-wrapper">
-        <div class="carousel" :style="carouselStyle">
-          <div v-if="!carouselItems || carouselItems.length === 0" class="empty-carousel">
-            <EmptyComponent type="small"></EmptyComponent>
-          </div>
-          <div class="carousel-item" v-else v-for="item in visibleItems" :key="item.game.id" @click="redirectToItemList(item.id)">
-            <img :src="item.background_image" :alt="item.game.name" class="carousel-image" />
-            <div class="carousel-overlay">
-              <h3>{{ item.game.name }}</h3>
-              <h3>{{ item.playtimeHours }} hours spent</h3>
-              <h3>{{ item.gameList.status }}</h3>
-              <span class="edit-icon" @click="edit(item.game.id)"><font-awesome-icon icon="edit" /></span>
-            </div>
-          </div>
-        </div>
-        <div class="navigation-arrows" v-if="carouselItems || carouselItems.length !== 0">
-          <div class="arrow left-arrow" @click="slideCarousel('left')">
-            <font-awesome-icon icon="chevron-left" />
-          </div>
-          <div class="arrow right-arrow" @click="slideCarousel('right')">
-            <font-awesome-icon icon="chevron-right" />
-          </div>
-        </div>
-      </div>
-      <edit-game-component :show-popup="showPopup" :gameId="gameId" @close="closePopup"></edit-game-component>
-
+  <div class="games-container">
+    <div v-if="loading" class="loading-container">
+      <LoadingComponent type="small"></LoadingComponent>
     </div>
-  </template>
-  
-  <script>
+    <div v-else class="carousel-wrapper">
+      <div class="carousel" :style="carouselStyle">
+        <div v-if="!carouselItems || carouselItems.length === 0" class="empty-carousel">
+          <EmptyComponent type="small"></EmptyComponent>
+        </div>
+        <div class="carousel-item" v-else v-for="item in visibleItems" :key="item.id" @click="redirectToItemList(item.id)">
+          <img :src="item.background_image" :alt="item.name" class="carousel-image" />
+          <div class="carousel-overlay">
+            <h3>{{ item.name }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="navigation-arrows" v-if="carouselItems || carouselItems.length !== 0">
+        <div class="arrow left-arrow" @click="slideCarousel('left')">
+          <font-awesome-icon icon="chevron-left" />
+        </div>
+        <div class="arrow right-arrow" @click="slideCarousel('right')">
+          <font-awesome-icon icon="chevron-right" />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   import EmptyComponent from '@/components/Empty/EmptyComponent.vue';
   import LoadingComponent from '@/components/Loading/LoadingComponent.vue';
-  import EditGameComponent from '@/components/Games/EditGameComponent.vue';
-  
+
   export default {
     name: 'GamesComponent',
     components: {
       FontAwesomeIcon,
       EmptyComponent,
-      LoadingComponent,
-      EditGameComponent,
+      LoadingComponent
     },
     data() {
       return {
@@ -74,36 +67,32 @@
     },
     methods: {
       async fetchCarouselItems() {
-      try {
-        const userId = sessionStorage.getItem('userId');
+        try {
+          const response = await fetch(`http://localhost:8080/api/game/all`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + sessionStorage.getItem('jwtoken'),
+            },
+          });
 
-        // Make the GET request
-        const response = await fetch(`http://localhost:8080/api/game-with-playtime/user/${userId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + sessionStorage.getItem('jwtoken'),
-          },
-        });
-
-        if (response.ok) {
-          const responseData = await response.json();
-          this.carouselItems = await responseData;
-        } else {
-          console.log('An error response was received');
+          if (response.ok) {
+            const responseData = await response.json();
+            this.carouselItems = await responseData;
+          } else {
+            console.log('An error response was received');
+          }
+        } catch (error) {
+          console.error('An error occurred during fetching:', error);
+        } finally {
+          this.loading = false;
         }
-      } catch (error) {
-        console.error('An error occurred during fetching:', error);
-      } finally {
-        this.loading = false;
-      }
-    },
-    redirectToItemList(itemId) {
-      this.$router.push(`/game/${itemId}`);
-    },
+      },
+      redirectToItemList(itemId) {
+        this.$router.push(`/game/${itemId}`);
+      },
       slideCarousel(direction) {
         const maxPosition = this.carouselItems.length - this.itemsToShow; // Maximum position of the carousel
-  
         if (direction === 'left') {
           if (this.currentPosition > 0) {
             this.currentPosition--;
@@ -113,18 +102,18 @@
             this.currentPosition++;
           }
         }
-      },
-    },
+      }
+    }
   };
-  </script>
-  
-  <style scoped>
-  .games-container {
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  .carousel-wrapper {
+</script>
+
+<style scoped>
+.games-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.carousel-wrapper {
   position: relative;
 }
 
@@ -144,6 +133,7 @@
   justify-content: flex-start;
   align-items: flex-start;
   position: relative;
+  cursor: pointer;
 }
 
 .carousel-image {
@@ -178,11 +168,6 @@
   opacity: 1;
 }
 
-.carousel-overlay h3 {
-  margin: 0;
-  font-size: 18px;
-}
-
 .navigation-arrows {
   display: flex;
   justify-content: space-between;
@@ -214,13 +199,12 @@
 }
 
 .left-arrow {
-  margin-left: 20px;
+  margin-left: -30px;
 }
 
 .right-arrow {
-  margin-right: 20px;
+  margin-right: 30px;
 }
-
 
 @media screen and (max-width: 600px) {
   .carousel-item {
@@ -236,7 +220,7 @@
     align-items: center;
     margin-left: 8rem;
   }
-  
+
   .carousel {
     height: auto;
   }
@@ -247,5 +231,4 @@
     max-width: 160px;
   }
 }
-  </style>
-  
+</style>

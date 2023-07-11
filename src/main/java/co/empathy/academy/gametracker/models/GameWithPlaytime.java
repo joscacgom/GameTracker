@@ -10,27 +10,33 @@ import java.util.Objects;
 public class GameWithPlaytime {
 
     @Id
-    private Long id;
+    private String id;
 
     @DBRef
     private Game game;
 
-    private Integer playtimeHours; // user time spend playing on game
+    @DBRef
+    private User user;
+
+    @DBRef
+    private GameList gameList;
+
+    private Integer playtimeHours;
 
     public GameWithPlaytime() {
     }
 
-    public GameWithPlaytime(Long id, Game game, Integer playtimeHours) {
+    public GameWithPlaytime(String id, Game game, Integer playtimeHours) {
         this.id = id;
         this.game = game;
         this.playtimeHours = playtimeHours;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -48,6 +54,22 @@ public class GameWithPlaytime {
 
     public void setPlaytimeHours(Integer playtimeHours) {
         this.playtimeHours = playtimeHours;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public GameList getGameList() {
+        return gameList;
+    }
+
+    public void setGameList(GameList gameList) {
+        this.gameList = gameList;
     }
 
     @Override
