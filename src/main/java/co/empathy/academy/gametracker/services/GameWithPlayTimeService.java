@@ -28,6 +28,13 @@ public class GameWithPlayTimeService {
         return gameWithPlayTimeRepository.save(gameToAdd);
     }
 
+    /**
+     * Update a game with playtime, given an Id.
+     *
+     * @param id The ID of the game with playtime.
+     * @param updatedGameWithPlaytime The updated game with playtime.
+     * @return The game with playtime.
+     */
     public GameWithPlaytime updatePlaytimeHours(String id, GameWithPlaytime updatedGameWithPlaytime) {
         // get the game with playtime by id
         Optional<GameWithPlaytime> optionalGameWithPlayTime = gameWithPlayTimeRepository.findById(id);
@@ -35,12 +42,13 @@ public class GameWithPlayTimeService {
         if (optionalGameWithPlayTime.isPresent()) {
             GameWithPlaytime gameWithPlayTime = optionalGameWithPlayTime.get();
             gameWithPlayTime.setPlaytimeHours(updatedGameWithPlaytime.getPlaytimeHours());
+            gameWithPlayTime.setGameList(updatedGameWithPlaytime.getGameList());
             return gameWithPlayTimeRepository.save(gameWithPlayTime);
         }
         return null;
     }
 
-     /**
+    /**
      * Get the games with playtime hours for a specific user.
      *
      * @param userId The ID of the user.
@@ -49,31 +57,15 @@ public class GameWithPlayTimeService {
     public List<GameWithPlaytime> getGamesByUserId(String userId) {
         List<GameWithPlaytime> userGames = gameWithPlayTimeRepository.findByUserId(userId);
         List<GameWithPlaytime> games = new ArrayList<>();
-        
+
         for (GameWithPlaytime game : userGames) {
             if (game.getUser().getId().equals(userId)) {
                 games.add(game);
             }
         }
-        
-        return games;
-    }
-    /**
-     * Get a game with playtime given an Id.
-     * 
-     * @param id The ID of the game with playtime.
-     * @param updatedGameWithPlaytime The updated game with playtime.
-     * @return The game with playtime.
-     */
-    public GameWithPlaytime updateGameWithPlaytime(String id, GameWithPlaytime updatedGameWithPlaytime) {
-        GameWithPlaytime gameWithPlaytime = gameWithPlayTimeRepository.findById(id).orElse(null);
-        if (gameWithPlaytime != null) {
-            gameWithPlaytime.setPlaytimeHours(updatedGameWithPlaytime.getPlaytimeHours());
-            gameWithPlaytime.setGameList(updatedGameWithPlaytime.getGameList());
 
-            return gameWithPlayTimeRepository.save(gameWithPlaytime);
-        }
-        return gameWithPlaytime;
+        return games;
     }
 
 }
+

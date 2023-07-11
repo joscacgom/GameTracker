@@ -45,8 +45,8 @@ public class GameWithPlaytimeController {
     @CrossOrigin(origins = "http://localhost:8081")
     @PutMapping("/{id}")
     public ResponseEntity<GameWithPlaytime> updatePlaytimeHours(
-            @RequestBody GameWithPlaytime gameWithPlaytime,
             @PathVariable("id") String id,
+            @RequestBody GameWithPlaytime gameWithPlaytime,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
         // Validate the JWT token
@@ -72,44 +72,6 @@ public class GameWithPlaytimeController {
         // Return the updated game with playtime hours
         return ResponseEntity.ok(updatedGameWithPlaytime);
     }
-
-    /**
-     * Update game with playtime with the specified ID.
-     *
-     * @param id                      The ID of the game with playtime.
-     * @param updatedGameWithPlaytime The updated game with playtime hours.
-     * @param authorizationHeader     The Authorization header containing the JWT token.
-     * @return ResponseEntity containing the updated game with playtime hours if successful,
-     * or a not found response if the game was not found.
-     */
-    @CrossOrigin(origins = "http://localhost:8081")
-    @PutMapping("/game-with-playtime/{id}")
-    public ResponseEntity<GameWithPlaytime> updateGameWithPlaytime(
-            @PathVariable("id") String id,
-            @RequestBody GameWithPlaytime updatedGameWithPlaytime,
-            @RequestHeader("Authorization") String authorizationHeader
-    ) {
-        // Validate the JWT token
-        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
-        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
-
-        // Check if the token is valid
-        if (token == null || !jwtUtils.validateToken(token, userDetails)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        // Update the playtime hours for the game
-        GameWithPlaytime updatedGame = gameWithPlayTimeService.updateGameWithPlaytime(id, updatedGameWithPlaytime);
-
-        // Check if the game was found and updated successfully
-        if (updatedGame == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        // Return the updated game with playtime hours
-        return ResponseEntity.ok(updatedGame);
-    }
-
 
     /**
      * Get the games with playtime hours for a specific user.

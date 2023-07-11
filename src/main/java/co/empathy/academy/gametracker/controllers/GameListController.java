@@ -282,6 +282,7 @@ public class GameListController {
         GameWithPlaytime gameToAdd = new GameWithPlaytime();
         gameToAdd.setGame(currentGame);
         gameToAdd.setUser(userService.getUser(jwtUtils.getUsernameFromToken(token)));
+        gameToAdd.setGameList(currentGameList);
 
         // Save it on ddbb
         GameWithPlaytime gameAdded = gameWithPlayTimeService.createGame(gameToAdd);
