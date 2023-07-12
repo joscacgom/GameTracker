@@ -1,0 +1,41 @@
+# Maven
+target/
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Logs
+logs/
+*.log
+
+# Compiled files
+*.class
+*.jar
+*.war
+*.ear
+
+# Application properties
+src/main/resources/application.properties
+
+# Eclipse specific files
+.classpath
+.project
+.settings/
+
+# IntelliJ specific files
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Visual Studio Code specific files
+.vscode/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+.env
