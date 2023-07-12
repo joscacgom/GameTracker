@@ -260,12 +260,15 @@ export default {
 @media (max-width: 768px) {
   .discover-container {
     padding: 1rem;
+    
   }
 
   .browse-container {
     flex-direction: column;
     align-items: flex-start;
-    margin-top: 1rem;
+    margin: 0 auto;
+    max-width: 300px;
+   
   }
 
   .input-search {
@@ -279,10 +282,11 @@ export default {
 
   .filters-container {
     justify-content: center;
+    margin: 0 auto;
+    max-width: 350px;
 }
-
   .filters-container select {
-    width: 100%;
+    width: 100px;
   }
 }
 </style>

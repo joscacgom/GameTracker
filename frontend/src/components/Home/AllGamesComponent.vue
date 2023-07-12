@@ -212,6 +212,7 @@
     height: auto;
     max-width: 200px;
     margin: 0 auto;
+    height: 200px;
   }
 
   .empty-carousel {
@@ -219,6 +220,18 @@
     justify-content: center;
     align-items: center;
     margin-left: 8rem;
+  }
+
+  .navigation-arrows {
+    z-index: 1;
+  }
+
+  .left-arrow {
+    margin-left: 0;
+  }
+
+  .right-arrow {
+    margin-right: 0;
   }
 
   .carousel {

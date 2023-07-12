@@ -68,6 +68,7 @@ export default {
     flex-direction: column;
     margin-top:0;
     margin-bottom:3rem;
+    margin-left: 0;
   }
 
   .empty-container span {

@@ -18,7 +18,7 @@
             </div>
           </div>
         </div>
-        <div class="navigation-arrows" v-if="carouselItems || carouselItems.length !== 0">
+        <div class="navigation-arrows">
           <div class="arrow left-arrow" @click="slideCarousel('left')">
             <font-awesome-icon icon="chevron-left" />
           </div>
