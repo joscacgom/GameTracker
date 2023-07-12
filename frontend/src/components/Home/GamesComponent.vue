@@ -225,7 +225,7 @@
 @media screen and (max-width: 768px) {
   .carousel-item {
     width: 100%;
-    height: auto;
+    height: 200px;
     max-width: 200px;
     margin: 0 auto;
   }

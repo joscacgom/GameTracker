@@ -68,7 +68,6 @@ export default {
     flex-direction: column;
     margin-top:0;
     margin-bottom:3rem;
-    margin-left: 0;
   }
 
   .empty-container span {
@@ -82,7 +81,7 @@ export default {
 
 @media screen and (max-width: 480px) {
   .empty-container {
-    margin-left: 0;
+    margin-left: 5rem;
     margin-top: 2rem;
     margin-bottom: 2rem;
   }

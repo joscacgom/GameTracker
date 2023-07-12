@@ -240,7 +240,7 @@ export default {
   }
   .carousel-item {
     width: 100%;
-    height: auto;
+    height: 200px;
     max-width: 200px;
     margin: 0 auto;
   }

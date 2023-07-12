@@ -263,6 +263,14 @@ export default {
     
   }
 
+  .scroll-button:first-child {
+    margin-right: 0;
+  }
+
+  .scroll-button:last-child {
+      margin-left: 0;
+  }
+
   .browse-container {
     flex-direction: column;
     align-items: flex-start;
@@ -282,9 +290,13 @@ export default {
 
   .filters-container {
     justify-content: center;
-    margin: 0 auto;
     max-width: 350px;
 }
+
+  .filters-scroll-container {
+    ;
+  }
+
   .filters-container select {
     width: 100px;
   }
