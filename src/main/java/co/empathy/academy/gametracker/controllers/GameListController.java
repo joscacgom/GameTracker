@@ -4,6 +4,7 @@ import java.util.List;
 
 import co.empathy.academy.gametracker.models.Game;
 import co.empathy.academy.gametracker.services.GameService;
+import co.empathy.academy.gametracker.services.GameWithPlayTimeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,12 +31,14 @@ public class GameListController {
 
     private final GameListService gameListService;
     private final GameService gameService;
+    private final GameWithPlayTimeService gameWithPlayTimeService;
     private final UserService userService;
     private final JWTUtils jwtUtils;
 
-    public GameListController(GameListService gameListService, GameService gameService, UserService userService, JWTUtils jwtUtils) {
+    public GameListController(GameListService gameListService, GameService gameService, GameWithPlayTimeService gameWithPlayTimeService, UserService userService, JWTUtils jwtUtils) {
         this.gameListService = gameListService;
         this.gameService = gameService;
+        this.gameWithPlayTimeService = gameWithPlayTimeService;
         this.userService = userService;
         this.jwtUtils = jwtUtils;
     }
@@ -224,9 +227,9 @@ public class GameListController {
      *
      * Returns:
      *   - 200 OK: If the game was added successfully
+     *   - 302 Found: If the game is already in the list
      *   - 404 Not Found: If the specified game list or game does not exist
      *   - 401 Unauthorized: If the request is not authorized or the token is invalid
-     *   - 409 Conflict: If the game is already in the list
      */
     @CrossOrigin(origins = "http://localhost:8081")
     @PutMapping("/{listId}/add/{gameId}")
@@ -256,16 +259,6 @@ public class GameListController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        // Check the game to be added is not in the current game list
-        List<GameWithPlaytime> currentGames = currentGameList.getGames();
-        if (currentGames.size() > 0) {
-            for (GameWithPlaytime game : currentGames) {
-                if (game.getId().equals(gameId)) {
-                    return ResponseEntity.status(HttpStatus.CONFLICT).build();
-                }
-            }
-        }
-
         // Get the current game
         Game currentGame = gameService.getGame(Long.valueOf(gameId));
 
@@ -274,21 +267,38 @@ public class GameListController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
+        // Check the game to be added is not in the current game list
+        List<GameWithPlaytime> currentGames = currentGameList.getGames();
+        if (currentGames != null) {
+            for (GameWithPlaytime game : currentGames) {
+                if (game.getGame().getId().equals(gameId)) {
+                    return ResponseEntity.status(HttpStatus.FOUND).build();
+                }
+            }
+        }
+
         // Create the game to add
         GameWithPlaytime gameToAdd = new GameWithPlaytime();
         gameToAdd.setGame(currentGame);
+        gameToAdd.setUser(userService.getUser(jwtUtils.getUsernameFromToken(token)));
+        gameToAdd.setGameList(currentGameList);
+        gameToAdd.setPlaytimeHours(0);
 
-        // Add the game to the game list
-        currentGames.add(gameToAdd);
-        currentGameList.setGames(currentGames);
-        gameList.setGames(currentGames);
+        // Save it on ddbb
+        GameWithPlaytime gameAdded = gameWithPlayTimeService.createGame(gameToAdd);;
+
+        // Check if the game adding was successfull
+        if (gameAdded == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
 
         // Update the current game list
-        GameList updatedCurrentGameList = gameListService.updateGameList(listId, currentGameList);
+        GameList updatedCurrentGameList = gameListService.addGameToGameList(listId, gameAdded);
+
 
         // Check if the current game list was updated successfully
         if (updatedCurrentGameList == null) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         // Return the updated current game list

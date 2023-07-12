@@ -1,20 +1,25 @@
 package co.empathy.academy.gametracker.services;
 
 import co.empathy.academy.gametracker.models.GameList;
+import co.empathy.academy.gametracker.models.GameWithPlaytime;
 import co.empathy.academy.gametracker.repositories.GameListRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import co.empathy.academy.gametracker.repositories.GameWithPlayTimeRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GameListService {
 
     private final GameListRepository gameListRepository;
+    private final GameWithPlayTimeRepository gameWithPlayTimeRepository;
 
-    public GameListService(GameListRepository gameListRepository) {
+    public GameListService(GameListRepository gameListRepository, GameWithPlayTimeRepository gameWithPlayTimeRepository) {
         this.gameListRepository = gameListRepository;
+        this.gameWithPlayTimeRepository = gameWithPlayTimeRepository;
     }
 
     /**
@@ -78,5 +83,42 @@ public class GameListService {
     public void deleteGameList(String listId) {
         gameListRepository.deleteById(listId);
     }
+
+    /**
+     * Updates an existing game list by adding a game to it.
+     *
+     * @param listId   The ID of the game list to update.
+     * @param game The game to be added.
+     * @return The updated game list or null.
+     */
+    public GameList addGameToGameList(String listId, GameWithPlaytime game) {
+        GameList existingGameList = getGameList(listId);
+        if (existingGameList != null) {
+            List<GameWithPlaytime> updateGameList = existingGameList.getGames();
+            if (updateGameList == null)
+                updateGameList = new ArrayList<>();
+            updateGameList.add(game);
+            existingGameList.setGames(updateGameList);
+            existingGameList.setTotalPlaytime(calculateTotalPlaytime(updateGameList));
+            return gameListRepository.save(existingGameList);
+        }
+        return null;
+    }
+
+    /**
+     * Calculates the total playtime for the updated game list.
+     *
+     * @param games  the list of games updated.
+     * @return total  an integer with the calculated total playtime hours.
+     */
+    private int calculateTotalPlaytime(List<GameWithPlaytime> games) {
+        int total = 0;
+        for (GameWithPlaytime game: games) {
+            if (game.getPlaytimeHours() != null) // user may not added playtime hours yet!
+                total += game.getPlaytimeHours();
+        }
+        return total;
+    }
+
 }
 

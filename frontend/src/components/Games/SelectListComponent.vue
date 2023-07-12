@@ -11,20 +11,20 @@
         <p>Game added to your list.</p>
       </div>
       <div v-else>
-      <div v-if="!gameLists || gameLists.length === 0" class="empty-gameLists">
-        <p>First, create your own list to add games.</p>
-      </div>
-      <div v-else class="content-gameLists">
-        <p>Select one of your lists to add the game.</p>
-        <form @submit.prevent="submitForm">
-          <div class="lists-container" v-for="list in gameLists" :key="list.id">
-            <label><input type="radio" name="r" :value="list" v-model="selectedList"> {{ list.status }}</label>
-          </div>
-          <div class="button-container">
-            <button type="submit" class="add-button">Add</button>
-          </div>
-        </form>
-      </div>
+        <div v-if="!gameLists || gameLists.length === 0" class="empty-gameLists">
+          <p>First, create your own list to add games.</p>
+        </div>
+        <div v-else class="content-gameLists">
+          <p>Select one of your lists to add the game.</p>
+          <form @submit.prevent="submitForm">
+            <div class="lists-container" v-for="list in gameLists" :key="list.id">
+              <label><input type="radio" name="r" :value="list" v-model="selectedList"> {{ list.status }}</label>
+            </div>
+            <div class="button-container">
+              <button type="submit" class="add-button">Add</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
