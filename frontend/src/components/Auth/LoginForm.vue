@@ -57,7 +57,6 @@ export default {
 
     if (response.ok) {
       const responseData = await response.json();
-
       // Save the response data in sessionStorage
       sessionStorage.setItem('jwtoken', responseData.jwtoken);
       sessionStorage.setItem('username', responseData.username);
