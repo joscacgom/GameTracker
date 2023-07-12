@@ -125,7 +125,7 @@
 }
 
 .carousel-item {
-  padding: 10px;
+  padding: 20px;
   width: 184px;
   height: 240px;
   display: flex;
@@ -203,7 +203,7 @@
 }
 
 .right-arrow {
-  margin-right: 30px;
+  margin-right: -30px;
 }
 
 @media screen and (max-width: 600px) {

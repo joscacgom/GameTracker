@@ -111,7 +111,7 @@ public class UserService implements UserDetailsService {
     /**
      * Delete a user by username.
      *
-     * @param username The username of the user to delete.
+     * @param currentUsername The username of the user to delete.
      * @throws Exception If the user is not found or the delete fails.
      */
     public void changePassword(String currentUsername, String newPassword) throws Exception {
@@ -146,4 +146,19 @@ public class UserService implements UserDetailsService {
         }
         return user.getId();
     }
+
+    /**
+     * Get a user by username.
+     *
+     * @param username The username of the user to get.
+     * @throws Exception If the user is not found.
+     */
+    public User getUser(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found.");
+        }
+        return user;
+    }
+
 }

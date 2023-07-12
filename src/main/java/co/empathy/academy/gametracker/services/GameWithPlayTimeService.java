@@ -18,6 +18,23 @@ public class GameWithPlayTimeService {
         this.gameWithPlayTimeRepository = gameWithPlayTimeRepository;
     }
 
+    /**
+     * Create a new GameWithPlaytime on Mongo ddbb
+     *
+     * @param gameToAdd the game to be added on ddbb
+     * @return the new game added
+     */
+    public GameWithPlaytime createGame(GameWithPlaytime gameToAdd) {
+        return gameWithPlayTimeRepository.save(gameToAdd);
+    }
+
+    /**
+     * Update a game with playtime, given an Id.
+     *
+     * @param id The ID of the game with playtime.
+     * @param updatedGameWithPlaytime The updated game with playtime.
+     * @return The game with playtime.
+     */
     public GameWithPlaytime updatePlaytimeHours(String id, GameWithPlaytime updatedGameWithPlaytime) {
         // get the game with playtime by id
         Optional<GameWithPlaytime> optionalGameWithPlayTime = gameWithPlayTimeRepository.findById(id);
@@ -25,6 +42,7 @@ public class GameWithPlayTimeService {
         if (optionalGameWithPlayTime.isPresent()) {
             GameWithPlaytime gameWithPlayTime = optionalGameWithPlayTime.get();
             gameWithPlayTime.setPlaytimeHours(updatedGameWithPlaytime.getPlaytimeHours());
+            gameWithPlayTime.setGameList(updatedGameWithPlaytime.getGameList());
             return gameWithPlayTimeRepository.save(gameWithPlayTime);
         }
         return null;
@@ -48,21 +66,5 @@ public class GameWithPlayTimeService {
         
         return games;
     }
-    /**
-     * Get a game with playtime given an Id.
-     * 
-     * @param id The ID of the game with playtime.
-     * @param updatedGameWithPlaytime The updated game with playtime.
-     * @return The game with playtime.
-     */
-    public GameWithPlaytime updateGameWithPlaytime(String id, GameWithPlaytime updatedGameWithPlaytime) {
-        GameWithPlaytime gameWithPlaytime = gameWithPlayTimeRepository.findById(id).orElse(null);
-        if (gameWithPlaytime != null) {
-            gameWithPlaytime.setPlaytimeHours(updatedGameWithPlaytime.getPlaytimeHours());
-            gameWithPlaytime.setGameList(updatedGameWithPlaytime.getGameList());
 
-            return gameWithPlayTimeRepository.save(gameWithPlaytime);
-        }
-        return gameWithPlaytime;
-    }
 }
