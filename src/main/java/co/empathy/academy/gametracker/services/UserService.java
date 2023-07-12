@@ -153,6 +153,13 @@ public class UserService implements UserDetailsService {
      * @param username The username of the user to get.
      * @throws Exception If the user is not found.
      */
+    public String getUserEmail(String username) {
+        User user = userRepository.findByUsername(username);
+        if(user == null) {
+            throw new IllegalArgumentException("User not found.");
+        }
+        return user.getEmail();
+    }
     public User getUser(String username) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
