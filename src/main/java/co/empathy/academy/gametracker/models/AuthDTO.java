@@ -6,13 +6,16 @@ public class AuthDTO {
 
     private String username;
 
+    private String email;
+
     private String JWToken;
 
     public AuthDTO() {
     }
 
-    public AuthDTO(String username, String JWToken, String id) {
+    public AuthDTO(String username, String email,String JWToken, String id) {
         this.username = username;
+        this.email = email;
         this.JWToken = JWToken;
         this.id = id;
     }
@@ -41,10 +44,26 @@ public class AuthDTO {
         this.id = id;
     }
 
+    public String getEmail(){
+        return email;
+    }
+
+    public void setEmail(String email){
+        this.email = email;
+    }
+
+    public AuthDTO(String username, String JWToken) {
+        this.username = username;
+        this.JWToken = JWToken;
+    }
+
+
+
     @Override
     public String toString() {
         return "AuthDTO{" +
                 "username='" + username + '\'' +
+                ", email='" + email + '\'' +
                 ", JWToken='" + JWToken + '\'' +
                 ", id='" + id + '\'' +
                 '}';
