@@ -16,7 +16,7 @@
         </div>
         <div>
           <label for="password2">Repeat Password</label>
-          <input type="password2" id="password2" v-model="password2" placeholder="Repeat your password..." required />
+          <input type="password" id="password2" v-model="password2" placeholder="Repeat your password..." required />
         </div>
         <button type="submit" :disabled="isRegisterIn">
           {{ isRegisterIn ? 'Register in...' : 'Register' }}
