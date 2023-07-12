@@ -293,10 +293,6 @@ export default {
     max-width: 350px;
 }
 
-  .filters-scroll-container {
-    ;
-  }
-
   .filters-container select {
     width: 100px;
   }
