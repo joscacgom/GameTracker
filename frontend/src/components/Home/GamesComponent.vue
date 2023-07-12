@@ -234,7 +234,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 3.5rem;
+    margin-right: 1rem;
   }
   
   .carousel {

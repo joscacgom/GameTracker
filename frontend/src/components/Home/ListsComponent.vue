@@ -248,7 +248,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 8rem;
+    margin-right: 1rem;
   }
   
   .carousel {

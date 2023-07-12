@@ -27,7 +27,7 @@
         <button @click="updateProfile" :disabled="isUpdatingInfo">
           {{ isUpdatingInfo ? 'Saving...' : 'Save changes' }}
         </button>
-        <p v-if="error" class="error">{{ error }}</p>
+        <p v-if="error1" class="error">{{ error1 }}</p>
       </div>
 
       <div class="form-container">
@@ -43,7 +43,7 @@
         <button @click="changePassword" :disabled="isUpdatingPassword">
           {{ isUpdatingPassword ? 'Saving...' : 'Change password' }}
         </button>
-        <p v-if="error" class="error">{{ error }}</p>
+        <p v-if="error2" class="error">{{ error2 }}</p>
       </div>
     </div>
   </div>
@@ -65,10 +65,11 @@
       return {
         avatar: require('@/assets/placeholder/mc.jpeg'),
         username: sessionStorage.getItem('username'),
-        email: '',
+        email: sessionStorage.getItem('email'),
         password: '',
         password2:'',
-        error: '',
+        error1: '',
+        error2: '',
         isUpdatingInfo: false,
         isUpdatingPassword: false,
         hovered: false,
@@ -89,12 +90,25 @@
 
       try{
 
-        this.error = '';
+        this.error1 = '';
+        this.error2 = '';
         this.isUpdatingInfo = true;
+
+        // Check if username is at least 3 characters
+        if (this.username.length < 3) {
+          this.error1 = 'Username must be at least 3 characters!';
+          return;
+        }
+
+        // Check if email is valid
+        if (this.email !== '' && !this.email.includes('@')) {
+          this.error1 = 'Email must be valid!';
+          return;
+        }
   
         const requestBody = {
           username: this.username,
-          email: this.email,
+          email: this.email === '' ? sessionStorage.getItem('email') : this.email,
           currentUsername: sessionStorage.getItem('username')
       };
 
@@ -113,8 +127,9 @@
 
         // Save the response data in sessionStorage
         sessionStorage.setItem('username', responseData.username);
+        sessionStorage.setItem('email', this.email === '' ? sessionStorage.getItem('email') : responseData.email);
 
-        toast('User info updated succesfully!', {
+        toast('User info updated, you must log in again!', {
               type: 'success',
               position: 'top-right',
               duration: 3000,
@@ -124,6 +139,16 @@
               },
               transition: 'Vue-Toastification__bounce',
             });
+            sessionStorage.removeItem('jwtoken');
+            sessionStorage.removeItem('username');
+            sessionStorage.removeItem('email');
+            sessionStorage.removeItem('userId');
+            
+            setTimeout(() => {
+              this.$router.push('/my-lists');
+            }, 3000);
+
+
       } else {
         const errorResponseText = await response.text();
         this.error = errorResponseText || 'An error occurred during updating.';
@@ -140,7 +165,7 @@
       }
     }catch (error) {
       console.error('An error occurred during updating:', error);
-      this.error = 'An error occurred during updating: ' + error.message;
+      this.error1 = 'An error occurred during updating: ' + error.message;
     } finally {
       this.isUpdatingInfo = false;
     }
@@ -149,18 +174,19 @@
       async changePassword() {
         try{
 
-          this.error = '';
+          this.error1 = '';
+          this.error2 = '';
           this.isUpdatingPassword = true;
 
           // Check if password is at least 8 characters
           if (this.password.length < 8) {
-            this.error = 'Password must be at least 8 characters!';
+            this.error2 = 'Password must be at least 8 characters!';
             return;
           }
 
           // Check if passwords match
           if (this.password !== this.password2) {
-            this.error = 'Passwords must match!';
+            this.error2 = 'Passwords must match!';
             return;
           }
     
@@ -181,7 +207,7 @@
 
         if (!response.ok) {
           const errorResponseText = await response.text();
-          this.error = errorResponseText || 'An error occurred during updating.';
+          this.error2 = errorResponseText || 'An error occurred during updating.';
           toast('An error has ocurred', {
               type: 'error',
               position: 'top-right',
@@ -206,7 +232,7 @@
         }
       }catch (error) {
         console.error('An error occurred during updating:', error);
-        this.error = 'An error occurred during updating: ' + error.message;
+        this.error2 = 'An error occurred during updating: ' + error.message;
       } finally {
         this.isUpdatingPassword = false;
     }
@@ -356,7 +382,24 @@
     font-weight: 500;
     line-height: 18px;
   }
-  
+
+  @keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+  .form-container button:hover {
+    background-color: rgb(252, 9, 76);
+    opacity: 0.8;
+    transition: all 0.3s linear;
+    animation: pulse 1s ease-in-out infinite;
+  }
   .form-container button:disabled {
     background-color: rgb(241, 112, 148);
     cursor: not-allowed;

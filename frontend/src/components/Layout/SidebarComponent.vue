@@ -71,6 +71,8 @@ export default {
     logout() {
       sessionStorage.removeItem('jwtoken');
       sessionStorage.removeItem('username');
+      sessionStorage.removeItem('userId');
+      sessionStorage.removeItem('email');
       this.$router.push('/');
     },
     redirectToProfile() {

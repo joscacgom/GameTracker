@@ -62,6 +62,7 @@ export default {
       sessionStorage.setItem('jwtoken', responseData.jwtoken);
       sessionStorage.setItem('username', responseData.username);
       sessionStorage.setItem('userId', responseData.id);
+      sessionStorage.setItem('email', responseData.email);
 
       this.$router.push('/home');
     } else {
