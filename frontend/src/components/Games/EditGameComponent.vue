@@ -129,7 +129,7 @@
         this.error = '';
 
         // Make the DELETE request
-        const response = await fetch(`http://localhost:8080/api/game-with-playtime/${this.gameId}`, {
+        const response = await fetch(`http://localhost:8080/api/game-lists/{listId}/games/${this.gameId}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',

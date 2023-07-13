@@ -410,6 +410,10 @@ public class GameListController {
         // Remove the game from the game list
         games.remove(gameToDelete);
 
+        // Remove gamewithplaytime
+        gameWithPlayTimeService.deleteGameById(gameId);
+
+
         // Update the game list
         GameList updatedGameList = gameListService.updateGameList(listId, gameList);
 
