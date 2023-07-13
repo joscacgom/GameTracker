@@ -21,7 +21,7 @@ public class GameWithPlaytime {
     private User user;
 
     @DBRef
-    @JsonIgnoreProperties("gamesWithPlaytime")
+    @JsonIgnoreProperties({"games"})
     private GameList gameList;
 
     private Integer playtimeHours;

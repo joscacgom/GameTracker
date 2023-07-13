@@ -377,7 +377,6 @@ public class GameListController {
 
         // Load user details from the token
         UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
-
         // Check if the token is valid
         if (token == null || !jwtUtils.validateToken(token, userDetails)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -385,6 +384,8 @@ public class GameListController {
 
         // Get the game list
         GameList gameList = gameListService.getGameList(listId);
+        System.out.println("User details: " + listId);
+
 
         // Check if the game list exists
         if (gameList == null) {
@@ -394,6 +395,11 @@ public class GameListController {
         // Find the game to be deleted in the game list
         List<GameWithPlaytime> games = gameList.getGames();
         GameWithPlaytime gameToDelete = null;
+
+        // check if games is not null
+        if (games == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
 
         for (GameWithPlaytime game : games) {
             if (game.getId().toString().equals(gameId)) {

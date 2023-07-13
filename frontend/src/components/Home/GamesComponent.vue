@@ -13,7 +13,7 @@
             <div class="carousel-overlay">
               <h3>{{ item.game.name }}</h3>
               <h3>{{ item.playtimeHours }} hours</h3>
-              <span class="edit-icon" @click.stop="edit(item.id)"><font-awesome-icon icon="edit" /></span>
+              <span class="edit-icon" @click.stop="edit(item.id, item.gameList.id, item.playtimeHours )"><font-awesome-icon icon="edit" /></span>
             </div>
             
           </div>
@@ -27,7 +27,7 @@
           </div>
         </div>
       </div>
-      <edit-game-component :show-popup="showPopup" :gameId="gameId" @close="closePopup"></edit-game-component>
+      <edit-game-component :show-popup="showPopup" :gameId="gameId" :gameListId="gameListId" :playtime="playtime" @close="closePopup"></edit-game-component>
 
     </div>
   </template>
@@ -55,6 +55,8 @@
         hoveredItem: null,
         showPopup: false,
         gameId: null,
+        gameListId: null,
+        playtime: null,
       };
     },
     mounted() {
@@ -79,9 +81,12 @@
         this.showPopup = false;
         this.fetchCarouselItems();
       },
-      edit(id) {
-      this.gameId = id;
-      this.showPopup = true;
+      edit(gameId, gameListId, playtime) {
+        this.gameId = gameId;
+        this.gameListId = gameListId;
+        this.playtime = playtime;
+
+        this.showPopup = true;
     },
       async fetchCarouselItems() {
       try {
