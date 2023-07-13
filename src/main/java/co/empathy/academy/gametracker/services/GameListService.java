@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import co.empathy.academy.gametracker.repositories.GameWithPlayTimeRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,7 +50,7 @@ public class GameListService {
         existingGameList.setTotalPlaytime(gameList.getTotalPlaytime());
         return gameListRepository.save(existingGameList);
     }
-
+    //  A method to given a gameList and a gameWithPlaytime, add the gameWithPlaytime to the gameList and   
     /**
      * Retrieves a game list by its ID.
      *
@@ -80,6 +79,40 @@ public class GameListService {
      */
     public void deleteGameList(String listId) {
         gameListRepository.deleteById(listId);
+    }
+
+    /**
+     * Updates a game from a game list to another list.
+     * @param listId The ID of the game list to delete from.
+     * @param gameId The ID of the game to delete.
+     * @param newListId The ID of the game list to add the game to.
+     * @return The updated game list or null.
+     */
+    public void updateGameStatusFromGameList(String listId, String gameId, String newListId) {
+        GameList existingGameList = getGameList(listId);
+        GameList newGameList = getGameList(newListId);
+
+        if (existingGameList != null) {
+            List<GameWithPlaytime> updateGameList = existingGameList.getGames();
+            if (updateGameList != null) {
+                for (GameWithPlaytime game: updateGameList) {
+                    if (game.getId().equals(gameId)) {
+                        updateGameList.remove(game);
+                        List<GameWithPlaytime> updatedGameList=newGameList.getGames();
+                        updatedGameList.add(game);
+                        newGameList.setGames(updatedGameList);
+                        newGameList.setTotalPlaytime(calculateTotalPlaytime(updatedGameList));
+                        break;
+                    }
+                }
+                existingGameList.setGames(updateGameList);
+                existingGameList.setTotalPlaytime(calculateTotalPlaytime(updateGameList));
+                gameListRepository.save(existingGameList);
+
+                
+                gameListRepository.save(newGameList);
+            }
+        }
     }
 
     /**

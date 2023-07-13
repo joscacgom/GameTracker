@@ -384,7 +384,6 @@ public class GameListController {
 
         // Get the game list
         GameList gameList = gameListService.getGameList(listId);
-        System.out.println("User details: " + listId);
 
 
         // Check if the game list exists

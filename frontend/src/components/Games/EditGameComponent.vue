@@ -35,6 +35,8 @@
 
 <script>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
   name: 'EditGameComponent',
@@ -131,7 +133,6 @@ export default {
       try {
         this.isDeleting = true;
         this.error = '';
-        console.log(this.localPlaytime,this.gameListId,this.gameId)
 
         const response = await fetch(`http://localhost:8080/api/game-lists/${this.gameListId}/games/${this.gameId}`, {
           method: 'DELETE',
@@ -144,6 +145,20 @@ export default {
         if (!response.ok) {
           const errorResponseText = await response.text();
           this.error = errorResponseText || 'An error occurred during deletion.';
+          toast('Game deleted successfully!', {
+            type: 'success',
+            position: 'top-right',
+            duration: 3000,
+            theme: 'colored',
+            icon: {
+              name: 'check-circle',
+            },
+            transition: 'Vue-Toastification__bounce',
+          });
+
+          setTimeout(() => {
+            this.$router.push('/home');
+          }, 3000);
         } else {
           this.$emit('delete-game');
           this.$router.push('/home');
@@ -162,7 +177,7 @@ export default {
         this.error = '';
 
         const requestBody = { ...this.game, gameList: this.gameList, playtimeHours: this.localPlaytime };
-
+        console.log(requestBody);
         const response = await fetch(`http://localhost:8080/api/game-with-playtime/${this.gameId}`, {
           method: 'PUT',
           headers: {

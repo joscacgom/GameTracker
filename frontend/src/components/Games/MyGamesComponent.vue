@@ -92,7 +92,7 @@
 
         if (response.ok) {
           const responseData = await response.json();
-          console.log(responseData);
+          this.carouselItems = responseData;
         } else {
           console.log('An error response was received');
         }

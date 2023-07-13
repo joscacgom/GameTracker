@@ -37,7 +37,8 @@
   import EmptyComponent from '@/components/Empty/EmptyComponent.vue';
   import LoadingComponent from '@/components/Loading/LoadingComponent.vue';
   import EditGameComponent from '@/components/Games/EditGameComponent.vue';
-  
+
+
   export default {
     name: 'GamesComponent',
     components: {

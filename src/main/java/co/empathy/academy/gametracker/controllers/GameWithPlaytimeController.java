@@ -52,7 +52,6 @@ public class GameWithPlaytimeController {
     ) {
         // Validate the JWT token
         // Extract the token from the authorization header
-        System.out.println("Authorization header: " + gameWithPlaytime.toString());
         String token = extractTokenFromAuthorizationHeader(authorizationHeader);
 
         // Load user details from the token
@@ -65,7 +64,6 @@ public class GameWithPlaytimeController {
 
         // Update the playtime hours for the game
         GameWithPlaytime updatedGameWithPlaytime = gameWithPlayTimeService.updatePlaytimeHours(id, gameWithPlaytime);
-
         // Check if the game was found and updated successfully
         if (updatedGameWithPlaytime == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

@@ -13,10 +13,12 @@ import org.springframework.stereotype.Service;
 public class GameWithPlayTimeService {
 
     private final GameWithPlayTimeRepository gameWithPlayTimeRepository;
+    private final GameListService gameListService;
 
 
-    public GameWithPlayTimeService(GameWithPlayTimeRepository gameWithPlayTimeRepository) {
+    public GameWithPlayTimeService(GameWithPlayTimeRepository gameWithPlayTimeRepository, GameListService gameListService) {
         this.gameWithPlayTimeRepository = gameWithPlayTimeRepository;
+        this.gameListService = gameListService;
     }
 
     /**
@@ -43,6 +45,9 @@ public class GameWithPlayTimeService {
         if (optionalGameWithPlayTime.isPresent()) {
             GameWithPlaytime gameWithPlayTime = optionalGameWithPlayTime.get();
             gameWithPlayTime.setPlaytimeHours(updatedGameWithPlaytime.getPlaytimeHours());
+            // remove the gamewithplaytime from the list and add the updated one
+            gameListService.updateGameStatusFromGameList(gameWithPlayTime.getGameList().getId(), id, updatedGameWithPlaytime.getGameList().getId() );
+
             gameWithPlayTime.setGameList(updatedGameWithPlaytime.getGameList());
             return gameWithPlayTimeRepository.save(gameWithPlayTime);
         }
