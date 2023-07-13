@@ -14,11 +14,9 @@ import org.springframework.stereotype.Service;
 public class GameListService {
 
     private final GameListRepository gameListRepository;
-    private final GameWithPlayTimeService gameWithPlayTimeService;
 
-    public GameListService(GameListRepository gameListRepository, GameWithPlayTimeService gameWithPlayTimeService) {
+    public GameListService(GameListRepository gameListRepository) {
         this.gameListRepository = gameListRepository;
-        this.gameWithPlayTimeService = gameWithPlayTimeService;
     }
 
     /**
@@ -80,11 +78,6 @@ public class GameListService {
         GameList existingGameList = getGameList(listId);
         if (existingGameList == null) {
             return;
-        }
-        // delete gamewithplaytime from game list
-        List<GameWithPlaytime> games = existingGameList.getGames();
-        for (GameWithPlaytime game: games) {
-          gameWithPlayTimeService.deleteGameById(game.getId());
         }
        
         gameListRepository.deleteById(listId);
