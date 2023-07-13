@@ -264,6 +264,12 @@
     background-color: rgb(252, 9, 76);
     opacity: 0.8;
   }
+
+  .create-button:disabled {
+    background-color: rgb(252, 9, 76);
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
   
   .popup-content {
     background-color: #fff;

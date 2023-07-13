@@ -19,9 +19,9 @@
               <label><input type="radio" name="r" :value="list" v-model="selectedList"> {{ list.status }}</label>
             </div>
             <div class="button-container">
-              <button type="submit" class="add-button">
+              <button type="submit" class="add-button" :disabled="isAdding">
                 <font-awesome-icon icon="plus-circle" />
-                Add game
+                {{ isAdding ? 'Adding...' : 'Add game' }}
               </button>
             </div>
           </form>
@@ -51,6 +51,8 @@
       return {
         gameLists: [],
         selectedList: null,
+        isAdding: false,
+
       };
     },
     async mounted() {
@@ -81,6 +83,7 @@
       },
       async submitForm() {
         try {
+          this.isAdding = true;
           // Add the game to the selected list
           if (this.selectedList === null) {
             console.log('User did not select a list');
@@ -269,6 +272,12 @@
     background-color: rgb(252, 9, 76);
     opacity: 0.8;
     cursor: pointer;
+  }
+
+  .add-button:disabled {
+    background-color: rgb(252, 9, 76);
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
 .empty-gameLists p, .added-gameLists p {

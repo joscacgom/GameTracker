@@ -11,7 +11,7 @@
     <div v-else-if="error" class="error-container">
       <ErrorComponent></ErrorComponent>
     </div>
-    <div v-else-if="!list.games" class="empty-container">
+    <div v-else-if="!list.games && !loading" class="empty-container">
       <EmptyComponent type="big"></EmptyComponent>
     </div>
     <div v-else>
@@ -167,6 +167,7 @@ export default {
     justify-content: flex-start;
     margin-top: 2rem;
     margin-left: 15rem;
+    gap:2rem;
   }
   
   .carousel-item {

@@ -95,6 +95,8 @@ public class GameListService {
                 for (GameWithPlaytime game: updateGameList) {
                     if (game.getId().equals(gameId)) {
                         updateGameList.remove(game);
+                        if(newGameList.getGames()==null)
+                            newGameList.setGames(new ArrayList<>());
                         List<GameWithPlaytime> updatedGameList=newGameList.getGames();
                         updatedGameList.add(game);
                         newGameList.setGames(updatedGameList);

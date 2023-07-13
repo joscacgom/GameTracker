@@ -9,7 +9,7 @@
       <LoadingComponent type="big"></LoadingComponent>
     </div>
 
-    <div v-if="!carouselItems || carouselItems.length === 0" class="empty-carousel">
+    <div v-if="!carouselItems || carouselItems.length === 0 && !loading" class="empty-carousel">
         <EmptyComponent type="big"></EmptyComponent>
     </div>
   
@@ -144,6 +144,7 @@
     justify-content: flex-start;
     margin-top: 2rem;
     margin-left: 15rem;
+    gap:2rem;
   }
   
   .carousel-item {
