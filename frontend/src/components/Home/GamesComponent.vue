@@ -75,10 +75,14 @@
       },
     },
     methods: {
-      edit(gameId) {
-        this.gameId = gameId;
-        this.showPopup = true;
+      closePopup() {
+        this.showPopup = false;
+        this.fetchCarouselItems();
       },
+      edit(id) {
+      this.gameId = id;
+      this.showPopup = true;
+    },
       async fetchCarouselItems() {
       try {
         const userId = sessionStorage.getItem('userId');
@@ -236,6 +240,10 @@
   transition: color 0.3s;
   z-index: 2;
 }
+
+.edit-icon :hover {
+    color: rgb(241, 112, 148);
+  }
 
 
 @media screen and (max-width: 768px) {

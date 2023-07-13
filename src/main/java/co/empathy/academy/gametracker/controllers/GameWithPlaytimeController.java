@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -147,6 +148,42 @@ public class GameWithPlaytimeController {
 
         // Return the list of games with playtime hours
         return ResponseEntity.ok(games);
+    }
+    /**
+     * Delete the game with playtime hours for a specific gameId.
+     * @param id The ID of the game.
+     * @param authorizationHeader The Authorization header containing the JWT token.
+     * @return ResponseEntity containing the deleted game with playtime hours if successful,
+     * or a not found response if the game was not found.
+     */
+    @CrossOrigin(origins = "http://localhost:8081")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<GameWithPlaytime> deleteGameById(
+            @PathVariable("id") String id,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        // Validate the JWT token
+        // Extract the token from the authorization header
+        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+
+        // Load user details from the token
+        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+
+        // Check if the token is valid
+        if (token == null || !jwtUtils.validateToken(token, userDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // Delete the game with playtime hours
+        GameWithPlaytime deletedGameWithPlaytime = gameWithPlayTimeService.deleteGameById(id);
+
+        // Check if the game was not found
+        if (deletedGameWithPlaytime == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        // Return the deleted game with playtime hours
+        return ResponseEntity.ok(deletedGameWithPlaytime);
     }
 
 

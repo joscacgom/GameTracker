@@ -23,7 +23,7 @@
       </div>
       <div class="game-bt">
         <button class="game-bt_add" @click="addToList"> Add to list</button>
-        <edit-game-component :show-popup="showPopup" @close="closePopup"></edit-game-component>
+        <select-list-component :show-popup="showPopup" @close="closePopup"></select-list-component>
       </div>
     </div>
     <div class="loading" v-else>Loading...</div>
@@ -32,12 +32,13 @@
 
 <script>
 import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
-import EditGameComponent from '@/components/Games/EditGameComponent.vue';
+import SelectListComponent from '@/components/Games/SelectListComponent.vue';
+
 export default {
   name: 'GameDetailsComponent',
   components: {
     SidebarComponent,
-    EditGameComponent,
+    SelectListComponent
   },
   data() {
     return {

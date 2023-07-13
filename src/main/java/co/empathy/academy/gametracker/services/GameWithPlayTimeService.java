@@ -48,11 +48,32 @@ public class GameWithPlayTimeService {
         return null;
     }
 
+    /**
+     * Delete a game with playtime, given an Id.
+     * 
+     * @param id The ID of the game with playtime.
+     * @return The game with playtime.
+     * 
+     * @throws Exception If the game with playtime does not exist.
+     * 
+     */
+    public GameWithPlaytime deleteGameById(String id) {
+        Optional<GameWithPlaytime> optionalGameWithPlayTime = gameWithPlayTimeRepository.findById(id);
+        if (optionalGameWithPlayTime.isPresent()) {
+            GameWithPlaytime gameWithPlayTime = optionalGameWithPlayTime.get();
+            gameWithPlayTimeRepository.delete(gameWithPlayTime);
+            return gameWithPlayTime;
+        }
+        return null;
+    }
+
      /**
      * Get the games with playtime hours for a specific user.
      *
      * @param userId The ID of the user.
      * @return The list of games with playtime hours for the user.
+     * 
+     * @throws Exception If the user does not exist.
      */
     public List<GameWithPlaytime> getGamesByUserId(String userId) {
         List<GameWithPlaytime> userGames = gameWithPlayTimeRepository.findByUserId(userId);

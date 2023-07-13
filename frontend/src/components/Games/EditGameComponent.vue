@@ -12,11 +12,11 @@
          <label for="status">Status list</label>
          <select id="status" v-model="gameList" required>
             <option value="" disabled>Select a status list</option>
-            <option v-for="list in lists" :value="list" :selected="list.status === gameList.status" :key="list.status">{{ list.status }}</option>
+            <option v-for="list in lists" :value="list" :key="list.status">{{ list.status }}</option>
          </select>
 
           <label for="status">Playtime</label>
-          <input type="number" id="playtime" v-model="playtime" min='0' :default="playtime" >
+          <input type="number" id="playtime" v-model="playtime" min='0' required >
           <div class="button-container">
             <button type="submit" class="button" :disabled="isEditing">
                 <font-awesome-icon icon="plus-circle" />
@@ -58,7 +58,7 @@
       return {
         gameList: '',
         error: '',
-        playtime: '',
+        playtime: 0,
         game: {},
         isEditing: false,
         isDeleting: false,
@@ -100,38 +100,36 @@
       }
       },
       async fetchGameDetails() {
-      try {
-        const response = await fetch(`http://localhost:8080/api/game-with-playtime/${this.gameId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + sessionStorage.getItem('jwtoken'),
-          },
-        });
+  try {
+    const response = await fetch(`http://localhost:8080/api/game-with-playtime/${this.gameId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + sessionStorage.getItem('jwtoken'),
+      },
+    });
 
-        if (response.ok) {
-          const responseData = await response.json();
-          console.log(responseData);
-          this.game= responseData;
-          this.gameList = responseData.gameList;
-          this.playtime = responseData.playtimeHours;
-        } else {
-          console.log('An error response was received');
-        }
-      } catch (error) {
-        console.error('An error occurred during fetching:', error);
-      } finally {
-        this.isLoading = false;
-      }
-
-    },
+    if (response.ok) {
+      const responseData = await response.json();
+      this.game = responseData;
+      this.gameList = responseData.gameList;
+      this.playtime = responseData.playtimeHours;
+    } else {
+      console.log('An error response was received');
+    }
+  } catch (error) {
+    console.error('An error occurred during fetching:', error);
+  } finally {
+    this.loading = false;
+  }
+},
     async deleteGame() {
     try {
         this.isDeleting = true;
         this.error = '';
 
         // Make the DELETE request
-        const response = await fetch(`http://localhost:8080/api/game-with-playtime/${this.listId}`, {
+        const response = await fetch(`http://localhost:8080/api/game-with-playtime/${this.gameId}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -143,8 +141,8 @@
             const errorResponseText = await response.text();
             this.error = errorResponseText || 'An error occurred during deletion.';
         } else {
-        this.$emit('delete-list');
-        this.$router.push('/my-lists');
+        this.$emit('delete-game');
+        this.$router.push('/home');
         }
     } catch (error) {
         console.error('An error occurred during deletion:', error);
@@ -350,5 +348,46 @@
   .popup-content button {
     margin-top: 1rem;
   }
+
+  .error {
+    color: rgb(252, 9, 76);
+    font-family: Poppins;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 768px) {
+
+.popup-content {
+  width: 80%;
+  margin-top:7rem;
+}
+
+.popup-container label {
+  width: 100%;
+  margin-right: 1rem;
+}
+.popup-container input {
+  justify-content: center;
+  align-items: center;
+  margin-right:1rem;
+ 
+}
+.close-button {
+  margin-left:1rem;
+}
+
+.button-container{
+ gap:0;
+}
+
+.button{
+  margin:0 auto;
+  margin-right: 1rem;
+}
+
+}
   </style>
   

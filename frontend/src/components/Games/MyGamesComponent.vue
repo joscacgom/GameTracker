@@ -15,13 +15,12 @@
   
       <div v-else class="carousel-container">
         <div class="carousel-item" v-for="item in carouselItems" :key="item.id" @click="redirectToItemGame(item.game.id)">
-          <img :src="item.background_image" :alt="item.game.name" class="carousel-image" />
+          <img :src="item.game.background_image" :alt="item.game.name" class="carousel-image" />
           <div class="carousel-overlay">
-            <h3>{{ item.game.name }}</h3>
-            <h3>{{ item.playtimeHours }} hours spent</h3>
-            <h3>{{ item.gameList.status }}</h3>
-            <span class="edit-icon" @click="edit(item.game.id)"><font-awesome-icon icon="edit" /></span>
-          </div>
+              <h3>{{ item.game.name }}</h3>
+              <h3>{{ item.playtimeHours }} hours</h3>
+              <span class="edit-icon" @click.stop="edit(item.id)"><font-awesome-icon icon="edit" /></span>
+            </div>
         </div>
       </div>
   
@@ -39,21 +38,22 @@
   import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
   import EmptyComponent from '@/components/Empty/EmptyComponent.vue';
   import LoadingComponent from '@/components/Loading/LoadingComponent.vue';
-  
+  import EditGameComponent from '@/components/Games/EditGameComponent.vue';
   export default {
-    name: 'MyListsComponent',
+    name: 'MyGamesComponent',
     components: {
       FontAwesomeIcon,
       SidebarComponent,
       EmptyComponent,
       LoadingComponent,
+      EditGameComponent,
     },
     data() {
       return {
         carouselItems: [],
         loading: true,
         showPopup: false,
-        gameId: '',
+        gameId: null,
       };
     },
     mounted() {
@@ -63,6 +63,7 @@
       redirectToItemGame(itemId) {
         this.$router.push(`/game/${itemId}`);
     },
+    
     closePopup() {
       this.showPopup = false;
     },
@@ -238,9 +239,14 @@
   }
 
   .edit-icon {
-    margin: 0.5rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #fff;
     cursor: pointer;
-  }
+    transition: color 0.3s;
+    z-index: 2;
+}
 
   .edit-icon :hover {
     color: rgb(241, 112, 148);
