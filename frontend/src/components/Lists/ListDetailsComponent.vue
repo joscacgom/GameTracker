@@ -31,7 +31,7 @@
       Discover new games
     </button>
     <edit-list-component :show-popup="showPopup" :listId="listId" @close="closePopup"></edit-list-component>
-    <edit-game-component :show-popup="showPopupGame" :gameId="gameId" :gameListId="gameListId" :playtime="playtime" @close="closePopup"></edit-game-component>
+    <edit-game-component :show-popup="showPopupGame" :gameId="gameId" :gameListId="gameListId" :playtime="playtime" @close="closePopupGame"></edit-game-component>
 
   </div>
 </template>
@@ -66,6 +66,7 @@ export default {
       isLoading: true,
       error: false,
       showPopup: false,
+      showPopupGame: false,
     };
   },
   mounted() {

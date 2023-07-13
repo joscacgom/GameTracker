@@ -301,6 +301,12 @@
   width: 24px;
   height: 24px;
 }
+
+.close-button:hover {
+  background-color: rgb(252, 9, 76);
+  opacity: 0.8;
+  cursor: pointer;
+}
   .button{
     border: none;
     background-color: rgb(252, 9, 76);

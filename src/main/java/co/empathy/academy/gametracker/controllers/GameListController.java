@@ -525,8 +525,10 @@ public class GameListController {
             if (!jwtUtils.validateToken(token, userDetails)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
-            for (GameWithPlaytime game : gameList.getGames()) {
-                gameWithPlayTimeService.deleteGameById(game.getId().toString());
+            if (gameList.getGames() != null) {
+                for (GameWithPlaytime game : gameList.getGames()) {
+                    gameWithPlayTimeService.deleteGameById(game.getId().toString());
+                }
             }
             // Delete the game list
             gameListService.deleteGameList(listId);

@@ -75,11 +75,6 @@ public class GameListService {
      * @param listId The ID of the game list to delete.
      */
     public void deleteGameList(String listId) {
-        GameList existingGameList = getGameList(listId);
-        if (existingGameList == null) {
-            return;
-        }
-       
         gameListRepository.deleteById(listId);
     }
 
