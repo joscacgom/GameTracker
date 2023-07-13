@@ -8,14 +8,14 @@
           <div v-if="!carouselItems || carouselItems.length === 0" class="empty-carousel">
             <EmptyComponent  type="small"></EmptyComponent>
           </div>
-          <div class="carousel-item" v-else v-for="item in visibleItems" :key="item.game.id" @click="redirectToItemList(item.id)">
-            <img :src="item.background_image" :alt="item.game.name" class="carousel-image" />
+          <div class="carousel-item" v-else v-for="item in visibleItems" :key="item.game.id" @click="redirectToItemList(item.game.id)">
+            <img :src="item.game.background_image" :alt="item.game.name" class="carousel-image" />
             <div class="carousel-overlay">
               <h3>{{ item.game.name }}</h3>
-              <h3>{{ item.playtimeHours }} hours spent</h3>
-              <h3>{{ item.gameList.status }}</h3>
-              <span class="edit-icon" @click="edit(item.game.id)"><font-awesome-icon icon="edit" /></span>
+              <h3>{{ item.playtimeHours }} hours</h3>
+              <span class="edit-icon" @click.stop="edit(item.id, item.gameList.id, item.playtimeHours )"><font-awesome-icon icon="edit" /></span>
             </div>
+            
           </div>
         </div>
         <div class="navigation-arrows">
@@ -27,7 +27,7 @@
           </div>
         </div>
       </div>
-      <edit-game-component :show-popup="showPopup" :gameId="gameId" @close="closePopup"></edit-game-component>
+      <edit-game-component :show-popup="showPopup" :gameId="gameId" :gameListId="gameListId" :playtime="playtime" @close="closePopup"></edit-game-component>
 
     </div>
   </template>
@@ -37,7 +37,8 @@
   import EmptyComponent from '@/components/Empty/EmptyComponent.vue';
   import LoadingComponent from '@/components/Loading/LoadingComponent.vue';
   import EditGameComponent from '@/components/Games/EditGameComponent.vue';
-  
+
+
   export default {
     name: 'GamesComponent',
     components: {
@@ -53,6 +54,10 @@
         itemsToShow: 3, // Number of items to show at a time
         loading: true,
         hoveredItem: null,
+        showPopup: false,
+        gameId: null,
+        gameListId: null,
+        playtime: null,
       };
     },
     mounted() {
@@ -73,6 +78,17 @@
       },
     },
     methods: {
+      closePopup() {
+        this.showPopup = false;
+        this.fetchCarouselItems();
+      },
+      edit(gameId, gameListId, playtime) {
+        this.gameId = gameId;
+        this.gameListId = gameListId;
+        this.playtime = playtime;
+
+        this.showPopup = true;
+    },
       async fetchCarouselItems() {
       try {
         const userId = sessionStorage.getItem('userId');
@@ -220,6 +236,20 @@
 .right-arrow {
   margin-right: 20px;
 }
+
+.edit-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #fff;
+  cursor: pointer;
+  transition: color 0.3s;
+  z-index: 2;
+}
+
+.edit-icon :hover {
+    color: rgb(241, 112, 148);
+  }
 
 
 @media screen and (max-width: 768px) {

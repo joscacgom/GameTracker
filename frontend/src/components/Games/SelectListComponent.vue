@@ -7,10 +7,8 @@
         </button>
         <h3 class="title">Select list</h3>
       </div>
-      <div v-if="added" class="added-gameLists">
-        <p>Game added to your list.</p>
-      </div>
-      <div v-else>
+      
+      <div >
         <div v-if="!gameLists || gameLists.length === 0" class="empty-gameLists">
           <p>First, create your own list to add games.</p>
         </div>
@@ -21,7 +19,10 @@
               <label><input type="radio" name="r" :value="list" v-model="selectedList"> {{ list.status }}</label>
             </div>
             <div class="button-container">
-              <button type="submit" class="add-button">Add</button>
+              <button type="submit" class="add-button" :disabled="isAdding">
+                <font-awesome-icon icon="plus-circle" />
+                {{ isAdding ? 'Adding...' : 'Add game' }}
+              </button>
             </div>
           </form>
         </div>
@@ -32,6 +33,8 @@
 
 <script>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+  import { toast } from 'vue3-toastify';
+  import 'vue3-toastify/dist/index.css';
 
   export default {
     name: 'SelectListComponent',
@@ -48,7 +51,8 @@
       return {
         gameLists: [],
         selectedList: null,
-        added: false
+        isAdding: false,
+
       };
     },
     async mounted() {
@@ -67,6 +71,7 @@
         else {
           const data = await response.json();
           this.gameLists = await data;
+          
         }
       } catch(error) {
         console.error(error);
@@ -78,6 +83,7 @@
       },
       async submitForm() {
         try {
+          this.isAdding = true;
           // Add the game to the selected list
           if (this.selectedList === null) {
             console.log('User did not select a list');
@@ -95,15 +101,29 @@
             body: JSON.stringify(requestBody)
           });
           if (!response.ok) {
-            this.added = false;
             const errorResponseText = await response.text();
             this.error = errorResponseText || 'An error occurred during editing.';
           }
           else {
-            this.added = true;
+            toast('Game added successfully!', {
+            type: 'success',
+            position: 'top-right',
+            duration: 3000,
+            theme: 'colored',
+            icon: {
+              name: 'check-circle',
+            },
+            transition: 'Vue-Toastification__bounce',
+          });
+
+          setTimeout(() => {
+            this.$router.push('/home');
+          }, 3000);
           }
         } catch(error) {
           console.error(error);
+        } finally {
+          this.closePopup();
         }
       }
     },
@@ -241,6 +261,24 @@
   font-weight: 500;
   line-height: 18px;
 }
+
+.close-button:hover {
+    background-color: rgb(252, 9, 76);
+    opacity: 0.8;
+    cursor: pointer;
+  }
+
+  .add-button:hover {
+    background-color: rgb(252, 9, 76);
+    opacity: 0.8;
+    cursor: pointer;
+  }
+
+  .add-button:disabled {
+    background-color: rgb(252, 9, 76);
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 
 .empty-gameLists p, .added-gameLists p {
   color: rgb(34, 35, 35, 0.5);

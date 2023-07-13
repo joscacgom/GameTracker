@@ -9,19 +9,18 @@
       <LoadingComponent type="big"></LoadingComponent>
     </div>
 
-    <div v-if="!carouselItems || carouselItems.length === 0" class="empty-carousel">
+    <div v-if="!carouselItems || carouselItems.length === 0 && !loading" class="empty-carousel">
         <EmptyComponent type="big"></EmptyComponent>
     </div>
   
       <div v-else class="carousel-container">
         <div class="carousel-item" v-for="item in carouselItems" :key="item.id" @click="redirectToItemGame(item.game.id)">
-          <img :src="item.background_image" :alt="item.game.name" class="carousel-image" />
+          <img :src="item.game.background_image" :alt="item.game.name" class="carousel-image" />
           <div class="carousel-overlay">
-            <h3>{{ item.game.name }}</h3>
-            <h3>{{ item.playtimeHours }} hours spent</h3>
-            <h3>{{ item.gameList.status }}</h3>
-            <span class="edit-icon" @click="edit(item.game.id)"><font-awesome-icon icon="edit" /></span>
-          </div>
+              <h3>{{ item.game.name }}</h3>
+              <h3>{{ item.playtimeHours }} hours</h3>
+              <span class="edit-icon" @click.stop="edit(item.id, item.gameList.id, item.playtimeHours )"><font-awesome-icon icon="edit" /></span>
+            </div>
         </div>
       </div>
   
@@ -29,7 +28,7 @@
         <font-awesome-icon icon="compass" />
         Discover New Games
       </button>
-      <edit-game-component :show-popup="showPopup" :gameId="gameId" @close="closePopup"></edit-game-component>
+      <edit-game-component :show-popup="showPopup" :gameId="gameId" :gameListId="gameListId" :playtime="playtime" @close="closePopup"></edit-game-component>
 
     </div>
   </template>
@@ -39,21 +38,24 @@
   import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
   import EmptyComponent from '@/components/Empty/EmptyComponent.vue';
   import LoadingComponent from '@/components/Loading/LoadingComponent.vue';
-  
+  import EditGameComponent from '@/components/Games/EditGameComponent.vue';
   export default {
-    name: 'MyListsComponent',
+    name: 'MyGamesComponent',
     components: {
       FontAwesomeIcon,
       SidebarComponent,
       EmptyComponent,
       LoadingComponent,
+      EditGameComponent,
     },
     data() {
       return {
         carouselItems: [],
         loading: true,
         showPopup: false,
-        gameId: '',
+        gameId: null,
+        gameListId: null,
+        playtime: null,
       };
     },
     mounted() {
@@ -63,11 +65,15 @@
       redirectToItemGame(itemId) {
         this.$router.push(`/game/${itemId}`);
     },
+    
     closePopup() {
       this.showPopup = false;
     },
-    edit(gameId) {
+    edit(gameId, gameListId, playtime) {
       this.gameId = gameId;
+      this.gameListId = gameListId;
+      this.playtime = playtime;
+
       this.showPopup = true;
     },
     async fetchCarouselItems() {
@@ -85,7 +91,7 @@
 
         if (response.ok) {
           const responseData = await response.json();
-          this.carouselItems = await responseData;
+          this.carouselItems = responseData;
         } else {
           console.log('An error response was received');
         }
@@ -138,6 +144,7 @@
     justify-content: flex-start;
     margin-top: 2rem;
     margin-left: 15rem;
+    gap:2rem;
   }
   
   .carousel-item {
@@ -238,9 +245,14 @@
   }
 
   .edit-icon {
-    margin: 0.5rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #fff;
     cursor: pointer;
-  }
+    transition: color 0.3s;
+    z-index: 2;
+}
 
   .edit-icon :hover {
     color: rgb(241, 112, 148);

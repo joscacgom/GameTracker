@@ -109,7 +109,20 @@
             this.error = errorResponseText || 'An error occurred during deletion.';
         } else {
         this.$emit('delete-list');
-        this.$router.push('/my-lists');
+        toast('List deleted successfully!', {
+              type: 'success',
+              position: 'top-right',
+              duration: 3000,
+              theme: 'colored',
+              icon: {
+                name: 'check-circle',
+              },
+              transition: 'Vue-Toastification__bounce',
+            });
+
+            setTimeout(() => {
+              this.$router.push('/my-lists');
+            }, 3000);
         }
     } catch (error) {
         console.error('An error occurred during deletion:', error);
@@ -301,6 +314,12 @@
   width: 24px;
   height: 24px;
 }
+
+.close-button:hover {
+  background-color: rgb(252, 9, 76);
+  opacity: 0.8;
+  cursor: pointer;
+}
   .button{
     border: none;
     background-color: rgb(252, 9, 76);
@@ -320,6 +339,12 @@
     font-weight: 500;
     line-height: 18px;
 
+  }
+
+  .button-container button:hover {
+    background-color: rgb(252, 9, 76);
+    opacity: 0.8;
+    cursor: pointer;
   }
 
   .button-container button:disabled {

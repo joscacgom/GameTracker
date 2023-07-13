@@ -15,14 +15,12 @@
     <div v-else class="carousel-container">
       <div class="carousel-item-wrapper">
         <div class="carousel-item" v-for="item in carouselItems" :key="item.id" @click="redirectToItemList(item.id)">
-          <div :class="{'carousel-image': true, 'default-image': !item.games || item.games.length === 0}">
-            <img v-if="item.games && item.games.length > 0" :src="item.games[0].background_image" :alt="item.status" />
-            <img v-else src="../../assets/placeholder/default-list-img.png" alt="Default Image" />
-            <div v-if="!item.games || item.games.length === 0 || hoveredItem === item.id" class="carousel-overlay">
+            <img class='carousel-image' v-if="item.games && item.games.length > 0" :src="item.games[0].game.background_image" :alt="item.status" />
+            <img class='default-image' v-else src="../../assets/placeholder/default-list-img.png" alt="Default Image" />
+            <div class="carousel-overlay">
               <h3>{{ item.status }}</h3>
             </div>
           </div>
-        </div>
       </div>
     </div>
 
@@ -182,6 +180,24 @@ export default {
   border-radius: 4px;
   cursor: pointer;
   transition: transform 0.3s;
+}
+
+.carousel-item:hover .default-image {
+  transform: scale(1.05);
+}
+
+.default-image {
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 250px;
+  object-fit: fill;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  transition: transform 0.3s;
+  cursor: pointer;
 }
 
 .carousel-item:hover .carousel-image {

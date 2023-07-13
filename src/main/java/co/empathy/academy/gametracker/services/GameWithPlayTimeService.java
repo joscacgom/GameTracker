@@ -13,9 +13,12 @@ import org.springframework.stereotype.Service;
 public class GameWithPlayTimeService {
 
     private final GameWithPlayTimeRepository gameWithPlayTimeRepository;
+    private final GameListService gameListService;
 
-    public GameWithPlayTimeService(GameWithPlayTimeRepository gameWithPlayTimeRepository) {
+
+    public GameWithPlayTimeService(GameWithPlayTimeRepository gameWithPlayTimeRepository, GameListService gameListService) {
         this.gameWithPlayTimeRepository = gameWithPlayTimeRepository;
+        this.gameListService = gameListService;
     }
 
     /**
@@ -42,8 +45,30 @@ public class GameWithPlayTimeService {
         if (optionalGameWithPlayTime.isPresent()) {
             GameWithPlaytime gameWithPlayTime = optionalGameWithPlayTime.get();
             gameWithPlayTime.setPlaytimeHours(updatedGameWithPlaytime.getPlaytimeHours());
+            // remove the gamewithplaytime from the list and add the updated one
+            gameListService.updateGameStatusFromGameList(gameWithPlayTime.getGameList().getId(), id, updatedGameWithPlaytime.getGameList().getId() );
+
             gameWithPlayTime.setGameList(updatedGameWithPlaytime.getGameList());
             return gameWithPlayTimeRepository.save(gameWithPlayTime);
+        }
+        return null;
+    }
+
+    /**
+     * Delete a game with playtime, given an Id.
+     * 
+     * @param id The ID of the game with playtime.
+     * @return The game with playtime.
+     * 
+     * @throws Exception If the game with playtime does not exist.
+     * 
+     */
+    public GameWithPlaytime deleteGameById(String id) {
+        Optional<GameWithPlaytime> optionalGameWithPlayTime = gameWithPlayTimeRepository.findById(id);
+        if (optionalGameWithPlayTime.isPresent()) {
+            GameWithPlaytime gameWithPlayTime = optionalGameWithPlayTime.get();
+            gameWithPlayTimeRepository.delete(gameWithPlayTime);
+            return gameWithPlayTime;
         }
         return null;
     }
@@ -53,6 +78,8 @@ public class GameWithPlayTimeService {
      *
      * @param userId The ID of the user.
      * @return The list of games with playtime hours for the user.
+     * 
+     * @throws Exception If the user does not exist.
      */
     public List<GameWithPlaytime> getGamesByUserId(String userId) {
         List<GameWithPlaytime> userGames = gameWithPlayTimeRepository.findByUserId(userId);
@@ -65,6 +92,21 @@ public class GameWithPlayTimeService {
         }
         
         return games;
+    }
+
+    /**
+     * Get the game with playtime hours for a specific user and game.
+     *
+     * @param userId The ID of the user.
+     * @param gameId The ID of the game.
+     * @return The game with playtime hours for the user and game.
+     */
+    public GameWithPlaytime getGameById(String id) {
+        Optional<GameWithPlaytime> optionalGameWithPlayTime = gameWithPlayTimeRepository.findById(id);
+        if (optionalGameWithPlayTime.isPresent()) {
+            return optionalGameWithPlayTime.get();
+        }
+        return null;
     }
 
 }

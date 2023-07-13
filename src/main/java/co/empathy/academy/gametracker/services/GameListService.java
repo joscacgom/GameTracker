@@ -8,18 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import co.empathy.academy.gametracker.repositories.GameWithPlayTimeRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GameListService {
 
     private final GameListRepository gameListRepository;
-    private final GameWithPlayTimeRepository gameWithPlayTimeRepository;
 
-    public GameListService(GameListRepository gameListRepository, GameWithPlayTimeRepository gameWithPlayTimeRepository) {
+    public GameListService(GameListRepository gameListRepository) {
         this.gameListRepository = gameListRepository;
-        this.gameWithPlayTimeRepository = gameWithPlayTimeRepository;
     }
 
     /**
@@ -44,16 +41,13 @@ public class GameListService {
         if (existingGameList == null) {
             return null;
         }
-        if (gameList.getGames() != null) {
-            existingGameList.getGames().addAll(gameList.getGames());
-        }
         if (gameList.getStatus() != null) {
             existingGameList.setStatus(gameList.getStatus());
         }
         existingGameList.setTotalPlaytime(gameList.getTotalPlaytime());
         return gameListRepository.save(existingGameList);
     }
-
+    //  A method to given a gameList and a gameWithPlaytime, add the gameWithPlaytime to the gameList and   
     /**
      * Retrieves a game list by its ID.
      *
@@ -83,6 +77,58 @@ public class GameListService {
     public void deleteGameList(String listId) {
         gameListRepository.deleteById(listId);
     }
+
+    /**
+     * Updates a game from a game list to another list.
+     * @param listId The ID of the game list to delete from.
+     * @param gameId The ID of the game to delete.
+     * @param newListId The ID of the game list to add the game to.
+     * @return The updated game list or null.
+     */
+    public void updateGameStatusFromGameList(String listId, String gameId, String newListId) {
+        GameList existingGameList = getGameList(listId);
+        GameList newGameList = getGameList(newListId);
+        
+        if (existingGameList != null && newGameList != null) {
+            List<GameWithPlaytime> updateGameList = existingGameList.getGames();
+            
+            if (updateGameList != null) {
+                GameWithPlaytime gameToUpdate = null;
+                
+                for (GameWithPlaytime game : updateGameList) {
+                    if (game.getId().equals(gameId)) {
+                        gameToUpdate = game;
+                        break;
+                    }
+                }
+                
+                if (gameToUpdate != null) {
+                    if (!listId.equals(newListId)) {
+                        updateGameList.remove(gameToUpdate);
+                        existingGameList.setGames(updateGameList);
+                        existingGameList.setTotalPlaytime(calculateTotalPlaytime(updateGameList));
+                        gameListRepository.save(existingGameList);
+                        
+                        List<GameWithPlaytime> updatedGames = newGameList.getGames();
+                        
+                        if (updatedGames == null) {
+                            updatedGames = new ArrayList<>();
+                            newGameList.setGames(updatedGames);
+                        }
+                        
+                        updatedGames.add(gameToUpdate);
+                        newGameList.setTotalPlaytime(calculateTotalPlaytime(updatedGames));
+                        gameListRepository.save(newGameList);
+                    } else {
+                        existingGameList.setTotalPlaytime(calculateTotalPlaytime(updateGameList));
+                        gameListRepository.save(existingGameList);
+                    }
+                }
+            }
+        }
+    }
+    
+    
 
     /**
      * Updates an existing game list by adding a game to it.
