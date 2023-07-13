@@ -9,13 +9,11 @@
           <EmptyComponent type="small"></EmptyComponent>
         </div>
         <div class="carousel-item" v-else v-for="item in visibleItems" :key="item.id" @click="redirectToItemList(item.id)">
-          <div :class="{'carousel-image': true, 'default-image': !item.games || item.games.length === 0}">
-            <img v-if="item.games && item.games.length > 0" :src="item.games[0].background_image" :alt="item.status" />
-            <img v-else src="../../assets/placeholder/default-list-img.png" alt="Default Image" />
-            <div v-if="!item.games || item.games.length === 0" class="carousel-overlay">
+            <img class='carousel-image' v-if="item.games && item.games.length > 0" :src="item.games[0].game.background_image" :alt="item.status" />
+            <img class='default-image' v-else src="../../assets/placeholder/default-list-img.png" alt="Default Image" />
+            <div class="carousel-overlay">
               <h3>{{ item.status }}</h3>
             </div>
-          </div>
         </div>
       </div>
       <div class="navigation-arrows">
@@ -223,8 +221,20 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
 }
 
+.carousel-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
 .default-image img {
   width: 100%;
   height: 100%;

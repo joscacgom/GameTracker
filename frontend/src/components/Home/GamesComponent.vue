@@ -8,14 +8,14 @@
           <div v-if="!carouselItems || carouselItems.length === 0" class="empty-carousel">
             <EmptyComponent  type="small"></EmptyComponent>
           </div>
-          <div class="carousel-item" v-else v-for="item in visibleItems" :key="item.game.id" @click="redirectToItemList(item.id)">
-            <img :src="item.background_image" :alt="item.game.name" class="carousel-image" />
+          <div class="carousel-item" v-else v-for="item in visibleItems" :key="item.game.id" @click="redirectToItemList(item.game.id)">
+            <img :src="item.game.background_image" :alt="item.game.name" class="carousel-image" />
             <div class="carousel-overlay">
               <h3>{{ item.game.name }}</h3>
-              <h3>{{ item.playtimeHours }} hours spent</h3>
-              <h3>{{ item.gameList.status }}</h3>
-              <span class="edit-icon" @click="edit(item.game.id)"><font-awesome-icon icon="edit" /></span>
+              <h3>{{ item.playtimeHours }} hours</h3>
+              <span class="edit-icon" @click="edit(item.id)"><font-awesome-icon icon="edit" /></span>
             </div>
+            
           </div>
         </div>
         <div class="navigation-arrows">
@@ -73,6 +73,10 @@
       },
     },
     methods: {
+      edit(gameId) {
+        this.gameId = gameId;
+        this.showPopup = true;
+      },
       async fetchCarouselItems() {
       try {
         const userId = sessionStorage.getItem('userId');
@@ -219,6 +223,16 @@
 
 .right-arrow {
   margin-right: 20px;
+}
+
+.edit-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #fff;
+  cursor: pointer;
+  transition: color 0.3s;
+  z-index: 2;
 }
 
 
