@@ -16,10 +16,10 @@
     </div>
     <div v-else>
       <div class="carousel-container">
-        <div class="carousel-item" v-for="game in list.games" :key="game.id">
-          <img :src="game.game.background_image" :alt="game.game.name" class="carousel-image" />
+        <div class="carousel-item" v-for="game in list.games" :key="game?.id">
+          <img :src="game?.game.background_image" :alt="game?.game.name" class="carousel-image" />
           <div class="carousel-overlay">
-            <h3>{{ game.playtimeHours }} hours</h3>
+            <h3>{{ game?.playtimeHours }} hours</h3>
           </div>
         </div>
       </div>

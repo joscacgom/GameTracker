@@ -3,7 +3,7 @@ package co.empathy.academy.gametracker.models;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -21,7 +21,7 @@ public class GameWithPlaytime {
     private User user;
 
     @DBRef
-    @JsonIgnore
+    @JsonIgnoreProperties("gamesWithPlaytime")
     private GameList gameList;
 
     private Integer playtimeHours;

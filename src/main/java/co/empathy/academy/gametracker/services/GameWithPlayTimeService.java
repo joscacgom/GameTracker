@@ -14,6 +14,7 @@ public class GameWithPlayTimeService {
 
     private final GameWithPlayTimeRepository gameWithPlayTimeRepository;
 
+
     public GameWithPlayTimeService(GameWithPlayTimeRepository gameWithPlayTimeRepository) {
         this.gameWithPlayTimeRepository = gameWithPlayTimeRepository;
     }

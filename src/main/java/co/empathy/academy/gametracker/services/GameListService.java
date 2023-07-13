@@ -15,11 +15,9 @@ import org.springframework.stereotype.Service;
 public class GameListService {
 
     private final GameListRepository gameListRepository;
-    private final GameWithPlayTimeRepository gameWithPlayTimeRepository;
 
-    public GameListService(GameListRepository gameListRepository, GameWithPlayTimeRepository gameWithPlayTimeRepository) {
+    public GameListService(GameListRepository gameListRepository) {
         this.gameListRepository = gameListRepository;
-        this.gameWithPlayTimeRepository = gameWithPlayTimeRepository;
     }
 
     /**

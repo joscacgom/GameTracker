@@ -9,7 +9,7 @@
           <EmptyComponent type="small"></EmptyComponent>
         </div>
         <div class="carousel-item" v-else v-for="item in visibleItems" :key="item.id" @click="redirectToItemList(item.id)">
-            <img class='carousel-image' v-if="item.games && item.games.length > 0" :src="item.games[0].game.background_image" :alt="item.status" />
+            <img class='carousel-image' v-if="item.games && item.games.length > 0" :src="item.games[0]?.game?.background_image" :alt="item.status" />
             <img class='default-image' v-else src="../../assets/placeholder/default-list-img.png" alt="Default Image" />
             <div class="carousel-overlay">
               <h3>{{ item.status }}</h3>
@@ -155,6 +155,10 @@ export default {
   transform: scale(1.05);
 }
 
+.carousel-item:hover .default-image {
+  transform: scale(1.05);
+}
+
 .carousel-overlay {
   position: absolute;
   top: 50%;
@@ -226,6 +230,8 @@ export default {
   object-fit: fill;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 4px;
+  transition: transform 0.3s;
+  cursor: pointer;
 }
 
 .carousel-image img {
