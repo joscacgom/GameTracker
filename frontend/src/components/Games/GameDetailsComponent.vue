@@ -22,7 +22,10 @@
         </div>
       </div>
       <div class="game-bt">
-        <button class="game-bt_add" @click="addToList"> Add to list</button>
+        <button class="game-bt_add" @click="addToList">
+          <font-awesome-icon icon="plus-circle" />
+          Add to list
+        </button>
         <select-list-component :show-popup="showPopup" @close="closePopup"></select-list-component>
       </div>
     </div>
@@ -33,11 +36,14 @@
 <script>
 import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
 import SelectListComponent from '@/components/Games/SelectListComponent.vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
 
 export default {
   name: 'GameDetailsComponent',
   components: {
     SidebarComponent,
+    FontAwesomeIcon,
     SelectListComponent
   },
   data() {
@@ -175,6 +181,25 @@ export default {
   border: none;
   cursor: pointer;
 }
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+  .game-bt_add:hover {
+    background-color: rgb(252, 9, 76);
+    opacity: 0.8;
+    transition: all 0.3s linear;
+    animation: pulse 1s ease-in-out infinite;
+  }
 
 .highlight {
   opacity: 0.7;

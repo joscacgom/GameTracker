@@ -19,7 +19,9 @@
         <div class="carousel-item" v-for="game in list.games" :key="game?.id">
           <img :src="game?.game.background_image" :alt="game?.game.name" class="carousel-image" />
           <div class="carousel-overlay">
+            <h3>{{ game?.game.name }}</h3>
             <h3>{{ game?.playtimeHours }} hours</h3>
+            <span class="editgame-icon" @click.stop="editGame(game.id, game.gameList.id, game.playtimeHours )"><font-awesome-icon icon="edit" /></span>
           </div>
         </div>
       </div>
@@ -29,6 +31,8 @@
       Discover new games
     </button>
     <edit-list-component :show-popup="showPopup" :listId="listId" @close="closePopup"></edit-list-component>
+    <edit-game-component :show-popup="showPopupGame" :gameId="gameId" :gameListId="gameListId" :playtime="playtime" @close="closePopup"></edit-game-component>
+
   </div>
 </template>
 
@@ -39,6 +43,7 @@ import LoadingComponent from '@/components/Loading/LoadingComponent.vue';
 import ErrorComponent from '@/components/Error/ErrorComponent.vue';
 import EmptyComponent from '@/components/Empty/EmptyComponent.vue';
 import EditListComponent from '@/components/Lists/EditListComponent.vue';
+import EditGameComponent from '@/components/Games/EditGameComponent.vue';
 export default {
   name: 'ListDetailsComponent',
   props: {
@@ -52,6 +57,7 @@ export default {
     LoadingComponent,
     ErrorComponent,
     EmptyComponent,
+    EditGameComponent,
     EditListComponent,
   },
   data() {
@@ -74,6 +80,16 @@ export default {
     },
     edit() {
       this.showPopup = true;
+    },
+    closePopupGame() {
+      this.showPopupGame = false;
+    },
+    editGame(gameId, gameListId, playtime) {
+      this.gameId = gameId;
+      this.gameListId = gameListId;
+      this.playtime = playtime;
+
+      this.showPopupGame = true;
     },
     async fetchListDetails() {
       try {
@@ -248,6 +264,20 @@ export default {
     transform: scale(1);
   }
 }
+
+.editgame-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #fff;
+    cursor: pointer;
+    transition: color 0.3s;
+    z-index: 2;
+}
+
+  .editgame-icon :hover {
+    color: rgb(241, 112, 148);
+  }
 
   .discover-button:hover {
     background-color: rgb(252, 9, 76);

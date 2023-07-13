@@ -145,6 +145,9 @@ export default {
         if (!response.ok) {
           const errorResponseText = await response.text();
           this.error = errorResponseText || 'An error occurred during deletion.';
+          
+        } else {
+          this.$emit('delete-game');
           toast('Game deleted successfully!', {
             type: 'success',
             position: 'top-right',
@@ -159,9 +162,6 @@ export default {
           setTimeout(() => {
             this.$router.push('/home');
           }, 3000);
-        } else {
-          this.$emit('delete-game');
-          this.$router.push('/home');
         }
       } catch (error) {
         console.error('An error occurred during deletion:', error);
@@ -177,7 +177,6 @@ export default {
         this.error = '';
 
         const requestBody = { ...this.game, gameList: this.gameList, playtimeHours: this.localPlaytime };
-        console.log(requestBody);
         const response = await fetch(`http://localhost:8080/api/game-with-playtime/${this.gameId}`, {
           method: 'PUT',
           headers: {
@@ -192,7 +191,20 @@ export default {
           this.error = errorResponseText || 'An error occurred during editing.';
         } else {
           this.$emit('edit-game');
-          this.$router.push('/my-games');
+          toast('Game updated successfully!', {
+            type: 'success',
+            position: 'top-right',
+            duration: 3000,
+            theme: 'colored',
+            icon: {
+              name: 'check-circle',
+            },
+            transition: 'Vue-Toastification__bounce',
+          });
+
+          setTimeout(() => {
+            this.$router.push('/my-games');
+          }, 3000);
         }
       } catch (error) {
         console.error('An error occurred during editing:', error);

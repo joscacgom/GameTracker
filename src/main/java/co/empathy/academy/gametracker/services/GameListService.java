@@ -41,9 +41,6 @@ public class GameListService {
         if (existingGameList == null) {
             return null;
         }
-        if (gameList.getGames() != null) {
-            existingGameList.getGames().addAll(gameList.getGames());
-        }
         if (gameList.getStatus() != null) {
             existingGameList.setStatus(gameList.getStatus());
         }

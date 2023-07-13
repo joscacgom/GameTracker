@@ -74,7 +74,6 @@
       this.gameListId = gameListId;
       this.playtime = playtime;
 
-      console.log(this.gameId, this.gameListId, this.playtime)
       this.showPopup = true;
     },
     async fetchCarouselItems() {

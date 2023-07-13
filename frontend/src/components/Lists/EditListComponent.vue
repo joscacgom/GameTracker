@@ -322,6 +322,12 @@
 
   }
 
+  .button-container button:hover {
+    background-color: rgb(252, 9, 76);
+    opacity: 0.8;
+    cursor: pointer;
+  }
+
   .button-container button:disabled {
     background-color: rgb(252, 9, 76);
     opacity: 0.5;
