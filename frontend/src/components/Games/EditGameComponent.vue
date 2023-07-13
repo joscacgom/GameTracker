@@ -16,7 +16,7 @@
          </select>
 
           <label for="status">Playtime</label>
-          <input type="number" id="playtime" v-model="playtime" min='0' required>
+          <input type="number" id="playtime" v-model="playtime" min='0' :default="playtime" >
           <div class="button-container">
             <button type="submit" class="button" :disabled="isEditing">
                 <font-awesome-icon icon="plus-circle" />
@@ -111,6 +111,7 @@
 
         if (response.ok) {
           const responseData = await response.json();
+          console.log(responseData);
           this.game= responseData;
           this.gameList = responseData.gameList;
           this.playtime = responseData.playtimeHours;

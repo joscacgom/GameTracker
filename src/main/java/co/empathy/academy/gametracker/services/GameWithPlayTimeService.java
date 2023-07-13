@@ -67,4 +67,19 @@ public class GameWithPlayTimeService {
         return games;
     }
 
+    /**
+     * Get the game with playtime hours for a specific user and game.
+     *
+     * @param userId The ID of the user.
+     * @param gameId The ID of the game.
+     * @return The game with playtime hours for the user and game.
+     */
+    public GameWithPlaytime getGameById(String id) {
+        Optional<GameWithPlaytime> optionalGameWithPlayTime = gameWithPlayTimeRepository.findById(id);
+        if (optionalGameWithPlayTime.isPresent()) {
+            return optionalGameWithPlayTime.get();
+        }
+        return null;
+    }
+
 }

@@ -13,7 +13,7 @@
             <div class="carousel-overlay">
               <h3>{{ item.game.name }}</h3>
               <h3>{{ item.playtimeHours }} hours</h3>
-              <span class="edit-icon" @click="edit(item.id)"><font-awesome-icon icon="edit" /></span>
+              <span class="edit-icon" @click.stop="edit(item.id)"><font-awesome-icon icon="edit" /></span>
             </div>
             
           </div>
@@ -53,6 +53,8 @@
         itemsToShow: 3, // Number of items to show at a time
         loading: true,
         hoveredItem: null,
+        showPopup: false,
+        gameId: null,
       };
     },
     mounted() {

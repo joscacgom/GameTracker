@@ -74,6 +74,44 @@ public class GameWithPlaytimeController {
     }
 
     /**
+     * Get the game with playtime hours for a specific gameId.
+     * @param id The ID of the game.
+     * @param authorizationHeader The Authorization header containing the JWT token.
+     * @return ResponseEntity containing the game with playtime hours if successful,
+     * or a not found response if the game was not found.
+     */
+    @CrossOrigin(origins = "http://localhost:8081")
+    @GetMapping("/{id}")
+    public ResponseEntity<GameWithPlaytime> getGameById(
+            @PathVariable("id") String id,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        // Validate the JWT token
+        // Extract the token from the authorization header
+        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+
+        // Load user details from the token
+        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+
+        // Check if the token is valid
+        if (token == null || !jwtUtils.validateToken(token, userDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // Get the game with playtime hours
+        GameWithPlaytime gameWithPlaytime = gameWithPlayTimeService.getGameById(id);
+
+        // Check if the game was not found
+        if (gameWithPlaytime == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        // Return the game with playtime hours
+        return ResponseEntity.ok(gameWithPlaytime);
+    }
+
+
+    /**
      * Get the games with playtime hours for a specific user.
      *
      * @param userId              The ID of the user.
