@@ -214,4 +214,90 @@ export default {
 span {
 color: rgb(252, 9, 76);
 }
+
+@media screen and (max-width: 768px) {
+  .game-details-container {
+    margin-top: 5rem;
+    margin-bottom:1rem;
+    margin-left: 1rem;
+    padding: 0 1rem;
+  }
+
+  .game {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .game-cover {
+    height: 200px;
+    width: 300px;
+  }
+
+  .game-details_genres,
+  .game-details_platforms {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .game-details_genres_genre,
+  .game-details_platforms_platform {
+    margin: 5px;
+  }
+
+  .game-details_name {
+    font-size: 24px;
+    text-align: left;
+  }
+
+  .game-details_description {
+    font-size: 14px;
+    text-align: justify;
+  }
+
+  .game-details_playtime {
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .game-details_platforms {
+    overflow-x: hidden;
+    padding-bottom: 1em;
+    font-size: 14px;
+    justify-content: flex-start;
+  }
+
+  .game-details_platforms_platform {
+    font-size: 14px;
+  }
+
+  .game-bt {
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .game-bt_add {
+    width: 100%;
+    max-width: 200px;
+    font-size: 16px;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .game-details-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 3rem;
+    padding: 0 1rem;
+  }
+
+  .game {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+}
+
 </style>

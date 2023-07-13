@@ -210,7 +210,6 @@
   .carousel-item {
     width: 100%;
     height: auto;
-    max-width: 200px;
     margin: 0 auto;
     height: 200px;
   }
