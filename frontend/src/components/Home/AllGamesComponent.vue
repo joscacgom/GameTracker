@@ -42,14 +42,21 @@
     data() {
       return {
         carouselItems: [],
-        currentPosition: 0, // Current position of the carousel
-        itemsToShow: 3, // Number of items to show at a time
+        currentPosition: 0,
+        itemsToShowDesktop: 3,
+        itemsToShowMobile: 2,
         loading: true,
         hoveredItem: null,
+        isMobile: false,
       };
     },
     mounted() {
       this.fetchCarouselItems();
+      window.addEventListener('resize', this.handleWindowResize);
+      this.checkMobile();
+    },
+    unmounted() {
+      window.removeEventListener('resize', this.handleWindowResize);
     },
     computed: {
       visibleItems() {
@@ -57,6 +64,9 @@
           this.currentPosition,
           this.currentPosition + this.itemsToShow
         );
+      },
+      itemsToShow() {
+        return this.isMobile ? this.itemsToShowMobile : this.itemsToShowDesktop;
       },
       carouselStyle() {
         const translateX = -this.currentPosition * this.itemWidth + 'px';
@@ -78,7 +88,7 @@
 
           if (response.ok) {
             const responseData = await response.json();
-            this.carouselItems = await responseData;
+            this.carouselItems = responseData;
           } else {
             console.log('An error response was received');
           }
@@ -92,7 +102,7 @@
         this.$router.push(`/game/${itemId}`);
       },
       slideCarousel(direction) {
-        const maxPosition = this.carouselItems.length - this.itemsToShow; // Maximum position of the carousel
+        const maxPosition = this.carouselItems.length - this.itemsToShow;
         if (direction === 'left') {
           if (this.currentPosition > 0) {
             this.currentPosition--;
@@ -102,8 +112,15 @@
             this.currentPosition++;
           }
         }
-      }
-    }
+      },
+      handleWindowResize() {
+        this.checkMobile();
+        this.currentPosition = 0;
+      },
+      checkMobile() {
+        this.isMobile = window.innerWidth <= 600;
+      },
+    },
   };
 </script>
 
@@ -208,10 +225,9 @@
 
 @media screen and (max-width: 600px) {
   .carousel-item {
-    width: 100%;
-    height: auto;
+    width: 80%;
+    max-width: 240px;
     margin: 0 auto;
-    height: 200px;
   }
 
   .empty-carousel {
@@ -236,11 +252,15 @@
   .carousel {
     height: auto;
   }
+  
+  .carousel-item:hover .carousel-overlay {
+    opacity: 1;
+  }
 }
 
 @media screen and (max-width: 400px) {
   .carousel-item {
-    max-width: 160px;
+    max-width: 200px;
   }
 }
 </style>
