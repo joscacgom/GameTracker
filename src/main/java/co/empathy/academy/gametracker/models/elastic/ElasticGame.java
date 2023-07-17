@@ -1,9 +1,10 @@
 package co.empathy.academy.gametracker.models.elastic;
 
-import co.empathy.academy.gametracker.models.*;
-
+import co.empathy.academy.gametracker.models.mongo.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
@@ -18,34 +19,47 @@ public class ElasticGame {
     @Id
     private Long id;
 
+    @Field(type = FieldType.Text)
     private String name;
 
+    @Field(type = FieldType.Text)
     private String description;
 
+    @Field(type = FieldType.Date)
     private LocalDate released;
 
+    @Field(type = FieldType.Text)
     private String background_image; // uri of the image
 
+    @Field(type = FieldType.Integer)
     private int playtime;
 
+    @Field(type = FieldType.Object)
     @Embedded
     private List<Platform> platforms; // platform names
 
+    @Field(type = FieldType.Object)
     @Embedded
     private List<Genre> genres; // genre names
 
+    @Field(type = FieldType.Object)
     @Embedded
     private List<Developer> developers; // platform names
 
+    @Field(type = FieldType.Object)
     @Embedded
     private List<Publisher> publishers; // genre names
 
+    @Field(type = FieldType.Integer)
     private Integer metacritic;
 
+    @Field(type = FieldType.Boolean)
     private Boolean tba;
 
+    @Field(type = FieldType.Integer)
     private Integer rating;
 
+    @Field(type = FieldType.Object)
     private EsrbRating esrb_rating;
 
     public ElasticGame() {

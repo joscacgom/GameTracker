@@ -1,6 +1,6 @@
 package co.empathy.academy.gametracker.services.elastic;
 
-import co.empathy.academy.gametracker.models.Platform;
+import co.empathy.academy.gametracker.models.mongo.Platform;
 import co.empathy.academy.gametracker.models.elastic.ElasticGame;
 import co.empathy.academy.gametracker.repositories.elastic.ElasticGameRepository;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,7 @@ public class ElasticGameService {
     private final OkHttpClient client = new OkHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Autowired
     public ElasticGameService(ElasticGameRepository elasticGameRepository) {
         this.elasticGameRepository = elasticGameRepository;
     }
