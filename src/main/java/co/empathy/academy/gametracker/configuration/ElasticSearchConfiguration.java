@@ -1,25 +1,32 @@
 package co.empathy.academy.gametracker.configuration;
 
+import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
+import org.springframework.data.elasticsearch.client.RestClients;
 
 @Configuration
-public class ElasticSearchConfiguration extends ElasticsearchConfiguration {
+public class ElasticSearchConfiguration {
 
-    @Value("${elastic.username}")
-    private String elasticUsername;
+    @Value("${spring.data.elasticsearch.cluster-nodes}")
+    private String elasticsearchClusternodes;
 
-    @Value("${elastic.pswd}")
-    private String elasticPswd;
+    @Value("${spring.data.elasticsearch.properties.restClient.username}")
+    private String elasticsearchUsername;
 
-    @Override
-    public ClientConfiguration clientConfiguration() {
-        return ClientConfiguration.builder()
-                .connectedTo("localhost:9200")
-                .withBasicAuth(elasticUsername, elasticPswd)
+    @Value("${spring.data.elasticsearch.properties.restClient.password}")
+    private String elasticsearchPassword;
+
+    @Bean(destroyMethod = "close")
+    public RestHighLevelClient elasticsearchClient() {
+        ClientConfiguration configuration = ClientConfiguration.builder()
+                .connectedTo(elasticsearchClusternodes)
+                .withBasicAuth(elasticsearchUsername, elasticsearchPassword)
                 .build();
+
+        return RestClients.create(configuration).rest();
     }
 
 }

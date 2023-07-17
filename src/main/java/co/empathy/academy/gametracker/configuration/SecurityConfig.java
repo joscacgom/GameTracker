@@ -1,6 +1,6 @@
 package co.empathy.academy.gametracker.configuration;
 
-import co.empathy.academy.gametracker.services.UserService;
+import co.empathy.academy.gametracker.services.mongo.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

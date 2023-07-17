@@ -25,6 +25,7 @@ public class ElasticGameController {
      * @return a response with the list of games in its body, ResponseEntity<List<ElasticGame>>,
      *  or the Http status (error)
      */
+    @CrossOrigin(origins = "https://localhost:9200")
     @GetMapping("/listGames")
     public ResponseEntity<List<ElasticGame>> getAListOfGames() {
         List<ElasticGame> games = elasticGameService.getAListOfGames();
