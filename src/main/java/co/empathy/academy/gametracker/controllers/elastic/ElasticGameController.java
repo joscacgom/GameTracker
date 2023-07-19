@@ -36,6 +36,20 @@ public class ElasticGameController {
     }
 
     /**
+     * Search games by the provided parameters.
+     *
+     * @param game The game object containing the search criteria
+     * @return a list of games matching the search criteria
+     */
+    @PostMapping("/searchGames")
+    public ResponseEntity<List<ElasticGame>> searchGamesByParameters(@RequestBody ElasticGame game) {
+        List<ElasticGame> matchingGames = elasticGameService.searchGamesByParameters(game);
+        if (matchingGames != null && !matchingGames.isEmpty())
+            return ResponseEntity.ok(matchingGames); // Return: OK response with matching games in the body.
+        else
+            return ResponseEntity.notFound().build(); // Return: Not Found response if no games match the criteria.
+    }
+    /**
      * Find all games by genre name specified from Elastic Search index
      * @param name of the genre
      * @return a list of games with that genre
