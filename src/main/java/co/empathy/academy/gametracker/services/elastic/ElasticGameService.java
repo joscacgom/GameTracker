@@ -9,18 +9,26 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ElasticGameService {
 
     private final ElasticGameRepository elasticGameRepository;
+    private final ElasticsearchOperations elasticsearchOperations;
 
     @Value("${rapidapi.key}")
     private String rapidAPIKey;
@@ -34,9 +42,9 @@ public class ElasticGameService {
     private final OkHttpClient client = new OkHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Autowired
-    public ElasticGameService(ElasticGameRepository elasticGameRepository) {
+    public ElasticGameService(ElasticGameRepository elasticGameRepository, ElasticsearchOperations elasticsearchOperations) {
         this.elasticGameRepository = elasticGameRepository;
+        this.elasticsearchOperations = elasticsearchOperations;
     }
 
     /**
@@ -44,7 +52,7 @@ public class ElasticGameService {
      * @return games, a List<ElasticGame>
      */
     public List<ElasticGame> getAListOfGames() {
-        // Llamada a RAWGAPI
+        // Call to RAWG API
         Request request = new Request.Builder()
                 .url("https://rawg-video-games-database.p.rapidapi.com/games?key=" + rapidAPIUrlKey)
                 .get()
@@ -54,16 +62,15 @@ public class ElasticGameService {
 
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful()) {
-                // Obtencion de la respuesta como cadena JSON
+                // Obtain the response as a JSON string
                 assert response.body() != null;
                 String jsonResponse = response.body().string();
 
                 if (jsonResponse.isBlank())
                     throw new IOException("Error response body is blank.");
 
-                // Des-serializar: Cadena JSON a Java
+                // Deserialize JSON string to Java objects
                 objectMapper.registerModule(new JavaTimeModule()); // Java 8 date/time module
-                // El json contiene en "results" los juegos
                 JsonNode gamesNode = objectMapper.readTree(jsonResponse).get("results");
                 List<ElasticGame> games = new ArrayList<>();
                 if (gamesNode != null) {
@@ -72,7 +79,6 @@ public class ElasticGameService {
                         if (game == null)
                             throw new IOException("Error while mapping: null game.");
 
-                        // El json contiene en "platforms [{ platform" las plataformas
                         List<Platform> platforms = new ArrayList<>();
                         JsonNode platformsNode = gameNode.get("platforms");
                         if (platformsNode != null) {
@@ -87,12 +93,12 @@ public class ElasticGameService {
                         games.add(game);
                     }
                 }
-
                 elasticGameRepository.saveAll(games);
+                elasticGameRepository.findAll().forEach(System.out::println);
                 return games;
-            }
-            else
+            } else {
                 throw new IOException("Error on API response.");
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -100,12 +106,46 @@ public class ElasticGameService {
     }
 
     /**
-     * Find all games by genre name specified from Elastic Search index
-     * @param name of the genre
+     * Search for games based on the provided parameters.
+     *
+     * @param game The game object containing the search criteria
+     * @return a list of games matching the search criteria
+     */
+    public List<ElasticGame> searchGamesByParameters(ElasticGame game) {
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+        Class<? extends ElasticGame> gameClass = game.getClass();
+
+        // Iterate over all fields of the game object
+        for (Field field : gameClass.getDeclaredFields()) {
+            field.setAccessible(true);
+            try {
+                // Check if the field is not null and not the "id" field
+                Object fieldValue = field.get(game);
+                if (fieldValue != null && !field.getName().equals("id")) {
+                    // Add a filter for the non-null field
+                    queryBuilder.filter(QueryBuilders.matchQuery(field.getName(), fieldValue));
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Execute the search query
+        NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder()
+                .withQuery(queryBuilder);
+        SearchHits<ElasticGame> searchHits = elasticsearchOperations.search(searchQueryBuilder.build(), ElasticGame.class);
+        return searchHits.getSearchHits().stream()
+                .map(SearchHit::getContent)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Find all games by genre name specified from Elasticsearch index
+     *
+     * @param name the name of the genre
      * @return a list of games with that genre
      */
     public List<ElasticGame> findAllByGenreName(String name) {
         return elasticGameRepository.findAllByGenreName(name);
     }
-
 }
