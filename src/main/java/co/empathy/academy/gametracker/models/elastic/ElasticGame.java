@@ -44,11 +44,11 @@ public class ElasticGame {
 
     @Field(type = FieldType.Object)
     @Embedded
-    private List<Developer> developers; // platform names
+    private List<Developer> developers;
 
     @Field(type = FieldType.Object)
     @Embedded
-    private List<Publisher> publishers; // genre names
+    private List<Publisher> publishers;
 
     @Field(type = FieldType.Integer)
     private Integer metacritic;
@@ -62,13 +62,10 @@ public class ElasticGame {
     @Field(type = FieldType.Object)
     private EsrbRating esrb_rating;
 
-    @Field(type = FieldType.Text)
-    private String genreName;
-
     public ElasticGame() {
     }
 
-    public ElasticGame(Long id, String name, String description, LocalDate released, String background_image, int playtime, List<Platform> platforms, List<Genre> genres, List<Developer> developers, List<Publisher> publishers, Integer metacritic, Boolean tba, Integer rating, EsrbRating esrb_rating, String genreName) {
+    public ElasticGame(Long id, String name, String description, LocalDate released, String background_image, int playtime, List<Platform> platforms, List<Genre> genres, List<Developer> developers, List<Publisher> publishers, Integer metacritic, Boolean tba, Integer rating, EsrbRating esrb_rating) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -83,7 +80,6 @@ public class ElasticGame {
         this.tba = tba;
         this.rating = rating;
         this.esrb_rating = esrb_rating;
-        this.genreName = genreName;
     }
 
     public Long getId() {
@@ -198,14 +194,6 @@ public class ElasticGame {
         this.rating = rating;
     }
 
-    public String getGenreName() {
-        return genreName;
-    }
-
-    public void setGenreName(String genreName) {
-        this.genreName = genreName;
-    }
-
     @Override
     public String toString() {
         return "ElasticGame{" +
@@ -223,7 +211,6 @@ public class ElasticGame {
                 ", tba=" + tba +
                 ", rating=" + rating +
                 ", esrb_rating=" + esrb_rating +
-                ", genreName='" + genreName + '\'' +
                 '}';
     }
 
@@ -239,4 +226,5 @@ public class ElasticGame {
     public int hashCode() {
         return Objects.hash(id, name, released);
     }
+
 }

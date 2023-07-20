@@ -34,10 +34,10 @@ public class Game {
     private List<Genre> genres; // genre names
 
     @Embedded
-    private List<Developer> developers; // platform names
+    private List<Developer> developers;
 
     @Embedded
-    private List<Publisher> publishers; // genre names
+    private List<Publisher> publishers;
 
     private Integer metacritic;
 
