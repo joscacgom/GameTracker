@@ -12,7 +12,7 @@
           <div class="filters-scroll-container">
             <div class="filter-category" v-for="(category, index) in visibleCategories" :key="index">
               <h3>{{ category.name }}</h3>
-              <select v-model="selectedFilters[category.name]">
+              <select v-model="selectedFilters[category.name]" @change="searchGames">
                 <option value="">All</option>
                 <option v-for="(filter, filterIndex) in category.filters" :key="filterIndex">{{ filter }}</option>
               </select>

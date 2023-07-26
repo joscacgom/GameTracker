@@ -16,9 +16,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -126,4 +126,21 @@ public class ElasticGameService {
                 .collect(Collectors.toList());
     }
 
+    public List<ElasticGame> searchWithFilters(String genre) {
+        if (genre != null && genre != "") {
+            QueryBuilder matchQuery = QueryBuilders.matchQuery("genres.name", genre);
+
+            // Build the native search query
+            QueryBuilder finalQuery = QueryBuilders.boolQuery().must(matchQuery);
+            NativeSearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(finalQuery).build();
+
+            // Execute the search query
+            SearchHits<ElasticGame> searchHits = elasticsearchOperations.search(searchQuery, ElasticGame.class);
+            return searchHits.getSearchHits().stream()
+                    .map(SearchHit::getContent)
+                    .collect(Collectors.toList());
+
+        }
+        return null;
+    }
 }
