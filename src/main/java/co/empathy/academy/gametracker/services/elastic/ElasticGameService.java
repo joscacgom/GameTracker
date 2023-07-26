@@ -111,12 +111,12 @@ public class ElasticGameService {
      * @return a list of games matching the search criteria
      */
     public List<ElasticGame> searchGamesByName(String name) {
-        // Use the query_string query to search for games with names containing the search term
-        String queryString = "*" + name.toLowerCase() + "*";
-        QueryBuilder queryStringQuery = QueryBuilders.queryStringQuery(queryString);
+        String analyzedName = name.toLowerCase();
+
+        QueryBuilder matchQuery = QueryBuilders.matchQuery("name", analyzedName);
 
         // Build the native search query
-        QueryBuilder finalQuery = QueryBuilders.boolQuery().must(queryStringQuery);
+        QueryBuilder finalQuery = QueryBuilders.boolQuery().must(matchQuery);
         NativeSearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(finalQuery).build();
 
         // Execute the search query
