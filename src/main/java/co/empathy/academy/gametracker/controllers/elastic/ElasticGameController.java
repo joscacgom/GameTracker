@@ -66,9 +66,24 @@ public class ElasticGameController {
 
     @CrossOrigin(origins = "http://localhost:8081")
     @GetMapping("/searchWithFilters")
-    public ResponseEntity<List<ElasticGame>> searchWithFilters(@RequestParam(required = false) String genre) {
-        List<ElasticGame> games = elasticGameService.searchWithFilters(genre);
+    public ResponseEntity<List<ElasticGame>> searchWithFilters(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String genre,
+            @RequestParam(required = false) String platform,
+            @RequestParam(required = false) String developer,
+            @RequestParam(required = false) String publisher,
+            @RequestParam(required = false) String playtime,
+            @RequestParam(required = false) String metacritic,
+            @RequestParam(required = false) String esrb,
+            @RequestParam(required = false) String tba,
+            @RequestParam(required = false) String rating,
+            @RequestParam(required = false) String year
+    ) {
+        List<ElasticGame> games = elasticGameService.searchWithFilters(
+            name,genre, platform, developer, publisher, playtime, metacritic, esrb, tba, rating, year
+        );
         return ResponseEntity.ok(games);
     }
+
 
 }

@@ -23,7 +23,7 @@
         </div>
         <!-- Display results here or all games component -->
         <div v-if="showFilteredGames">
-          <FilterGamesComponent :searchQuery="searchQuery"/>
+          <FilterGamesComponent :searchQuery="searchQuery" :selectedFilters="selectedFilters" />
         </div>
         <div v-else>
           <AllGamesComponent/>
@@ -101,7 +101,7 @@ export default {
       return this.filterCategories;
     },
     showFilteredGames() {
-      return this.searchQuery.trim() !== '';
+      return this.searchQuery.trim() !== '' || Object.values(this.selectedFilters).some(filter => filter);
     }
   },
   mounted() {
@@ -129,8 +129,8 @@ export default {
       );
     },
     searchGames() {
-      // Ensure that the searchQuery is not empty before displaying the FilterGamesComponent
-      if (this.searchQuery.trim() !== '') {
+      if (this.searchQuery.trim() !== '' || Object.values(this.selectedFilters).some(filter => filter)) {
+
         this.$forceUpdate(); // Force a re-render to switch components
       }
     }

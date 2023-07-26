@@ -1,28 +1,19 @@
 package co.empathy.academy.gametracker.services.elastic;
 
 import co.empathy.academy.gametracker.models.mongo.*;
+import co.elastic.clients.elasticsearch.core.search.ScoreMode;
 import co.empathy.academy.gametracker.models.elastic.ElasticGame;
 import co.empathy.academy.gametracker.repositories.elastic.ElasticGameRepository;
 import co.empathy.academy.gametracker.repositories.mongo.GameRepository;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.elasticsearch.index.query.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -107,16 +98,17 @@ public class ElasticGameService {
     /**
      * Search games by the provided name.
      *
-     * @param name The name o the search criteria
+     * @param name The name of the search criteria
      * @return a list of games matching the search criteria
      */
     public List<ElasticGame> searchGamesByName(String name) {
         String analyzedName = name.toLowerCase();
 
-        QueryBuilder matchQuery = QueryBuilders.matchQuery("name", analyzedName);
+        // Use wildcard query to perform a partial match
+        QueryBuilder wildcardQuery = QueryBuilders.wildcardQuery("name", "*" + analyzedName + "*");
 
         // Build the native search query
-        QueryBuilder finalQuery = QueryBuilders.boolQuery().must(matchQuery);
+        QueryBuilder finalQuery = QueryBuilders.boolQuery().must(wildcardQuery);
         NativeSearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(finalQuery).build();
 
         // Execute the search query
@@ -126,21 +118,85 @@ public class ElasticGameService {
                 .collect(Collectors.toList());
     }
 
-    public List<ElasticGame> searchWithFilters(String genre) {
-        if (genre != null && genre != "") {
-            QueryBuilder matchQuery = QueryBuilders.matchQuery("genres.name", genre);
+        public List<ElasticGame> searchWithFilters(
+            String name,
+            String genre,
+            String platform,
+            String developer,
+            String publisher,
+            String playtime,
+            String metacritic,
+            String esrb,
+            String tba,
+            String rating,
+            String year
+    ) {
+        // Build your search query based on the provided filter parameters
+        NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder();
 
-            // Build the native search query
-            QueryBuilder finalQuery = QueryBuilders.boolQuery().must(matchQuery);
-            NativeSearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(finalQuery).build();
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 
-            // Execute the search query
-            SearchHits<ElasticGame> searchHits = elasticsearchOperations.search(searchQuery, ElasticGame.class);
-            return searchHits.getSearchHits().stream()
-                    .map(SearchHit::getContent)
-                    .collect(Collectors.toList());
-
+        // Add a must clause for the name search
+        if (name != null && !name.isEmpty()) {
+            String analyzedName = name.toLowerCase();
+            QueryBuilder wildcardQuery = QueryBuilders.wildcardQuery("name", "*" + analyzedName + "*");
+            boolQueryBuilder.must(wildcardQuery);
         }
-        return null;
+
+        // For nested fields, use nested queries
+        if (genre != null && !genre.isEmpty()) {
+            boolQueryBuilder.must(QueryBuilders.nestedQuery("genres",
+                    QueryBuilders.matchQuery("genres.name.keyword", genre), null));
+        }
+
+        if (platform != null && !platform.isEmpty()) {
+            boolQueryBuilder.must(QueryBuilders.nestedQuery("platforms",
+                    QueryBuilders.matchQuery("platforms.name.keyword", platform), null));
+        }
+
+        if (developer != null && !developer.isEmpty()) {
+            boolQueryBuilder.must(QueryBuilders.nestedQuery("developers",
+                    QueryBuilders.matchQuery("developers.name.keyword", developer), null));
+        }
+
+        if (publisher != null && !publisher.isEmpty()) {
+            boolQueryBuilder.must(QueryBuilders.nestedQuery("publishers",
+                    QueryBuilders.matchQuery("publishers.name.keyword", publisher), null));
+        }
+
+        if (playtime != null && !playtime.isEmpty()) {
+            boolQueryBuilder.must(QueryBuilders.matchQuery("playtime", playtime));
+        }
+
+        if (metacritic != null && !metacritic.isEmpty()) {
+            boolQueryBuilder.must(QueryBuilders.rangeQuery("metacritic").gt(Integer.parseInt(metacritic)));
+        }
+
+        if (esrb != null && !esrb.isEmpty()) {
+            boolQueryBuilder.must(QueryBuilders.matchQuery("esrb_rating.name.keyword", esrb));
+        }
+
+        if (tba != null && !tba.isEmpty()) {
+            boolQueryBuilder.must(QueryBuilders.matchQuery("tba", Boolean.parseBoolean(tba)));
+        }
+
+        if (rating != null && !rating.isEmpty()) {
+            boolQueryBuilder.must(QueryBuilders.matchQuery("rating.keyword", rating));
+        }
+
+        if (year != null && !year.isEmpty()) {
+            boolQueryBuilder.must(QueryBuilders.matchQuery("year.keyword", year));
+        }
+
+        searchQueryBuilder.withQuery(boolQueryBuilder);
+
+        // Execute the search query and return the matching games
+        NativeSearchQuery searchQuery = searchQueryBuilder.build();
+        SearchHits<ElasticGame> searchHits = elasticsearchOperations.search(searchQuery, ElasticGame.class);
+        return searchHits.getSearchHits().stream()
+                .map(SearchHit::getContent)
+                .collect(Collectors.toList());
     }
+
+
 }
