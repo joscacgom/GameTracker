@@ -10,12 +10,13 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,7 @@ public class ElasticGameService {
     private final GameRepository mongoGameRepository;
     private final ElasticsearchOperations elasticsearchOperations;
 
+    @Autowired
     public ElasticGameService(ElasticGameRepository elasticGameRepository, GameRepository mongoGameRepository, ElasticsearchOperations elasticsearchOperations) {
         this.elasticGameRepository = elasticGameRepository;
         this.mongoGameRepository = mongoGameRepository;
@@ -97,6 +99,28 @@ public class ElasticGameService {
         NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder()
                 .withQuery(queryBuilder);
         SearchHits<ElasticGame> searchHits = elasticsearchOperations.search(searchQueryBuilder.build(), ElasticGame.class);
+        return searchHits.getSearchHits().stream()
+                .map(SearchHit::getContent)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Search games by the provided name.
+     *
+     * @param name The name o the search criteria
+     * @return a list of games matching the search criteria
+     */
+    public List<ElasticGame> searchGamesByName(String name) {
+        // Use the query_string query to search for games with names containing the search term
+        String queryString = "*" + name.toLowerCase() + "*";
+        QueryBuilder queryStringQuery = QueryBuilders.queryStringQuery(queryString);
+
+        // Build the native search query
+        QueryBuilder finalQuery = QueryBuilders.boolQuery().must(queryStringQuery);
+        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(finalQuery).build();
+
+        // Execute the search query
+        SearchHits<ElasticGame> searchHits = elasticsearchOperations.search(searchQuery, ElasticGame.class);
         return searchHits.getSearchHits().stream()
                 .map(SearchHit::getContent)
                 .collect(Collectors.toList());

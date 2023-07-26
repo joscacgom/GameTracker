@@ -25,6 +25,7 @@ public class ElasticGameController {
      * @return a response with the list of games in its body, ResponseEntity<List<ElasticGame>>,
      *  or the Http status (error)
      */
+    @CrossOrigin(origins = "http://localhost:8081")
     @GetMapping("/listGames")
     public ResponseEntity<List<ElasticGame>> getAListOfGames() {
         List<ElasticGame> games = elasticGameService.getAListOfGames();
@@ -40,6 +41,7 @@ public class ElasticGameController {
      * @param game The game object containing the search criteria
      * @return a list of games matching the search criteria
      */
+    @CrossOrigin(origins = "http://localhost:8081")
     @PostMapping("/searchGames")
     public ResponseEntity<List<ElasticGame>> searchGamesByParameters(@RequestBody ElasticGame game) {
         List<ElasticGame> matchingGames = elasticGameService.searchGamesByParameters(game);
@@ -47,6 +49,19 @@ public class ElasticGameController {
             return ResponseEntity.ok(matchingGames); // Return: OK response with matching games in the body.
         else
             return ResponseEntity.notFound().build(); // Return: Not Found response if no games match the criteria.
+    }
+
+    /**
+     * Search games by the provided name.
+     *
+     * @param name The name o the search criteria
+     * @return a list of games matching the search criteria
+     */
+    @CrossOrigin(origins = "http://localhost:8081")
+    @GetMapping("/searchByName")
+    public ResponseEntity<List<ElasticGame>> searchGamesByName(@RequestParam("name") String name) {
+        List<ElasticGame> games = elasticGameService.searchGamesByName(name);
+        return ResponseEntity.ok(games);
     }
 
 }
