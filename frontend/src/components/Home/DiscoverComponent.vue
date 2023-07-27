@@ -59,24 +59,24 @@ export default {
           filters: ['PC', 'PlayStation 5', 'Xbox Series S/X', 'Nintendo Switch', 'Android', 'iOS', 'PlayStation 4', 'Xbox One', 'PlayStation 3', 'Xbox 360', 'Linux', 'macOS', 'PS Vita']
         },
         {
-          name: 'Developer',
-          filters: ['electronic-arts', 'valve-software', 'microsoft-studios', 'Developer 4', 'Developer 5']
+          name: 'Developers',
+          filters: ['Valve Software', 'CD PROJEKT RED', 'Rockstar Games', 'Crystal Dynamics', 'Bethesda Game Studios', 'Irrational Games', 'Gearbox Software', 'DONTNOD Entertainment', 'Double Eleven', 'Santa Monica Studio', 'id Software']
         },
         {
-          name: 'Publisher',
-          filters: ['Publisher 1', 'Publisher 2', 'Publisher 3', 'Publisher 4', 'Publisher 5']
+          name: 'Publishers',
+          filters: ['Valve', 'Rockstar Games', 'CD PROJEKT RED', 'Electronic Arts', 'Square Enix', 'Ubisoft', 'Bethesda Softworks', '2K Games', 'Activision', 'Microsoft Studios', 'Sony Interactive Entertainment', 'Nintendo']
         },
         {
           name: 'Playtime',
-          filters: ['10', '10-20', '20-30', '30-40', '40-50', '50-60', '60-70', '70-80', '80-90', '90-100', '100+']
+          filters: ['0-10', '10-20', '20-30', '30-40', '40-50', '50-60', '60-70', '70-80', '80-90', '90-100', '>100']
         },
         {
           name: 'Metacritic',
-          filters: ['>80', '>70', '>60', '>50']
+          filters: ['>80', '>70', '>60', '>50', '<50']
         },
         {
           name: 'ESRB',
-          filters: ['E', 'E10+', 'T', 'M', 'AO']
+          filters: ['Mature', 'Teen', 'Everyone 10+']
         },
         {
           name: 'TBA',
@@ -84,11 +84,11 @@ export default {
         },
         {
           name: 'Rating',
-          filters: ['Rating 1', 'Rating 2', 'Rating 3', 'Rating 4', 'Rating 5']
+          filters: ['1', '2', '3', '4', '5']
         },
         {
           name: 'Year',
-          filters: ['2023', '2022', '2021', '2020']
+          filters: ['2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010', '2009', '2008', '2007', '2006', '2005', '2004' ]
         }
       ],
       visibleCategories: [],

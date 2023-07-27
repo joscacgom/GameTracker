@@ -64,7 +64,7 @@ public class ElasticGameController {
         return ResponseEntity.ok(games);
     }
 
-    @CrossOrigin(origins = "http://localhost:8081")
+    @CrossOrigin(origins = "*")
     @GetMapping("/searchWithFilters")
     public ResponseEntity<List<ElasticGame>> searchWithFilters(
             @RequestParam(required = false) String name,

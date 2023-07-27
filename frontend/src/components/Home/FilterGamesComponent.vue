@@ -114,7 +114,7 @@ export default {
           year: this.selectedFilters['Year'] || '',
         }).toString();
 
-        const response = await fetch(`http://localhost:8080/searchWithFilters?${queryParams}`, {
+        const response = await fetch(`http://localhost:8080/elastic/game/searchWithFilters?${queryParams}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
