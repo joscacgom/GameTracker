@@ -13,7 +13,6 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -64,59 +63,21 @@ public class ElasticGameService {
     }
 
     /**
-     * Search for games based on the provided parameters.
-     *
-     * @param game The game object containing the search criteria
-     * @return a list of games matching the search criteria
-     */
-    public List<ElasticGame> searchGamesByParameters(ElasticGame game) {
-        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
-        Class<? extends ElasticGame> gameClass = game.getClass();
-
-        // Iterate over all fields of the game object
-        for (Field field : gameClass.getDeclaredFields()) {
-            field.setAccessible(true);
-            try {
-                // Check if the field is not null and not the "id" field
-                Object fieldValue = field.get(game);
-                if (fieldValue != null && !field.getName().equals("id")) {
-                    // Add a filter for the non-null field
-                    queryBuilder.filter(QueryBuilders.matchQuery(field.getName(), fieldValue));
-                }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // Execute the search query
-        NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder()
-                .withQuery(queryBuilder);
-        SearchHits<ElasticGame> searchHits = elasticsearchOperations.search(searchQueryBuilder.build(), ElasticGame.class);
-        return searchHits.getSearchHits().stream()
-                .map(SearchHit::getContent)
-                .collect(Collectors.toList());
-    }
-
-    /**
      * Search games by the provided name.
      *
-     * @param name The name of the search criteria
+     * @param name
+     * @param genre
+     * @param platform
+     * @param developer
+     * @param publisher
+     * @param playtime
+     * @param metacritic
+     * @param esrb
+     * @param tba
+     * @param rating
+     * @param year
      * @return a list of games matching the search criteria
      */
-    public List<ElasticGame> searchGamesByName(String name) {
-        String analyzedName = name.toLowerCase();
-
-        QueryBuilder wildcardQuery = QueryBuilders.wildcardQuery("name", "*" + analyzedName + "*");
-
-        QueryBuilder finalQuery = QueryBuilders.boolQuery().must(wildcardQuery);
-        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(finalQuery).build();
-
-        SearchHits<ElasticGame> searchHits = elasticsearchOperations.search(searchQuery, ElasticGame.class);
-        return searchHits.getSearchHits().stream()
-                .map(SearchHit::getContent)
-                .collect(Collectors.toList());
-    }
-
     public List<ElasticGame> searchWithFilters(
             String name,
             String genre,

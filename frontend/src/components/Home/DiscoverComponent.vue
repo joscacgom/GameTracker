@@ -60,7 +60,7 @@ export default {
         },
         {
           name: 'Developers',
-          filters: ['Valve Software', 'CD PROJEKT RED', 'Rockstar Games', 'Crystal Dynamics', 'Bethesda Game Studios', 'Irrational Games', 'Gearbox Software', 'DONTNOD Entertainment', 'Double Eleven', 'Santa Monica Studio', 'id Software']
+          filters: ['Valve Software', 'CD PROJEKT RED', 'Rockstar North', 'Rockstar Games', 'Crystal Dynamics', 'Bethesda Game Studios', 'Irrational Games', 'Gearbox Software', 'DONTNOD Entertainment', 'Double Eleven', 'Santa Monica Studio', 'id Software']
         },
         {
           name: 'Publishers',
@@ -130,7 +130,6 @@ export default {
     },
     searchGames() {
       if (this.searchQuery.trim() !== '' || Object.values(this.selectedFilters).some(filter => filter)) {
-
         this.$forceUpdate(); // Force a re-render to switch components
       }
     }

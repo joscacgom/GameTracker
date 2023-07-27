@@ -38,32 +38,19 @@ public class ElasticGameController {
     /**
      * Search games by the provided parameters.
      *
-     * @param game The game object containing the search criteria
+     * @param name
+     * @param genre
+     * @param platform
+     * @param developer
+     * @param publisher
+     * @param playtime
+     * @param metacritic
+     * @param esrb
+     * @param tba
+     * @param rating
+     * @param year
      * @return a list of games matching the search criteria
      */
-    @CrossOrigin(origins = "http://localhost:8081")
-    @PostMapping("/searchGames")
-    public ResponseEntity<List<ElasticGame>> searchGamesByParameters(@RequestBody ElasticGame game) {
-        List<ElasticGame> matchingGames = elasticGameService.searchGamesByParameters(game);
-        if (matchingGames != null && !matchingGames.isEmpty())
-            return ResponseEntity.ok(matchingGames); // Return: OK response with matching games in the body.
-        else
-            return ResponseEntity.notFound().build(); // Return: Not Found response if no games match the criteria.
-    }
-
-    /**
-     * Search games by the provided name.
-     *
-     * @param name The name o the search criteria
-     * @return a list of games matching the search criteria
-     */
-    @CrossOrigin(origins = "http://localhost:8081")
-    @GetMapping("/searchByName")
-    public ResponseEntity<List<ElasticGame>> searchGamesByName(@RequestParam("name") String name) {
-        List<ElasticGame> games = elasticGameService.searchGamesByName(name);
-        return ResponseEntity.ok(games);
-    }
-
     @CrossOrigin(origins = "*")
     @GetMapping("/searchWithFilters")
     public ResponseEntity<List<ElasticGame>> searchWithFilters(
@@ -80,7 +67,7 @@ public class ElasticGameController {
             @RequestParam(required = false) String year
     ) {
         List<ElasticGame> games = elasticGameService.searchWithFilters(
-            name,genre, platform, developer, publisher, playtime, metacritic, esrb, tba, rating, year
+            name, genre, platform, developer, publisher, playtime, metacritic, esrb, tba, rating, year
         );
         return ResponseEntity.ok(games);
     }
