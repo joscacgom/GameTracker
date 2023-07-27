@@ -60,6 +60,7 @@ public class ElasticGame {
     private Integer rating;
 
     @Field(type = FieldType.Object)
+    @Embedded
     private EsrbRating esrb_rating;
 
     public ElasticGame() {

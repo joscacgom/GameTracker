@@ -45,6 +45,7 @@ public class Game {
 
     private Integer rating;
 
+    @Embedded
     private EsrbRating esrb_rating;
 
     public Game() {
