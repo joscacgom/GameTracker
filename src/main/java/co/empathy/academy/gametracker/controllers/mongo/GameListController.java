@@ -43,18 +43,13 @@ public class GameListController {
         this.jwtUtils = jwtUtils;
     }
 
-    /*
+    /**
      * Endpoint to create a new game list.
      *
-     * Request: POST /api/game-lists
-     * Headers:
-     *   - Authorization: Bearer <JWT Token>
-     * Body:
-     *   - gameList: GameList object representing the new game list to be created
-     *
-     * Returns:
-     *   - 201 Created: If the game list was created successfully
-     *   - 401 Unauthorized: If the request is not authorized or the token is invalid
+     * @param gameList GameList object representing the new game list to be created
+     * @param authorizationHeader Bearer <JWT Token>
+     * @return 201 Created: If the game list was created successfully or
+     * 401 Unauthorized: If the request is not authorized or the token is invalid
      */
     @CrossOrigin(origins = "http://localhost:8081")
     @PostMapping
@@ -78,21 +73,15 @@ public class GameListController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdGameList);
     }
 
-    /*
+    /**
      * Endpoint to update a game list.
      *
-     * Request: PUT /api/game-lists/{listId}
-     * Path Parameters:
-     *   - listId: ID of the game list to be updated
-     * Headers:
-     *   - Authorization: Bearer <JWT Token>
-     * Body:
-     *   - gameList: GameList object representing the updated game list
-     *
-     * Returns:
-     *   - 200 OK: If the game list was updated successfully
-     *   - 404 Not Found: If the specified game list does not exist
-     *   - 401 Unauthorized: If the request is not authorized or the token is invalid
+     * @param listId ID of the game list to be updated
+     * @param gameList GameList object representing the updated game list
+     * @param authorizationHeader Bearer <JWT Token>
+     * @return 200 OK: If the game list was updated successfully or
+     * 404 Not Found: If the specified game list does not exist or
+     * 401 Unauthorized: If the request is not authorized or the token is invalid
      */
     @CrossOrigin(origins = "http://localhost:8081")
     @PutMapping("/{listId}")
@@ -118,22 +107,16 @@ public class GameListController {
         return ResponseEntity.ok(updatedGameList);
     }
 
-    /*
+    /**
      * Endpoint to update a game within a game list.
      *
-     * Request: PUT /api/game-lists/{listId}/game/{gameId}
-     * Path Parameters:
-     *   - listId: ID of the game list containing the game to be updated
-     *   - gameId: ID of the game to be updated
-     * Headers:
-     *   - Authorization: Bearer <JWT Token>
-     * Body:
-     *   - gameList: GameList object representing the updated game list with the modified game
-     *
-     * Returns:
-     *   - 200 OK: If the game was updated successfully
-     *   - 404 Not Found: If the specified game list or game does not exist
-     *   - 401 Unauthorized: If the request is not authorized or the token is invalid
+     * @param listId ID of the game list containing the game to be updated
+     * @param gameId ID of the game to be updated
+     * @param gameList GameList object representing the updated game list with the modified game
+     * @param authorizationHeader Bearer <JWT Token>
+     * @return 200 OK: If the game was updated successfully or
+     * 404 Not Found: If the specified game list or game does not exist or
+     * 401 Unauthorized: If the request is not authorized or the token is invalid
      */
     @CrossOrigin(origins = "http://localhost:8081")
     @PutMapping("/{listId}/game/{gameId}")
@@ -213,23 +196,17 @@ public class GameListController {
         return ResponseEntity.ok(updatedCurrentGameList);
     }
 
-    /*
+    /**
      * Endpoint to add a game to a game list.
      *
-     * Request: PUT /api/game-lists/{listId}/add/{gameId}
-     * Path Parameters:
-     *   - listId: ID of the game list where the game is going to be added
-     *   - gameId: ID of the game to be added
-     * Headers:
-     *   - Authorization: Bearer <JWT Token>
-     * Body:
-     *   - gameList: GameList object representing the updated game list with the added game
-     *
-     * Returns:
-     *   - 200 OK: If the game was added successfully
-     *   - 302 Found: If the game is already in the list
-     *   - 404 Not Found: If the specified game list or game does not exist
-     *   - 401 Unauthorized: If the request is not authorized or the token is invalid
+     * @param listId ID of the game list where the game is going to be added
+     * @param gameId ID of the game to be added
+     * @param gameList GameList object representing the updated game list with the added game
+     * @param authorizationHeader Bearer <JWT Token>
+     * @return 200 OK: If the game was added successfully or
+     * 302 Found: If the game is already in the list or
+     * 404 Not Found: If the specified game list or game does not exist or
+     * 401 Unauthorized: If the request is not authorized or the token is invalid
      */
     @CrossOrigin(origins = "http://localhost:8081")
     @PutMapping("/{listId}/add/{gameId}")
@@ -305,19 +282,14 @@ public class GameListController {
         return ResponseEntity.ok(updatedCurrentGameList);
     }
 
-    /*
+    /**
      * Endpoint to retrieve game lists by user ID.
      *
-     * Request: GET /api/game-lists/user/{userId}
-     * Path Parameters:
-     *   - userId: ID of the user whose game lists are to be retrieved
-     * Headers:
-     *   - Authorization: Bearer <JWT Token>
-     *
-     * Returns:
-     *   - 200 OK: If the game lists were retrieved successfully
-     *   - 404 Not Found: If no game lists were found for the specified user
-     *   - 401 Unauthorized: If the request is not authorized or the token is invalid
+     * @param userId ID of the user whose game lists are to be retrieved
+     * @param authorizationHeader Bearer <JWT Token>
+     * @return 200 OK: If the game lists were retrieved successfully or
+     * 404 Not Found: If no game lists were found for the specified user or
+     * 401 Unauthorized: If the request is not authorized or the token is invalid
      */
     @CrossOrigin(origins = "http://localhost:8081")
     @GetMapping("/user/{userId}")
@@ -349,20 +321,15 @@ public class GameListController {
         return ResponseEntity.ok(gameLists);
     }
 
-    /*
+    /**
      * Endpoint to delete a game from a game list.
      *
-     * Request: DELETE /api/game-lists/{listId}/games/{gameId}
-     * Path Parameters:
-     *   - listId: ID of the game list containing the game to be deleted
-     *   - gameId: ID of the game to be deleted
-     * Headers:
-     *   - Authorization: Bearer <JWT Token>
-     *
-     * Returns:
-     *   - 200 OK: If the game was deleted successfully
-     *   - 404 Not Found: If the specified game list or game does not exist
-     *   - 401 Unauthorized: If the request is not authorized or the token is invalid
+     * @param listId ID of the game list containing the game to be deleted
+     * @param gameId ID of the game to be deleted
+     * @param authorizationHeader Bearer <JWT Token>
+     * @return 200 OK: If the game was deleted successfully or
+     * 404 Not Found: If the specified game list or game does not exist or
+     * 401 Unauthorized: If the request is not authorized or the token is invalid
      */
     @CrossOrigin(origins = "http://localhost:8081")
     @DeleteMapping("/{listId}/games/{gameId}")
@@ -431,19 +398,14 @@ public class GameListController {
         return ResponseEntity.ok(updatedGameList);
     }
 
-    /*
+    /**
      * Endpoint to retrieve a game list by its ID.
      *
-     * Request: GET /api/game-lists/{listId}
-     * Path Parameters:
-     *   - listId: ID of the game list to be retrieved
-     * Headers:
-     *   - Authorization: Bearer <JWT Token>
-     *
-     * Returns:
-     *   - 200 OK: If the game list was retrieved successfully
-     *   - 404 Not Found: If the specified game list does not exist
-     *   - 401 Unauthorized: If the request is not authorized or the token is invalid
+     * @param listId ID of the game list to be retrieved
+     * @param authorizationHeader Bearer <JWT Token>
+     * @return 200 OK: If the game list was retrieved successfully or
+     * 404 Not Found: If the specified game list does not exist or
+     * 401 Unauthorized: If the request is not authorized or the token is invalid
      */
     @CrossOrigin(origins = "http://localhost:8081")
     @GetMapping("/{listId}")
@@ -480,19 +442,14 @@ public class GameListController {
         return ResponseEntity.ok(gameList);
     }
 
-    /*
+    /**
      * Endpoint to delete a game list.
      *
-     * Request: DELETE /api/game-lists/{listId}
-     * Path Parameters:
-     *   - listId: ID of the game list to be deleted
-     * Headers:
-     *   - Authorization: Bearer <JWT Token>
-     *
-     * Returns:
-     *   - 204 No Content: If the game list was deleted successfully
-     *   - 404 Not Found: If the specified game list does not exist
-     *   - 401 Unauthorized: If the request is not authorized or the token is invalid
+     * @param listId ID of the game list to be deleted
+     * @param authorizationHeader Bearer <JWT Token>
+     * @return 204 No Content: If the game list was deleted successfully or
+     * 404 Not Found: If the specified game list does not exist or
+     * 401 Unauthorized: If the request is not authorized or the token is invalid
      */
     @CrossOrigin(origins = "http://localhost:8081")
     @DeleteMapping("/{listId}")
@@ -540,14 +497,11 @@ public class GameListController {
         }
     }
 
-    /*
+    /**
      * Helper method to extract the JWT token from the Authorization header.
      *
-     * Parameters:
-     *   - authorizationHeader: The Authorization header value
-     *
-     * Returns:
-     *   - The JWT token, or null if not found
+     * @param authorizationHeader The Authorization header value
+     * @return The JWT token, or null if not found
      */
     private String extractTokenFromAuthorizationHeader(String authorizationHeader) {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer")) {

@@ -185,15 +185,11 @@ public class GameWithPlaytimeController {
         return ResponseEntity.ok(deletedGameWithPlaytime);
     }
 
-
-    /*
+    /**
      * Helper method to extract the JWT token from the Authorization header.
      *
-     * Parameters:
-     *   - authorizationHeader: The Authorization header value
-     *
-     * Returns:
-     *   - The JWT token, or null if not found
+     * @param authorizationHeader The Authorization header value
+     * @return The JWT token, or null if not found
      */
     private String extractTokenFromAuthorizationHeader(String authorizationHeader) {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer")) {

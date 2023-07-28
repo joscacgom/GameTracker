@@ -15,7 +15,6 @@ public class GameWithPlayTimeService {
     private final GameWithPlayTimeRepository gameWithPlayTimeRepository;
     private final GameListService gameListService;
 
-
     public GameWithPlayTimeService(GameWithPlayTimeRepository gameWithPlayTimeRepository, GameListService gameListService) {
         this.gameWithPlayTimeRepository = gameWithPlayTimeRepository;
         this.gameListService = gameListService;
@@ -78,8 +77,6 @@ public class GameWithPlayTimeService {
      *
      * @param userId The ID of the user.
      * @return The list of games with playtime hours for the user.
-     * 
-     * @throws Exception If the user does not exist.
      */
     public List<GameWithPlaytime> getGamesByUserId(String userId) {
         List<GameWithPlaytime> userGames = gameWithPlayTimeRepository.findByUserId(userId);
@@ -95,11 +92,10 @@ public class GameWithPlayTimeService {
     }
 
     /**
-     * Get the game with playtime hours for a specific user and game.
+     * Get the game with playtime hours by its id.
      *
-     * @param userId The ID of the user.
-     * @param gameId The ID of the game.
-     * @return The game with playtime hours for the user and game.
+     * @param id The ID of the game.
+     * @return The game with playtime hours or null.
      */
     public GameWithPlaytime getGameById(String id) {
         Optional<GameWithPlaytime> optionalGameWithPlayTime = gameWithPlayTimeRepository.findById(id);

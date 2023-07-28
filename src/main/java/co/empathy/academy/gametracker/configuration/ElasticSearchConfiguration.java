@@ -19,6 +19,10 @@ public class ElasticSearchConfiguration {
     @Value("${spring.data.elasticsearch.properties.restClient.password}")
     private String elasticsearchPassword;
 
+    /**
+     * Creating the client configuration for elastic search.
+     * @return a RestHighLevelClient
+     */
     @Bean(destroyMethod = "close")
     public RestHighLevelClient elasticsearchClient() {
         ClientConfiguration configuration = ClientConfiguration.builder()

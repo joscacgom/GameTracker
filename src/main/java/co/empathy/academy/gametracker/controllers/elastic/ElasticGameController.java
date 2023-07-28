@@ -2,7 +2,6 @@ package co.empathy.academy.gametracker.controllers.elastic;
 
 import co.empathy.academy.gametracker.models.elastic.ElasticGame;
 import co.empathy.academy.gametracker.services.elastic.ElasticGameService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,6 @@ import java.util.List;
 @RequestMapping("/elastic/game")
 public class ElasticGameController {
 
-    @Autowired
     private ElasticGameService elasticGameService;
 
     public ElasticGameController(ElasticGameService elasticGameService) {
@@ -71,6 +69,5 @@ public class ElasticGameController {
         );
         return ResponseEntity.ok(games);
     }
-
 
 }

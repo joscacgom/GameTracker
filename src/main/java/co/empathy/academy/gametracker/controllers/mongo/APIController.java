@@ -2,7 +2,6 @@ package co.empathy.academy.gametracker.controllers.mongo;
 
 import co.empathy.academy.gametracker.models.mongo.Game;
 import co.empathy.academy.gametracker.services.mongo.APIService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +15,6 @@ import java.util.List;
 @RequestMapping("/api")
 public class APIController {
 
-    @Autowired
     private final APIService apiService;
 
     public APIController(APIService apiService) {

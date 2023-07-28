@@ -4,7 +4,6 @@ import co.empathy.academy.gametracker.models.mongo.User;
 import co.empathy.academy.gametracker.repositories.mongo.UserRepository;
 import co.empathy.academy.gametracker.utils.JWTUtils;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,15 +14,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private JWTUtils jwtUtils;
 
     @Value("${jwt.expiration}")
     private long expirationTime;
 
+    public UserService(UserRepository userRepository, JWTUtils jwtUtils) {
+        this.userRepository = userRepository;
+        this.jwtUtils = jwtUtils;
+    }
+
+    /**
+     * Register a user.
+     *
+     * @param username String
+     * @param email String
+     * @param password String
+     * @return a User registered
+     */
     public User registerUser(String username, String email, String password) {
         // Check if a user with the given username or email already exists
         if (userRepository.findByUsername(username) != null) {
@@ -46,6 +56,12 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
+    /**
+     * Load user by its username
+     * @param username String
+     * @return the UserDetails object.
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
@@ -63,6 +79,12 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
+    /**
+     * User login
+     * @param username
+     * @param password
+     * @return token or null if the authentication fails.
+     */
     public String loginUser(String username, String password) {
         // Find the user by username
         User user = userRepository.findByUsername(username);
@@ -160,6 +182,14 @@ public class UserService implements UserDetailsService {
         }
         return user.getEmail();
     }
+
+    /**
+     * Get a user by username.
+     *
+     * @param username The username of the user to get.
+     * @return user found by its username.
+     * @throws Exception If the user is not found.
+     */
     public User getUser(String username) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
