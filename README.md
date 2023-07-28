@@ -26,5 +26,28 @@ docker run -p 8081:8081 gametracker-front
 
 Great! our app is running smoothly at [GameTracker App](http://localhost:8081)
 
+If we want to execute the app locally, we need first to modify the application properties:
+```
+#Configuracion ElasticSearch para Docker
+spring.data.elasticsearch.cluster-nodes=172.17.0.2:9200
+```
+Comment the line above, and uncomment this one:
+```
+# Configuracion ElasticSearch para desplegar en local
+# spring.data.elasticsearch.cluster-nodes=localhost:9200
+```
+
+Now, we must execute the backend first (root directory):
+```
+mvn spring-boot:run
+```
+
+Then we go for the frontend side (cd frontend):
+```
+vue serve
+```
+
+Remember that we need a elastic container running with the games properly indexed as we saw before.
+
 ## Developers
 [José Cáceres](https://github.com/joscacgom) & [Mayte (Teresa) Fernández](https://github.com/teresafcoro)
