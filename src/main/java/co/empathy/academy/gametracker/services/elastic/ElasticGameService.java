@@ -6,7 +6,6 @@ import co.empathy.academy.gametracker.repositories.elastic.ElasticGameRepository
 import co.empathy.academy.gametracker.repositories.mongo.GameRepository;
 
 import org.elasticsearch.index.query.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -26,7 +25,6 @@ public class ElasticGameService {
     private final GameRepository mongoGameRepository;
     private final ElasticsearchOperations elasticsearchOperations;
 
-    @Autowired
     public ElasticGameService(ElasticGameRepository elasticGameRepository, GameRepository mongoGameRepository, ElasticsearchOperations elasticsearchOperations) {
         this.elasticGameRepository = elasticGameRepository;
         this.mongoGameRepository = mongoGameRepository;

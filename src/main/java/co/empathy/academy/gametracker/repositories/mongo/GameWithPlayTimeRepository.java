@@ -9,6 +9,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GameWithPlayTimeRepository extends MongoRepository<GameWithPlaytime, String> {
+
+    /**
+     * Finds a list of games with playtime by its user id on MongoDB.
+     *
+     * @param userId String
+     * @return a list of GameWithPlaytime objects
+     */
     List<GameWithPlaytime> findByUserId(String userId);
 
 }

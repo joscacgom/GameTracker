@@ -2,7 +2,6 @@ package co.empathy.academy.gametracker.controllers.mongo;
 
 import co.empathy.academy.gametracker.models.mongo.Game;
 import co.empathy.academy.gametracker.services.mongo.GameService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.List;
 @RequestMapping("/api/game")
 public class GameController {
 
-    @Autowired
     private GameService gameService;
 
     public GameController(GameService gameService) {

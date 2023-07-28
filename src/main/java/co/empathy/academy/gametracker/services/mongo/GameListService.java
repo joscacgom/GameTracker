@@ -3,7 +3,6 @@ package co.empathy.academy.gametracker.services.mongo;
 import co.empathy.academy.gametracker.models.mongo.GameList;
 import co.empathy.academy.gametracker.models.mongo.GameWithPlaytime;
 import co.empathy.academy.gametracker.repositories.mongo.GameListRepository;
-import co.empathy.academy.gametracker.repositories.mongo.GameWithPlayTimeRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +47,8 @@ public class GameListService {
         existingGameList.setTotalPlaytime(gameList.getTotalPlaytime());
         return gameListRepository.save(existingGameList);
     }
-    //  A method to given a gameList and a gameWithPlaytime, add the gameWithPlaytime to the gameList and   
+
+
     /**
      * Retrieves a game list by its ID.
      *
@@ -128,8 +128,6 @@ public class GameListService {
             }
         }
     }
-    
-    
 
     /**
      * Updates an existing game list by adding a game to it.

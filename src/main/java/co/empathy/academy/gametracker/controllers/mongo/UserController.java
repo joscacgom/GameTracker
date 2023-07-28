@@ -22,23 +22,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/authenticate")
 public class UserController {
+
     private final UserService userService;
     private final JWTUtils jwtUtils;
-
 
     public UserController(UserService userService, JWTUtils jwtUtils) {
         this.userService = userService;
         this.jwtUtils = jwtUtils;
     }
 
-    /*
+    /**
      * Register a new user.
-     * 
+     *
      * @param user The user to register.
-     * 
      * @return ResponseEntity containing the registered user if successful, or an
      * error response if the registration failed.
-     *
      */
     @CrossOrigin(origins = "http://localhost:8081")
     @PostMapping("/register")
@@ -60,14 +58,12 @@ public class UserController {
         }
     }
 
-    /*
+    /**
      * Login a user.
-     * 
+     *
      * @param user The user to login.
-     * 
      * @return ResponseEntity containing the JWT token if successful, or an error
      * response if the login failed.
-     *
      */
     @CrossOrigin(origins = "http://localhost:8081")
     @PostMapping("/login")
@@ -81,7 +77,7 @@ public class UserController {
             String token = userService.loginUser(username, password);
             String id = userService.getUserId(username);
             String email = userService.getUserEmail(username);
-            if(token == null) {
+            if (token == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
             }
 
@@ -94,19 +90,18 @@ public class UserController {
         }
     }
 
-     /*
+    /**
      * Update user's email and username.
-     * 
-     * @param user The updated user data.
-     * 
+     *
+     * @param userUpdateDTO The updated user data.
+     * @param authorizationHeader the authorization header.
      * @return ResponseEntity containing the updated user if successful, or an
      * error response if the update failed.
-     *
      */
     @CrossOrigin(origins = "http://localhost:8081")
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@RequestBody UserUpdateDTO userUpdateDTO, @RequestHeader("Authorization") String authorizationHeader) {
-         // Validate the JWT token
+        // Validate the JWT token
         // Extract the token from the authorization header
         String token = extractTokenFromAuthorizationHeader(authorizationHeader);
 
@@ -117,7 +112,7 @@ public class UserController {
         if (token == null || !jwtUtils.validateToken(token, userDetails)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        
+
         // Extract the necessary details (username, email) from the request body
         String username = userUpdateDTO.getUsername();
         String email = userUpdateDTO.getEmail();
@@ -126,7 +121,7 @@ public class UserController {
 
         try {
             // Call the updateUser method of the userService to update the user's email and username
-            userService.updateUser(currentUsername,username, email);
+            userService.updateUser(currentUsername, username, email);
 
             // Return the updated user with HTTP status 200 (OK)
             return ResponseEntity.ok(userUpdateDTO);
@@ -136,14 +131,13 @@ public class UserController {
         }
     }
 
-    /*
+    /**
      * Change user's password.
-     * 
-     * @param user The updated user data.
-     * 
+     *
+     * @param changePasswordDTO The updated user data.
+     * @param authorizationHeader the authorization header.
      * @return ResponseEntity containing the updated user if successful, or an
      * error response if the update failed.
-     *
      */
     @CrossOrigin(origins = "http://localhost:8081")
     @PatchMapping("/change-password")
@@ -168,14 +162,11 @@ public class UserController {
         }
     }
 
-     /*
+    /**
      * Helper method to extract the JWT token from the Authorization header.
      *
-     * Parameters:
-     *   - authorizationHeader: The Authorization header value
-     *
-     * Returns:
-     *   - The JWT token, or null if not found
+     * @param authorizationHeader The Authorization header value.
+     * @return the JWT token, or null if not found.
      */
     private String extractTokenFromAuthorizationHeader(String authorizationHeader) {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer")) {
@@ -183,4 +174,5 @@ public class UserController {
         }
         return null;
     }
+
 }

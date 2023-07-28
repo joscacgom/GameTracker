@@ -9,7 +9,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,6 @@ import java.util.List;
 @Service
 public class APIService {
 
-    @Autowired
     private final GameRepository gameRepository;
 
     @Value("${rapidapi.key}")
@@ -31,7 +29,6 @@ public class APIService {
 
     @Value("${rapidapi.url.key}")
     private String rapidAPIUrlKey;
-
 
     private final OkHttpClient client = new OkHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
