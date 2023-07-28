@@ -12,7 +12,6 @@ public interface GameWithPlayTimeRepository extends MongoRepository<GameWithPlay
 
     /**
      * Finds a list of games with playtime by its user id on MongoDB.
-     *
      * @param userId String
      * @return a list of GameWithPlaytime objects
      */
