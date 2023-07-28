@@ -152,25 +152,25 @@ export default {
 }
 
 .carousel-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin-top: 2rem;
-  margin-left: 15rem;
-  gap: 2rem;
-}
-
-.carousel-item {
-  display: flex;
-  flex: 1 0 21%;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 1rem;
-  font-family: 'Poppins', sans-serif;
-  font-size: 18px;
-  font-weight: 500;
-  position: relative;
-}
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 2rem;
+    margin-left: 10rem;
+    gap: 5rem;
+  }
+  
+  .carousel-item {
+    flex: 1 0 calc(25% - 0.5rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    position: relative; 
+  }
 
 .carousel-image {
   width: 200px;

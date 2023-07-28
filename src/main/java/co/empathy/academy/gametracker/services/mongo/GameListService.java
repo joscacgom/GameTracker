@@ -3,7 +3,6 @@ package co.empathy.academy.gametracker.services.mongo;
 import co.empathy.academy.gametracker.models.mongo.GameList;
 import co.empathy.academy.gametracker.models.mongo.GameWithPlaytime;
 import co.empathy.academy.gametracker.repositories.mongo.GameListRepository;
-import co.empathy.academy.gametracker.repositories.mongo.GameWithPlayTimeRepository;
 
 import java.util.ArrayList;
 import java.util.List;
