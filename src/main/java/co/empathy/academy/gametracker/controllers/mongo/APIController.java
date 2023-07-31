@@ -30,9 +30,9 @@ public class APIController {
     public ResponseEntity<List<Game>> getAListOfGames() {
         List<Game> games = apiService.getAListOfGames();
         if (games != null)
-            return ResponseEntity.ok(games); // Retorno: respuesta ok con games en el cuerpo.
-        else // Retorno: respuesta de error con mensaje.
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.ok(games);
+        else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     /**
@@ -44,9 +44,9 @@ public class APIController {
     public ResponseEntity<Game> getGameDetails(@PathVariable Long game_id) {
         Game game = apiService.getGameDetails(game_id);
         if (game != null)
-            return ResponseEntity.ok(game); // Retorno: respuesta ok con el juego en el cuerpo.
-        else // Retorno: respuesta de error con mensaje.
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.ok(game);
+        else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
 }
