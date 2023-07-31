@@ -86,7 +86,7 @@ export default {
       try {
         const userId = sessionStorage.getItem('userId');
 
-        const response = await fetch(`http://localhost:8080/api/game-lists/user/${userId}`, {
+        const response = await fetch(`http://localhost:8080/games/lists/user/${userId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ export default {
     },
     async fetchGameDetails() {
   try {
-    const response = await fetch(`http://localhost:8080/api/game-with-playtime/${this.gameId}`, {
+    const response = await fetch(`http://localhost:8080/games/game-with-playtime/${this.gameId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -134,7 +134,7 @@ export default {
         this.isDeleting = true;
         this.error = '';
 
-        const response = await fetch(`http://localhost:8080/api/game-lists/${this.gameListId}/games/${this.gameId}`, {
+        const response = await fetch(`http://localhost:8080/games/lists/${this.gameListId}/games/${this.gameId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -177,7 +177,7 @@ export default {
         this.error = '';
 
         const requestBody = { ...this.game, gameList: this.gameList, playtimeHours: this.localPlaytime };
-        const response = await fetch(`http://localhost:8080/api/game-with-playtime/${this.gameId}`, {
+        const response = await fetch(`http://localhost:8080/games/game-with-playtime/${this.gameId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

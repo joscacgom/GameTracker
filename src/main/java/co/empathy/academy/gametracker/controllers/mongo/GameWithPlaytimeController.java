@@ -21,7 +21,7 @@ import co.empathy.academy.gametracker.services.mongo.UserService;
 import co.empathy.academy.gametracker.utils.JWTUtils;
 
 @RestController
-@RequestMapping("/api/game-with-playtime")
+@RequestMapping("games/game-with-playtime")
 public class GameWithPlaytimeController {
 
     private final GameWithPlayTimeService gameWithPlayTimeService;

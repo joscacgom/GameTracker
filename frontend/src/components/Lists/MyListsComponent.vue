@@ -65,7 +65,7 @@ export default {
         const userId = sessionStorage.getItem('userId');
 
         // Make the GET request
-        const response = await fetch(`http://localhost:8080/api/game-lists/user/${userId}`, {
+        const response = await fetch(`http://localhost:8080/games/lists/user/${userId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

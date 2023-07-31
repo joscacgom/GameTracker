@@ -94,7 +94,7 @@ export default {
     },
     async fetchListDetails() {
       try {
-        const response = await fetch(`http://localhost:8080/api/game-lists/${this.listId}`, {
+        const response = await fetch(`http://localhost:8080/games/lists/${this.listId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

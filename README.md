@@ -16,7 +16,7 @@ docker run -p 8080:8080 gametracker-back
 ```
 
 Now that we have our backend running properly, we must index all the games in elastic, by clicking in the next endpoint:
-[Index elastic games](http://127.0.0.1:8080/elastic/game/listGames)
+[Index elastic games](http://127.0.0.1:8080/games/elastic/listGames)
 
 Finally, we are able to dockerize and run the frontend side. To make it happen, we must be located at the frontend directory (cd frontend):
 ```

@@ -67,7 +67,7 @@
           };
 
           // Make the POST request
-          const response = await fetch('http://localhost:8080/api/game-lists', {
+          const response = await fetch('http://localhost:8080/games/lists', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

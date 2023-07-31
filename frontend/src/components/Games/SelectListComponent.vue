@@ -59,7 +59,7 @@
       try {
         // GET the users game lists
         const userId = sessionStorage.getItem('userId');
-        const response = await fetch(`http://localhost:8080/api/game-lists/user/${userId}`, {
+        const response = await fetch(`http://localhost:8080/games/lists/user/${userId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -92,7 +92,7 @@
           const gameId = this.$route.params.gameId;
           const listId = this.selectedList.id;
           const requestBody = {...this.selectedList, status: this.selectedList.status};
-          const response = await fetch(`http://localhost:8080/api/game-lists/${listId}/add/${gameId}`, {
+          const response = await fetch(`http://localhost:8080/games/lists/${listId}/add/${gameId}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',

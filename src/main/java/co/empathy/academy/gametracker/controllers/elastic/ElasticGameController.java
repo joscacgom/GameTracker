@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/elastic/game")
+@RequestMapping("games/elastic")
 public class ElasticGameController {
 
     private ElasticGameService elasticGameService;

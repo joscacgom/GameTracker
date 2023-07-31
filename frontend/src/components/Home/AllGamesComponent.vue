@@ -78,7 +78,7 @@
     methods: {
       async fetchCarouselItems() {
         try {
-          const response = await fetch(`http://localhost:8080/api/game/all`, {
+          const response = await fetch(`http://localhost:8080/games/all`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',

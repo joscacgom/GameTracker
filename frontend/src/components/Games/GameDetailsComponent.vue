@@ -55,7 +55,7 @@ export default {
   async mounted() {
     try {
       const id = this.$route.params.gameId;
-      const response = await fetch(`http://localhost:8080/api/game/${id}`);
+      const response = await fetch(`http://localhost:8080/games/${id}`);
       if (!response.ok)
         throw new Error('Unable to fetch game data');
       const data = await response.json();

@@ -26,7 +26,7 @@ import co.empathy.academy.gametracker.services.mongo.UserService;
 import co.empathy.academy.gametracker.utils.JWTUtils;
 
 @RestController
-@RequestMapping("/api/game-lists")
+@RequestMapping("games/lists")
 public class GameListController {
 
     private final GameListService gameListService;
