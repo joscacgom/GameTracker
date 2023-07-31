@@ -100,7 +100,7 @@ public class GameListController {
         GameList updatedGameList = gameListService.updateGameList(listId, gameList);
         // Check if the game list was found
         if (updatedGameList == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
         // Return the updated game list
@@ -266,7 +266,7 @@ public class GameListController {
 
         // Check if the game adding was successfull
         if (gameAdded == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
         // Update the current game list
@@ -275,7 +275,7 @@ public class GameListController {
 
         // Check if the current game list was updated successfully
         if (updatedCurrentGameList == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
         // Return the updated current game list
@@ -493,7 +493,7 @@ public class GameListController {
             // Return a success response with no content
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
