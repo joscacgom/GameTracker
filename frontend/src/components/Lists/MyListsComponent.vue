@@ -36,8 +36,8 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
 import CreateListComponent from '@/components/Lists/CreateListComponent.vue';
-import EmptyComponent from '@/components/Empty/EmptyComponent.vue';
-import LoadingComponent from '@/components/Loading/LoadingComponent.vue';
+import EmptyComponent from '@/components/EmptyComponent.vue';
+import LoadingComponent from '@/components/LoadingComponent.vue';
 
 export default {
   name: 'MyListsComponent',

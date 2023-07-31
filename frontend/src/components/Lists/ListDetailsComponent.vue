@@ -39,9 +39,9 @@
 
 <script>
 import SidebarComponent from '@/components/Layout/SidebarComponent.vue';
-import LoadingComponent from '@/components/Loading/LoadingComponent.vue';
-import ErrorComponent from '@/components/Error/ErrorComponent.vue';
-import EmptyComponent from '@/components/Empty/EmptyComponent.vue';
+import LoadingComponent from '@/components/LoadingComponent.vue';
+import ErrorComponent from '@/components/ErrorComponent.vue';
+import EmptyComponent from '@/components/EmptyComponent.vue';
 import EditListComponent from '@/components/Lists/EditListComponent.vue';
 import EditGameComponent from '@/components/Games/EditGameComponent.vue';
 export default {
