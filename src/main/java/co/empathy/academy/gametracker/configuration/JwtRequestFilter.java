@@ -7,7 +7,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import co.empathy.academy.gametracker.services.mongo.UserService;
+import co.empathy.academy.gametracker.services.UserService;
 import co.empathy.academy.gametracker.utils.JWTUtils;
 
 import javax.servlet.FilterChain;

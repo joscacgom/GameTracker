@@ -1,6 +1,6 @@
 package co.empathy.academy.gametracker;
 
-import co.empathy.academy.gametracker.repositories.elastic.ElasticGameRepository;
+import co.empathy.academy.gametracker.repositories.ElasticGameRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
