@@ -110,7 +110,6 @@ public class GameWithPlaytimeController {
         return ResponseEntity.ok(gameWithPlaytime);
     }
 
-
     /**
      * Get the games with playtime hours for a specific user.
      *
