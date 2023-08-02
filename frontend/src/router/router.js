@@ -6,7 +6,7 @@ import MainComponent from '../components/Home/MainComponent.vue';
 import ProfileComponent from '../components/Profile/ProfileComponent.vue';
 import MyListsComponent from '../components/Lists/MyListsComponent.vue';
 import ListDetailsComponent from '../components/Lists/ListDetailsComponent.vue';
-import NotFoundComponent from '../components/NotFound/NotFoundComponent.vue';
+import NotFoundComponent from '../components/NotFoundComponent.vue';
 import MyGamesComponent from '../components/Games/MyGamesComponent.vue';
 import DiscoverComponent from '@/components/Home/DiscoverComponent.vue';
 import GameDetailsComponent from '@/components/Games/GameDetailsComponent.vue';

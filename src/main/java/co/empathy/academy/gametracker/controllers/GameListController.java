@@ -5,6 +5,8 @@ import java.util.List;
 import co.empathy.academy.gametracker.models.Game;
 import co.empathy.academy.gametracker.services.GameService;
 import co.empathy.academy.gametracker.services.GameWithPlayTimeService;
+import co.empathy.academy.gametracker.services.TokenSecurityService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,12 +34,14 @@ public class GameListController {
     private final GameListService gameListService;
     private final GameService gameService;
     private final GameWithPlayTimeService gameWithPlayTimeService;
+    private final TokenSecurityService tokenSecurityService;
     private final UserService userService;
     private final JWTUtils jwtUtils;
 
-    public GameListController(GameListService gameListService, GameService gameService, GameWithPlayTimeService gameWithPlayTimeService, UserService userService, JWTUtils jwtUtils) {
+    public GameListController(GameListService gameListService, TokenSecurityService tokenSecurityService , GameService gameService, GameWithPlayTimeService gameWithPlayTimeService, UserService userService, JWTUtils jwtUtils) {
         this.gameListService = gameListService;
         this.gameService = gameService;
+        this.tokenSecurityService = tokenSecurityService;
         this.gameWithPlayTimeService = gameWithPlayTimeService;
         this.userService = userService;
         this.jwtUtils = jwtUtils;
@@ -56,10 +60,10 @@ public class GameListController {
     public ResponseEntity<GameList> createGameList(@RequestBody GameList gameList, @RequestHeader("Authorization") String authorizationHeader) {
         // Validate the JWT token
         // Extract the token from the authorization header
-        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+        String token = tokenSecurityService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
         // Load user details from the token
-        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+        UserDetails userDetails = tokenSecurityService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
 
         // Check if the token is valid
         if (token == null || !jwtUtils.validateToken(token, userDetails)) {
@@ -88,10 +92,10 @@ public class GameListController {
     public ResponseEntity<GameList> updateGameList(@PathVariable("listId") String listId, @RequestBody GameList gameList, @RequestHeader("Authorization") String authorizationHeader) {
         // Validate the JWT token
         // Extract the token from the authorization header
-        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+        String token = tokenSecurityService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
         // Load user details from the token
-        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+        UserDetails userDetails = tokenSecurityService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
         // Check if the token is valid
         if (token == null || !jwtUtils.validateToken(token, userDetails)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -100,7 +104,7 @@ public class GameListController {
         GameList updatedGameList = gameListService.updateGameList(listId, gameList);
         // Check if the game list was found
         if (updatedGameList == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
         // Return the updated game list
@@ -128,10 +132,10 @@ public class GameListController {
     ) {
         // Validate the JWT token
         // Extract the token from the authorization header
-        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+        String token = tokenSecurityService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
         // Load user details from the token
-        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+        UserDetails userDetails = tokenSecurityService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
 
         // Check if the token is valid
         if (token == null || !jwtUtils.validateToken(token, userDetails)) {
@@ -218,10 +222,10 @@ public class GameListController {
     ) {
         // Validate the JWT token
         // Extract the token from the authorization header
-        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+        String token = tokenSecurityService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
         // Load user details from the token
-        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+        UserDetails userDetails = tokenSecurityService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
 
         // Check if the token is valid
         if (token == null || !jwtUtils.validateToken(token, userDetails)) {
@@ -266,7 +270,7 @@ public class GameListController {
 
         // Check if the game adding was successfull
         if (gameAdded == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
         // Update the current game list
@@ -275,7 +279,7 @@ public class GameListController {
 
         // Check if the current game list was updated successfully
         if (updatedCurrentGameList == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
         // Return the updated current game list
@@ -299,10 +303,10 @@ public class GameListController {
     ) {
         // Validate the JWT token
         // Extract the token from the authorization header
-        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+        String token = tokenSecurityService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
         // Load user details from the token
-        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+        UserDetails userDetails = tokenSecurityService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
 
         // Check if the token is valid
         if (token == null || !jwtUtils.validateToken(token, userDetails)) {
@@ -340,10 +344,10 @@ public class GameListController {
     ) {
         // Validate the JWT token
         // Extract the token from the authorization header
-        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+        String token = tokenSecurityService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
         // Load user details from the token
-        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+        UserDetails userDetails = tokenSecurityService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
         // Check if the token is valid
         if (token == null || !jwtUtils.validateToken(token, userDetails)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -415,10 +419,10 @@ public class GameListController {
     ) {
         // Validate the JWT token
         // Extract the token from the authorization header
-        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+        String token = tokenSecurityService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
         // Load user details from the token
-        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+        UserDetails userDetails = tokenSecurityService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
 
         // Check if the token is valid
         if (token == null) {
@@ -459,10 +463,10 @@ public class GameListController {
     ) {
         // Validate the JWT token
         // Extract the token from the authorization header
-        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+        String token = tokenSecurityService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
         // Load user details from the token
-        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+        UserDetails userDetails = tokenSecurityService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
 
         // Check if the token is valid
         if (token == null) {
@@ -493,21 +497,8 @@ public class GameListController {
             // Return a success response with no content
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-    }
-
-    /**
-     * Helper method to extract the JWT token from the Authorization header.
-     *
-     * @param authorizationHeader The Authorization header value
-     * @return The JWT token, or null if not found
-     */
-    private String extractTokenFromAuthorizationHeader(String authorizationHeader) {
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer")) {
-            return authorizationHeader.substring(7);
-        }
-        return null;
     }
 
 }

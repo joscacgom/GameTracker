@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import co.empathy.academy.gametracker.models.GameWithPlaytime;
 import co.empathy.academy.gametracker.services.GameWithPlayTimeService;
-import co.empathy.academy.gametracker.services.UserService;
+import co.empathy.academy.gametracker.services.TokenSecurityService;
 import co.empathy.academy.gametracker.utils.JWTUtils;
 
 @RestController
@@ -26,12 +26,12 @@ public class GameWithPlaytimeController {
 
     private final GameWithPlayTimeService gameWithPlayTimeService;
     private final JWTUtils jwtUtils;
-    private final UserService userService;
+    private final TokenSecurityService tokenSecurityService;
 
-    public GameWithPlaytimeController(GameWithPlayTimeService gameWithPlayTimeService, JWTUtils jwtUtils, UserService userService) {
+    public GameWithPlaytimeController(GameWithPlayTimeService gameWithPlayTimeService, TokenSecurityService tokenSecurityService ,JWTUtils jwtUtils) {
         this.gameWithPlayTimeService = gameWithPlayTimeService;
         this.jwtUtils = jwtUtils;
-        this.userService = userService;
+        this.tokenSecurityService = tokenSecurityService;
     }
 
     /**
@@ -52,10 +52,10 @@ public class GameWithPlaytimeController {
     ) {
         // Validate the JWT token
         // Extract the token from the authorization header
-        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+        String token = tokenSecurityService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
         // Load user details from the token
-        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+        UserDetails userDetails = tokenSecurityService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
 
         // Check if the token is valid
         if (token == null || !jwtUtils.validateToken(token, userDetails)) {
@@ -88,10 +88,10 @@ public class GameWithPlaytimeController {
     ) {
         // Validate the JWT token
         // Extract the token from the authorization header
-        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+        String token = tokenSecurityService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
         // Load user details from the token
-        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+        UserDetails userDetails = tokenSecurityService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
 
         // Check if the token is valid
         if (token == null || !jwtUtils.validateToken(token, userDetails)) {
@@ -127,10 +127,10 @@ public class GameWithPlaytimeController {
     ) {
         // Validate the JWT token
         // Extract the token from the authorization header
-        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+        String token = tokenSecurityService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
         // Load user details from the token
-        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+        UserDetails userDetails = tokenSecurityService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
 
         // Check if the token is valid
         if (token == null || !jwtUtils.validateToken(token, userDetails)) {
@@ -163,10 +163,10 @@ public class GameWithPlaytimeController {
     ) {
         // Validate the JWT token
         // Extract the token from the authorization header
-        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+        String token = tokenSecurityService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
         // Load user details from the token
-        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+        UserDetails userDetails = tokenSecurityService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
 
         // Check if the token is valid
         if (token == null || !jwtUtils.validateToken(token, userDetails)) {
@@ -183,19 +183,6 @@ public class GameWithPlaytimeController {
 
         // Return the deleted game with playtime hours
         return ResponseEntity.ok(deletedGameWithPlaytime);
-    }
-
-    /**
-     * Helper method to extract the JWT token from the Authorization header.
-     *
-     * @param authorizationHeader The Authorization header value
-     * @return The JWT token, or null if not found
-     */
-    private String extractTokenFromAuthorizationHeader(String authorizationHeader) {
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer")) {
-            return authorizationHeader.substring(7);
-        }
-        return null;
     }
 
 }

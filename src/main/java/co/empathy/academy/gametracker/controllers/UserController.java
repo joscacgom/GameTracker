@@ -4,6 +4,7 @@ import co.empathy.academy.gametracker.models.dtos.AuthDTO;
 import co.empathy.academy.gametracker.models.dtos.ChangePasswordDTO;
 import co.empathy.academy.gametracker.models.User;
 import co.empathy.academy.gametracker.models.dtos.UserUpdateDTO;
+import co.empathy.academy.gametracker.services.TokenSecurityService;
 import co.empathy.academy.gametracker.services.UserService;
 import co.empathy.academy.gametracker.utils.JWTUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,10 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final TokenSecurityService tokenSecurityService;
     private final JWTUtils jwtUtils;
 
-    public UserController(UserService userService, JWTUtils jwtUtils) {
+    public UserController(UserService userService, TokenSecurityService tokenSecurityService, JWTUtils jwtUtils) {
         this.userService = userService;
+        this.tokenSecurityService = tokenSecurityService;
         this.jwtUtils = jwtUtils;
     }
 
@@ -103,10 +106,10 @@ public class UserController {
     public ResponseEntity<?> updateUser(@RequestBody UserUpdateDTO userUpdateDTO, @RequestHeader("Authorization") String authorizationHeader) {
         // Validate the JWT token
         // Extract the token from the authorization header
-        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+        String token = tokenSecurityService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
         // Load user details from the token
-        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+        UserDetails userDetails = tokenSecurityService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
 
         // Check if the token is valid
         if (token == null || !jwtUtils.validateToken(token, userDetails)) {
@@ -144,10 +147,10 @@ public class UserController {
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO, @RequestHeader("Authorization") String authorizationHeader) {
         // Validate the JWT token
         // Extract the token from the authorization header
-        String token = extractTokenFromAuthorizationHeader(authorizationHeader);
+        String token = tokenSecurityService.extractTokenFromAuthorizationHeader(authorizationHeader);
 
         // Load user details from the token
-        UserDetails userDetails = userService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
+        UserDetails userDetails = tokenSecurityService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
 
         // Check if the token is valid
         if (token == null || !jwtUtils.validateToken(token, userDetails)) {
@@ -160,19 +163,6 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-    }
-
-    /**
-     * Helper method to extract the JWT token from the Authorization header.
-     *
-     * @param authorizationHeader The Authorization header value.
-     * @return the JWT token, or null if not found.
-     */
-    private String extractTokenFromAuthorizationHeader(String authorizationHeader) {
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer")) {
-            return authorizationHeader.substring(7);
-        }
-        return null;
     }
 
 }
